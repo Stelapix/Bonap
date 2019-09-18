@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Cheh'),
+      home: MyHomePage(title: 'Compteur'),
     );
   }
 }
@@ -99,11 +99,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
           children: <Widget>[
 
-            Image.asset(
-              '1.jpg',
-            ),
-
-
             Text(
               'Valeur actuelle du compteur:',
             ),
@@ -112,6 +107,11 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+
+
+
+
+
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,12 +145,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
             ),
 
-/*
+
             const Image(
               image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
 
             )
- */
+
+
+
+
+
           ],
 
         ),
@@ -161,9 +165,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
 
+
+
+
+
+
       // This trailing comma makes auto-formatting nicer for build methods.
     );
 
   }
 }
-
