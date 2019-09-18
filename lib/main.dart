@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Compteur'),
     );
   }
 }
@@ -57,18 +57,23 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+
+  void _resetCounter()
+  {
+    setState(() {
+      _counter = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
@@ -89,23 +94,84 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+
           children: <Widget>[
+
             Text(
-              'You have pushed the button this many times:',
+              'Valeur actuelle du compteur:',
             ),
+
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+
+
+
+
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+
+                FloatingActionButton(
+                  onPressed: _decrementCounter,
+                  tooltip: 'Diminuer',
+                  child: Icon(Icons.remove),
+                ),
+
+                FlatButton(
+                  color: Colors.blue,
+                  textColor: Colors.white,
+
+                  onPressed: () {
+                    _resetCounter();
+                  },
+
+                  child: Text(
+                    "Reset",
+                  ),
+                ),
+
+                FloatingActionButton(
+                  onPressed: _incrementCounter,
+                  tooltip: 'Augmenter',
+                  child: Icon(Icons.add),
+                ),
+              ],
+
+            ),
+
+
+            const Image(
+              image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+
+            )
+
+
+
+
+
           ],
+
         ),
+
+
+
+
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+
+
+
+
+
+
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
+
   }
 }
