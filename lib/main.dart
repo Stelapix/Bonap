@@ -1,12 +1,14 @@
 import 'package:bonap/presentation/custom_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+//Pages
+import './about.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,8 +19,6 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(title: 'Bonap\''),
     );
   }
-
-
 }
 
 class MyHomePage extends StatefulWidget {
@@ -31,28 +31,100 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      appBar: AppBar(
-        title: Text(widget.title),
+      appBar: new AppBar(
+        title: new Text(widget.title),
       ),
-
+      drawer: new Drawer(
+        child: ListView(
+          children: <Widget>[
+            const Image(
+              alignment: Alignment.topCenter,
+              image: AssetImage('assets/1.png'),
+            ),
+            new ListTile(
+              title: new Text('Menu'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Repas'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Ingrédients'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Liste de Course'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Bilan Kcal'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('FeedBack'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+            new ListTile(
+              title: new Text('Settings'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
+              },
+            ),
+          ],
+        ),
+      ),
       body: Center(
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-
           children: <Widget>[
-
-
             const Image(
               alignment: Alignment.topCenter,
               image: AssetImage('assets/logo_bonap.png'),
             ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -60,52 +132,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   'CARRY Quentin - LE FEYER Aymeric',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
-
                 Padding(
                   padding: EdgeInsets.all(30.0),
                   child: Row(
-
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       FloatingActionButton(
                         child: Icon(Custom.github_circled),
                         onPressed: _launchURLGit,
                         tooltip: 'Git',
-
                       ),
-
                       FloatingActionButton(
                         child: Icon(Custom.trello),
                         onPressed: _launchURLTrello,
                         tooltip: 'Trello',
-
                       )
                     ],
-
                   ),
                 ),
                 Text(
                   'Bonap est un gestionnaire de menu intelligent \n'
-                      'Ajoutez des recettes et commencez votre menu !\n'
-                      'La liste de course sera automatiquement générée\n'
-                      'Une estimation du prix sera alors générée\n'
-                      'Membre d\'une famille ? Ajoutez-la !\n'
-                      '\n'
-                      'Tout est prêt ? Dans ce cas, Bonap !',
+                  'Ajoutez des recettes et commencez votre menu !\n'
+                  'La liste de course sera automatiquement générée\n'
+                  'Une estimation du prix sera alors générée\n'
+                  'Membre d\'une famille ? Ajoutez-la !\n'
+                  '\n'
+                  'Tout est prêt ? Dans ce cas, Bonap !',
                   style: TextStyle(fontSize: 16.0),
                 )
-
-
               ],
             )
-
-
           ],
         ),
-
       ),
-
-
     );
   }
 
@@ -126,5 +185,4 @@ class _MyHomePageState extends State<MyHomePage> {
       throw 'Could not launch $url';
     }
   }
-
 }
