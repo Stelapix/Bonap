@@ -1,0 +1,64 @@
+{
+  "name": "Custom",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "0f6a2573a7b6df911ed199bb63717e27",
+      "css": "github-circled",
+      "code": 61595,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "b846892636bd74112998bb159bdddf27",
+      "css": "trello",
+      "code": 61825,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "37b78d4b18e18a0f04c47146c2e54eb8",
+      "css": "restaurant_menu",
+      "code": 59392,
+      "src": "material"
+    },
+    {
+      "uid": "b08f8c33777cd6b512d9576fc6e7f405",
+      "css": "food",
+      "code": 59393,
+      "src": "linecons"
+    },
+    {
+      "uid": "7184d8171b6a9b18eabbace94cca21db",
+      "css": "chart-line",
+      "code": 59394,
+      "src": "entypo"
+    },
+    {
+      "uid": "b2270284ed38dffa576900a69b320faa",
+      "css": "settings",
+      "code": 59395,
+      "src": "material"
+    },
+    {
+      "uid": "ae9ba050784ea522ea8e0bf55a2a6f27",
+      "css": "feedback",
+      "code": 59396,
+      "src": "material"
+    },
+    {
+      "uid": "8b477a390fca32fdefa0ca0c1f280ba5",
+      "css": "format_list_bulleted",
+      "code": 59397,
+      "src": "material"
+    },
+    {
+      "uid": "9affc98d652b86628d650ee58dbf0357",
+      "css": "basket",
+      "code": 59398,
+      "src": "fontawesome"
+    }
+  ]
+}

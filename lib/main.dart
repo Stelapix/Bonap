@@ -1,5 +1,5 @@
 import 'package:bonap/presentation/custom_icons.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,69 +42,55 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Image(
               alignment: Alignment.topCenter,
-              image: AssetImage('assets/1.png'),
+
+              image: AssetImage('assets/logo_bonap_blue.png'),
+
+
             ),
             new ListTile(
+              leading: Icon(Custom.restaurant_menu),
               title: new Text('Menu'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
+              leading: Icon(Custom.food),
               title: new Text('Repas'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
+              leading: Icon(Custom.format_list_bulleted),
               title: new Text('Ingrédients'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
+              leading: Icon(Custom.basket),
               title: new Text('Liste de Course'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
-              title: new Text('Bilan Kcal'),
+              leading: Icon(Custom.chart_line),
+              title: new Text('Bilan diététique'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
-              title: new Text('FeedBack'),
+              leading: Icon(Custom.feedback),
+              title: new Text('Feedback'),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+
               },
             ),
             new ListTile(
+              leading: Icon(Custom.settings),
               title: new Text('Settings'),
               onTap: () {
                 Navigator.of(context).pop();

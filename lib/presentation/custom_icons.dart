@@ -11,7 +11,19 @@
 ///      fonts:
 ///       - asset: fonts/Custom.ttf
 ///
-///
+/// 
+/// * Material Design Icons, Copyright (C) Google, Inc
+///         Author:    Google
+///         License:   Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
+///         Homepage:  https://design.google.com/icons/
+/// * Linecons, Copyright (C) 2013 by Designmodo
+///         Author:    Designmodo for Smashing Magazine
+///         License:   CC BY ()
+///         Homepage:  http://designmodo.com/linecons-free/
+/// * Entypo, Copyright (C) 2012 by Daniel Bruce
+///         Author:    Daniel Bruce
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://www.entypo.com
 /// * Font Awesome, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -24,7 +36,13 @@ class Custom {
 
   static const _kFontFam = 'Custom';
 
-  static const IconData github_circled =
-      const IconData(0xf09b, fontFamily: _kFontFam);
+  static const IconData restaurant_menu = const IconData(0xe800, fontFamily: _kFontFam);
+  static const IconData food = const IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData chart_line = const IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData settings = const IconData(0xe803, fontFamily: _kFontFam);
+  static const IconData feedback = const IconData(0xe804, fontFamily: _kFontFam);
+  static const IconData format_list_bulleted = const IconData(0xe805, fontFamily: _kFontFam);
+  static const IconData basket = const IconData(0xe806, fontFamily: _kFontFam);
+  static const IconData github_circled = const IconData(0xf09b, fontFamily: _kFontFam);
   static const IconData trello = const IconData(0xf181, fontFamily: _kFontFam);
 }
