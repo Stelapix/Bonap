@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -36,58 +37,72 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: new AppBar(
         title: new Text(widget.title),
+        backgroundColor: Colors.deepOrange,
       ),
       drawer: new Drawer(
         child: ListView(
           children: <Widget>[
-            const Image(
-              alignment: Alignment.topCenter,
-
-              image: AssetImage('assets/logo_bonap_blue.png'),
-
-
-            ),
+            DrawerHeader(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: <Color>[
+                  Colors.green,
+                  Colors.lightGreenAccent
+                ])),
+                child: Container(
+                    alignment: Alignment(0.0, 0.5),
+                    child: Column(
+                      children: <Widget>[
+                        Material(
+                          borderRadius:
+                            BorderRadius.all(Radius.circular(100.0)),
+                            elevation: 10,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/logo_bonap.png',
+                              width: 90,
+                              height: 90,
+                            ),
+                          ),
+                        ),
+                        Text('Bonap', style: TextStyle(color: Colors.white, fontSize: 20.0),)
+                      ],
+                    ))),
             new ListTile(
               leading: Icon(Custom.restaurant_menu),
               title: new Text('Menu'),
               onTap: () {
-
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new AboutPage()));
               },
             ),
             new ListTile(
-              leading: Icon(Custom.food),
+              leading: Icon(Custom.meal),
               title: new Text('Repas'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             new ListTile(
-              leading: Icon(Custom.format_list_bulleted),
+              leading: Icon(IconIngredient.food),
               title: new Text('Ingrédients'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             new ListTile(
               leading: Icon(Custom.basket),
               title: new Text('Liste de Course'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             new ListTile(
               leading: Icon(Custom.chart_line),
               title: new Text('Bilan diététique'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             new ListTile(
               leading: Icon(Custom.feedback),
               title: new Text('Feedback'),
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             new ListTile(
               leading: Icon(Custom.settings),
