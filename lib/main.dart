@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/icon/icon.png',
+                              'assets/icon/icon5.png',
                               width: 90,
                               height: 90,
                             ),
