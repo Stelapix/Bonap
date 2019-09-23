@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: new AppBar(
         title: new Text(widget.title),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.orange,
       ),
       drawer: new Drawer(
         child: ListView(
@@ -45,8 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
             DrawerHeader(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: <Color>[
-                  Colors.green,
-                  Colors.lightGreenAccent
+                  Colors.yellow,
+                  Colors.orange
                 ])),
                 child: Container(
                     alignment: Alignment(0.0, 0.5),
@@ -59,13 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/logo_bonap.png',
+                              'assets/icon/icon.png',
                               width: 90,
                               height: 90,
                             ),
                           ),
                         ),
-                        Text('Bonap', style: TextStyle(color: Colors.white, fontSize: 20.0),)
+                        Text('Bonap', style: TextStyle(color: Colors.black, fontSize: 20.0),)
                       ],
                     ))),
             new ListTile(
@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: new Text('Ingrédients'),
               onTap: () {},
             ),
+            Divider(),
             new ListTile(
               leading: Icon(Custom.basket),
               title: new Text('Liste de Course'),
@@ -99,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: new Text('Bilan diététique'),
               onTap: () {},
             ),
+            Divider(),
             new ListTile(
               leading: Icon(Custom.feedback),
               title: new Text('Feedback'),
@@ -122,10 +124,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Image(
-              alignment: Alignment.topCenter,
-              image: AssetImage('assets/logo_bonap.png'),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: const Image(
+                alignment: Alignment.topCenter,
+                image: AssetImage('assets/logo_bonap.png'),
+              ),
             ),
+
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
