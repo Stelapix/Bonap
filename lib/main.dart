@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
       ),
       home: MyHomePage(title: 'Bonap\''),
     );
@@ -147,11 +147,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       FloatingActionButton(
                         child: Icon(Custom.github_circled),
                         onPressed: _launchURLGit,
+                        heroTag: "bt1",
                         tooltip: 'Git',
                       ),
                       FloatingActionButton(
                         child: Icon(Custom.trello),
                         onPressed: _launchURLTrello,
+                        heroTag: "bt2",
                         tooltip: 'Trello',
                       )
                     ],
@@ -169,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               ],
             )
+
           ],
         ),
       ),
