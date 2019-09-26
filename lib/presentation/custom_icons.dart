@@ -37,20 +37,14 @@ class Custom {
   static const _kFontFam = 'Custom';
 
   static const IconData restaurant_menu = const IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData meal = const IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData food = const IconData(0xe801, fontFamily: _kFontFam);
   static const IconData chart_line = const IconData(0xe802, fontFamily: _kFontFam);
   static const IconData settings = const IconData(0xe803, fontFamily: _kFontFam);
   static const IconData feedback = const IconData(0xe804, fontFamily: _kFontFam);
   static const IconData format_list_bulleted = const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData basket = const IconData(0xe806, fontFamily: _kFontFam);
+  static const IconData roast_turkey = const IconData(0xe807, fontFamily: _kFontFam);
+  static const IconData harvest = const IconData(0xe808, fontFamily: _kFontFam);
   static const IconData github_circled = const IconData(0xf09b, fontFamily: _kFontFam);
   static const IconData trello = const IconData(0xf181, fontFamily: _kFontFam);
-}
-
-class IconIngredient {
-  IconIngredient._();
-
-  static const _kFontFam = 'IconIngredient';
-
-  static const IconData food = const IconData(0xe800, fontFamily: _kFontFam);
 }

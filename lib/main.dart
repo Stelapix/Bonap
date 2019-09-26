@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Pages
-import './about.dart';
+import './repas.dart';
+import './ingredients.dart';
+import './listeCourse.dart';
+import './bilan.dart';
+import './feedback.dart';
+import './settings.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,32 +17,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      home: MyHomePage(title: 'Bonap\''),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.title),
-        backgroundColor: Colors.orange,
+        title: new Text("Menu de la semaine", style: TextStyle(color: Colors.black),),
+        iconTheme: new IconThemeData(color: Colors.black),
+        backgroundColor: Color.fromRGBO(0, 191, 255, 1),
       ),
       drawer: new Drawer(
         child: ListView(
@@ -45,66 +40,78 @@ class _MyHomePageState extends State<MyHomePage> {
             DrawerHeader(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: <Color>[
-                  Colors.yellow,
-                  Colors.orange
+                  Color.fromRGBO(255, 225, 0, 1),
+                  Color.fromRGBO(0, 191, 255, 1),
                 ])),
-                child: Container(
-                    alignment: Alignment(0.0, 0.5),
-                    child: Column(
-                      children: <Widget>[
-                        Material(
-                          borderRadius:
-                            BorderRadius.all(Radius.circular(100.0)),
-                            elevation: 10,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              'assets/icon/icon5.png',
-                              width: 90,
-                              height: 90,
-                            ),
-                          ),
-                        ),
-                        Text('Bonap', style: TextStyle(color: Colors.black, fontSize: 20.0),)
-                      ],
-                    ))),
+                child: Image.asset(
+                  'assets/icon/icon7.png',
+                  width: 90,
+                  height: 90,
+                )),
             new ListTile(
               leading: Icon(Custom.restaurant_menu),
               title: new Text('Menu'),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
               },
             ),
             new ListTile(
-              leading: Icon(Custom.meal),
+              leading: Icon(Custom.roast_turkey),
               title: new Text('Repas'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new RepasPage()));
+              },
             ),
             new ListTile(
-              leading: Icon(IconIngredient.food),
+              leading: Icon(Custom.harvest),
               title: new Text('Ingrédients'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            new IngredientsPage()));
+              },
             ),
-            Divider(),
             new ListTile(
               leading: Icon(Custom.basket),
               title: new Text('Liste de Course'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            new ListeCoursePage()));
+              },
             ),
             new ListTile(
               leading: Icon(Custom.chart_line),
               title: new Text('Bilan diététique'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new BilanPage()));
+              },
             ),
             Divider(),
             new ListTile(
               leading: Icon(Custom.feedback),
               title: new Text('Feedback'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new FeedbackPage()));
+              },
             ),
             new ListTile(
               leading: Icon(Custom.settings),
@@ -114,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (BuildContext context) => new AboutPage()));
+                        builder: (BuildContext context) => new SettingsPage()));
               },
             ),
           ],
@@ -131,7 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 image: AssetImage('assets/logo_bonap.png'),
               ),
             ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -171,7 +177,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 )
               ],
             )
-
           ],
         ),
       ),

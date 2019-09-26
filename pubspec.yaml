@@ -33,7 +33,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/icon5.png"
+  image_path: "assets/icon/icon6.png"
 
 
 
@@ -70,9 +70,7 @@ flutter:
     - family:  Custom
       fonts:
         - asset: fonts/Custom.ttf
-    - family:  IconIngredient
-      fonts:
-        - asset: fonts/IconIngredient.ttf # Crédit : <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
-
+    # Crédit :  <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+    #           <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
