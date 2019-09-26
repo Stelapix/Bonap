@@ -1,7 +1,6 @@
 import 'package:bonap/presentation/custom_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 //Pages
 import './repas.dart';
@@ -25,22 +24,69 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePage createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> {
+  int _counter = 1;
+
+  void _incrementCounter() {
+    if (_counter < 4) {
+      setState(() {
+        _counter++;
+      });
+      _onChanged();
+    }
+  }
+
+  void _decrementCounter() {
+    if (_counter > 1) {
+      setState(() {
+        _counter--;
+        _onChanged();
+      });
+    }
+  }
+
+  List<Color> _colors = [
+    Color.fromRGBO(0, 191, 255, 1),
+    Color.fromRGBO(205, 225, 0, 1),
+  ];
+
+  int _currentIndex = 0;
+
+  _onChanged() {
+
+      setState(() {
+        if (_currentIndex == 0) {
+          _currentIndex = 1;
+        } else {
+          _currentIndex = 0;
+        }
+      });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: new Text("Menu de la semaine", style: TextStyle(color: Colors.black),),
+        title: new Text(
+          "Menu de la semaine",
+          style: TextStyle(color: Colors.black),
+        ),
         iconTheme: new IconThemeData(color: Colors.black),
-        backgroundColor: Color.fromRGBO(0, 191, 255, 1),
+        backgroundColor: _colors[_currentIndex],
       ),
-      drawer: new Drawer(
+      drawer: Drawer(
         child: ListView(
           children: <Widget>[
             DrawerHeader(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: <Color>[
-                  Color.fromRGBO(255, 225, 0, 1),
+                  Color.fromRGBO(205, 225, 0, 1),
                   Color.fromRGBO(0, 191, 255, 1),
                 ])),
                 child: Image.asset(
@@ -48,103 +94,172 @@ class HomePage extends StatelessWidget {
                   width: 90,
                   height: 90,
                 )),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.restaurant_menu),
-              title: new Text('Menu'),
+              title: Text('Menu'),
               onTap: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.roast_turkey),
-              title: new Text('Repas'),
+              title: Text('Repas'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new RepasPage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => RepasPage()));
               },
             ),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.harvest),
-              title: new Text('Ingrédients'),
+              title: Text('Ingrédients'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            new IngredientsPage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => IngredientsPage()));
               },
             ),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.basket),
-              title: new Text('Liste de Course'),
+              title: Text('Liste de Course'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            new ListeCoursePage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => ListeCoursePage()));
               },
             ),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.chart_line),
-              title: new Text('Bilan diététique'),
+              title: Text('Bilan diététique'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new BilanPage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => BilanPage()));
               },
             ),
-            Divider(),
-            new ListTile(
+            Divider(
+              height: 70.0,
+              color: Color(0x00000000),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Divider(
+                thickness: 1.0,
+                color: Colors.white,
+              ),
+            ),
+            ListTile(
               leading: Icon(Custom.feedback),
-              title: new Text('Feedback'),
+              title: Text('Feedback'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new FeedbackPage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => FeedbackPage()));
               },
             ),
-            new ListTile(
+            ListTile(
               leading: Icon(Custom.settings),
-              title: new Text('Settings'),
+              title: Text('Settings'),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.push(
                     context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new SettingsPage()));
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => SettingsPage()));
               },
             ),
           ],
         ),
       ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '\nLundi\n\nMardi\n\nMercredi\n\nJeudi\n\nVendredi\n\nSamedi\n\nDimanche\n',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+            Divider(
+              thickness: 1.0,
+              color: Colors.white,
+            ),
+            Divider(
+              height: 20.0,
+              color: Color(0x00000000),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FloatingActionButton(
+                  backgroundColor: _colors[_currentIndex],
+                  elevation: 20.0,
+                  onPressed: () {
+                    _decrementCounter();
+
+                  },
+                  heroTag: "<",
+                  tooltip: 'Décrémenter',
+                  mini: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+                Text(
+                  'Semaine $_counter',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
+                FloatingActionButton(
+                  backgroundColor: _colors[_currentIndex],
+                  elevation: 20.0,
+                  onPressed: () {
+                    _incrementCounter();
+
+                  },
+                  heroTag: ">",
+                  tooltip: 'Incrémenter',
+                  mini: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                  child: Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+        
+        
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: const Image(
-                alignment: Alignment.topCenter,
-                image: AssetImage('assets/logo_bonap.png'),
-              ),
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  'CARRY Quentin - LE FEYER Aymeric',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
+                Container(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(
+                      '\n  Lundi\n\n  Mardi\n\n  Mercredi\n\n  Jeudi\n\n  Vendredi\n\n  Samedi\n\n  Dimanche',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    )),
                 Padding(
                   padding: EdgeInsets.all(30.0),
                   child: Row(
@@ -180,8 +295,10 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
+
+        );
+
+
 
   void _launchURLGit() async {
     const url = 'https://github.com/AymericLeFeyer/Bonap';
@@ -201,3 +318,4 @@ class HomePage extends StatelessWidget {
     }
   }
 }
+*/
