@@ -1,6 +1,7 @@
 import 'package:bonap/presentation/custom_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //Pages
 import './repas.dart';
@@ -10,7 +11,12 @@ import './bilan.dart';
 import './feedback.dart';
 import './settings.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  /* Bloquer l'affichage Horizontal */
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -19,10 +25,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
+      debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
 }
+
+class CustomPopupMenu {
+  CustomPopupMenu({this.title, this.icon});
+
+  String title;
+  IconData icon;
+}
+
+List<CustomPopupMenu> choices = <CustomPopupMenu>[
+  CustomPopupMenu(title: 'Déconnexion', icon: Icons.home),
+];
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,7 +55,7 @@ class _HomePage extends State<HomePage> {
       setState(() {
         _counter++;
       });
-      _onChanged();
+      _onChangedColor();
     }
   }
 
@@ -45,10 +63,12 @@ class _HomePage extends State<HomePage> {
     if (_counter > 1) {
       setState(() {
         _counter--;
-        _onChanged();
+        _onChangedColor();
       });
     }
   }
+
+  ///////////////////////////////////////
 
   List<Color> _colors = [
     Color.fromRGBO(0, 191, 255, 1),
@@ -57,17 +77,43 @@ class _HomePage extends State<HomePage> {
 
   int _currentIndex = 0;
 
-  _onChanged() {
-
-      setState(() {
-        if (_currentIndex == 0) {
-          _currentIndex = 1;
-        } else {
-          _currentIndex = 0;
-        }
-      });
-
+  _onChangedColor() {
+    setState(() {
+      if (_currentIndex == 0) {
+        _currentIndex = 1;
+      } else {
+        _currentIndex = 0;
+      }
+    });
   }
+
+  ///////////////////////////////////////
+
+  String _value;
+  List<String> _midiSoir = new List<String>();
+
+  void initState() {
+    _midiSoir.addAll(["Midi", "Soir"]);
+    _value = _midiSoir.elementAt(0);
+  }
+
+  void _onChanged(String value) {
+    setState(() {
+      _value = value;
+    });
+  }
+
+  ///////////////////////////////////////
+
+  CustomPopupMenu _selectedChoices = choices[0];
+
+  void _select(CustomPopupMenu choice) {
+    setState(() {
+      _selectedChoices = choice;
+    });
+  }
+
+  ///////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +121,25 @@ class _HomePage extends State<HomePage> {
       appBar: new AppBar(
         title: new Text(
           "Menu de la semaine",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 23.0, color: Colors.black),
         ),
+        actions: <Widget>[
+          PopupMenuButton(
+            elevation: 3.2,
+            initialValue: choices[0],
+            tooltip: 'Option de déconnexion',
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return choices.map((CustomPopupMenu choice) {
+                return PopupMenuItem<CustomPopupMenu>(
+                  value: choice,
+                  child: Text(choice.title),
+                );
+              }).toList();
+            },
+          )
+        ],
         iconTheme: new IconThemeData(color: Colors.black),
         backgroundColor: _colors[_currentIndex],
       ),
@@ -182,17 +245,49 @@ class _HomePage extends State<HomePage> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Container(
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text('Repas du :  ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: _colors[_currentIndex],
+                          fontSize: 25.0)),
+                  DropdownButton(
+                    value: _value,
+                    items: _midiSoir.map((String value) {
+                      return new DropdownMenuItem(
+                          value: value,
+                          child: new Row(children: <Widget>[
+                            Text('$value',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25.0)),
+                          ]));
+                    }).toList(),
+                    onChanged: (String value) {
+                      _onChanged(value);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              thickness: 1.0,
+              color: _colors[_currentIndex],
+            ),
             Text(
               '\nLundi\n\nMardi\n\nMercredi\n\nJeudi\n\nVendredi\n\nSamedi\n\nDimanche\n',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
             ),
             Divider(
               thickness: 1.0,
-              color: Colors.white,
+              color: _colors[_currentIndex],
             ),
             Divider(
               height: 20.0,
@@ -206,7 +301,6 @@ class _HomePage extends State<HomePage> {
                   elevation: 20.0,
                   onPressed: () {
                     _decrementCounter();
-
                   },
                   heroTag: "<",
                   tooltip: 'Décrémenter',
@@ -224,7 +318,6 @@ class _HomePage extends State<HomePage> {
                   elevation: 20.0,
                   onPressed: () {
                     _incrementCounter();
-
                   },
                   heroTag: ">",
                   tooltip: 'Incrémenter',
