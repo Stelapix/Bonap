@@ -142,6 +142,18 @@ class _HomePage extends State<HomePage> {
           )
         ],
 
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: 'Afficher le drawer',
+            );
+          },
+        ),
+
         iconTheme: new IconThemeData(color: Colors.black),
         backgroundColor: _colors[_currentIndex],
 
@@ -222,6 +234,10 @@ class _HomePage extends State<HomePage> {
               child: Align(
                 child: Column(
                   children: <Widget>[
+                    Divider(
+                      thickness: 1.0,
+                      color: Colors.white,
+                    ),
                     ListTile(
                       leading: Icon(Custom.feedback),
                       title: Text('Feedback'),
