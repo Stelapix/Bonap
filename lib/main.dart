@@ -124,6 +124,7 @@ class _HomePage extends State<HomePage> {
           style: TextStyle(
               fontWeight: FontWeight.bold, fontSize: 23.0, color: Colors.black),
         ),
+
         actions: <Widget>[
           PopupMenuButton(
             elevation: 3.2,
@@ -140,11 +141,13 @@ class _HomePage extends State<HomePage> {
             },
           )
         ],
+
         iconTheme: new IconThemeData(color: Colors.black),
         backgroundColor: _colors[_currentIndex],
+
       ),
       drawer: Drawer(
-        child: ListView(
+        child: Column(
           children: <Widget>[
             DrawerHeader(
                 decoration: BoxDecoration(
@@ -154,95 +157,102 @@ class _HomePage extends State<HomePage> {
                 ])),
                 child: Image.asset(
                   'assets/icon/icon7.png',
-                  width: 90,
-                  height: 90,
+                  width: double.infinity,
                 )),
-            ListTile(
-              leading: Icon(Custom.restaurant_menu),
-              title: Text('Menu'),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              leading: Icon(Custom.roast_turkey),
-              title: Text('Repas'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => RepasPage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Custom.harvest),
-              title: Text('Ingrédients'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => IngredientsPage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Custom.basket),
-              title: Text('Liste de Course'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => ListeCoursePage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Custom.chart_line),
-              title: Text('Bilan diététique'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => BilanPage()));
-              },
-            ),
-            Divider(
-              height: 70.0,
-              color: Color(0x00000000),
-            ),
+
+            Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Custom.restaurant_menu),
+                      title: Text('Menu'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.roast_turkey),
+                      title: Text('Repas'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => RepasPage()));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.harvest),
+                      title: Text('Ingrédients'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => IngredientsPage()));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.basket),
+                      title: Text('Liste de Course'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => ListeCoursePage()));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.chart_line),
+                      title: Text('Bilan diététique'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => BilanPage()));
+                      },
+                    ),
+                  ],
+                )),
+
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(
-                thickness: 1.0,
-                color: Colors.white,
-              ),
-            ),
-            ListTile(
-              leading: Icon(Custom.feedback),
-              title: Text('Feedback'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => FeedbackPage()));
-              },
-            ),
-            ListTile(
-              leading: Icon(Custom.settings),
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => SettingsPage()));
-              },
+              child: Align(
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Custom.feedback),
+                      title: Text('Feedback'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => FeedbackPage()));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.settings),
+                      title: Text('Settings'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => SettingsPage()));
+                      },
+                    ),
+
+                  ],
+                ),
+              )
+
             ),
           ],
         ),
+
       ),
       body: Container(
         padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
@@ -257,7 +267,7 @@ class _HomePage extends State<HomePage> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: _colors[_currentIndex],
-                          fontSize: 25.0)),
+                          fontSize: 20.0)),
                   DropdownButton(
                     value: _value,
                     items: _midiSoir.map((String value) {
@@ -267,7 +277,7 @@ class _HomePage extends State<HomePage> {
                             Text('$value',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 25.0)),
+                                    fontSize: 20.0)),
                           ]));
                     }).toList(),
                     onChanged: (String value) {
@@ -303,7 +313,7 @@ class _HomePage extends State<HomePage> {
                     _decrementCounter();
                   },
                   heroTag: "<",
-                  tooltip: 'Décrémenter',
+                  tooltip: 'Semaine Précédente',
                   mini: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0))),
@@ -320,7 +330,7 @@ class _HomePage extends State<HomePage> {
                     _incrementCounter();
                   },
                   heroTag: ">",
-                  tooltip: 'Incrémenter',
+                  tooltip: 'Semaine Suivante',
                   mini: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0))),
