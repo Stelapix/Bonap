@@ -1,27 +1,17 @@
-import 'package:bonap/presentation/custom_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:flutter/painting.dart.';
 
-//Pages
-import './repas.dart';
-import './ingredients.dart';
-import './listeCourse.dart';
-import './bilan.dart';
-import './feedback.dart';
-import './settings.dart';
-
-import 'widget/drawer.dart';
+// Widgets
+import 'widgets/drawer.dart';
+import 'widgets/calendrier.dart';
+import 'widgets/dropDownButton.dart';
 
 void main() async {
-  /* Bloquer l'affichage Horizontal */
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]); // Désactiver l'orientation horizontale
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -32,55 +22,131 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
       ),
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // Retirer le bandeau de debug
       home: HomePage(),
     );
   }
 }
-
-class CustomPopupMenu {
-  CustomPopupMenu({this.title, this.icon});
-
-  String title;
-  IconData icon;
-}
-
-List<CustomPopupMenu> choices = <CustomPopupMenu>[
-  CustomPopupMenu(title: 'Déconnexion', icon: Icons.home),
-];
 
 class HomePage extends StatefulWidget {
   @override
   _HomePage createState() => _HomePage();
 }
 
-String _value;
-List<String> _midiSoir = new List<String>();
+enum popUpMenu { deconnexion }
 
 class _HomePage extends State<HomePage> {
-  int _counter = 1;
+  final bleu = Color.fromRGBO(0, 191, 255, 1);
+  final jaune = Color.fromRGBO(205, 225, 0, 1);
 
-  void _incrementCounter() {
-    if (_counter < 4) {
-      setState(() {
-        _counter++;
-      });
-      _onChangedColor();
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: new AppBar(
+          title: new Text(
+            "Menu de la semaine",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 23.0,
+                color: Colors.black),
+          ),
+          actions: <Widget>[
+            PopupMenuButton<popUpMenu>(
+              elevation: 3.2,
+              tooltip: 'Option de déconnexion',
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<popUpMenu>>[
+                const PopupMenuItem<popUpMenu>(
+                  value: popUpMenu.deconnexion,
+                  child: Text('Déconnexion'),
+                ),
+              ],
+            )
+          ],
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip: 'Afficher le drawer',
+              );
+            },
+          ),
+          iconTheme: new IconThemeData(color: Colors.black),
+          backgroundColor: bleu,
+        ),
+        drawer: AppDrawer(),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Repas du :  ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: bleu,
+                            fontSize: 20.0)),
+                    DropDownButton(),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: LinearGradient(
+                    colors: <Color>[
+                      jaune,
+                      bleu,
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '\nLundi                                                                         \n\nMardi\n\nMercredi\n\nJeudi\n\nVendredi\n\nSamedi\n\nDimanche\n',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                thickness: 1.0,
+                color: null,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: LinearGradient(
+                    colors: <Color>[
+                      jaune,
+                      bleu,
+                    ],
+                  ),
+                ),
+                child: Calendrier(),
+              ),
+              Divider(
+                thickness: 1.0,
+                color: bleu,
+              ),
+            ],
+          ),
+        ));
   }
+}
 
-  void _decrementCounter() {
-    if (_counter > 1) {
-      setState(() {
-        _counter--;
-        _onChangedColor();
-      });
-    }
-  }
+/*
 
-  ///////////////////////////////////////
-
-  List<Color> _colors = [
+        List<Color> _colors = [
     Color.fromRGBO(0, 191, 255, 1),
     Color.fromRGBO(205, 225, 0, 1),
   ];
@@ -103,205 +169,27 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  CustomPopupMenu _selectedChoices = choices[0];
 
-  void _select(CustomPopupMenu choice) {
-    setState(() {
-      _selectedChoices = choice;
-    });
+       int _counter = 1;
+
+  void _incrementCounter() {
+    if (_counter < 4) {
+      setState(() {
+        _counter++;
+      });
+      _onChangedColor();
+    }
   }
 
-  CalendarController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _midiSoir.addAll(["Midi", "Soir"]);
-    _value = _midiSoir.elementAt(0);
-    _controller = CalendarController();
+  void _decrementCounter() {
+    if (_counter > 1) {
+      setState(() {
+        _counter--;
+        _onChangedColor();
+      });
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "Menu de la semaine",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 23.0,
-                color: Colors.black),
-          ),
-          actions: <Widget>[
-            PopupMenuButton(
-              elevation: 3.2,
-              initialValue: choices[0],
-              tooltip: 'Option de déconnexion',
-              onSelected: _select,
-              itemBuilder: (BuildContext context) {
-                return choices.map((CustomPopupMenu choice) {
-                  return PopupMenuItem<CustomPopupMenu>(
-                    value: choice,
-                    child: Text(choice.title),
-                  );
-                }).toList();
-              },
-            )
-          ],
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: 'Afficher le drawer',
-              );
-            },
-          ),
-          iconTheme: new IconThemeData(color: Colors.black),
-          backgroundColor: _colors[_currentIndex],
-        ),
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text('Repas du :  ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: _colors[_currentIndex],
-                            fontSize: 20.0)),
-                    DropdownButton(
-                      value: _value,
-                      items: _midiSoir.map((String value) {
-                        return new DropdownMenuItem(
-                            value: value,
-                            child: new Row(children: <Widget>[
-                              Text('$value',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0)),
-                            ]));
-                      }).toList(),
-                      onChanged: (String value) {
-                        _onChanged(value);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 1.0,
-                color: _colors[_currentIndex],
-              ),
-              TableCalendar(
-                locale: 'fr_FR',
-                initialCalendarFormat: CalendarFormat.week,
-                availableCalendarFormats: const {
-                  CalendarFormat.month: 'Mois',
-                  CalendarFormat.twoWeeks: '15j',
-                  CalendarFormat.week: 'Semaine',
-                },
-                calendarStyle: CalendarStyle(
-                    todayColor: Colors.orange,
-                    selectedColor: Colors.cyanAccent,
-                    selectedStyle: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0),
-                    todayStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                        color: Colors.white)),
-                daysOfWeekStyle: DaysOfWeekStyle(
-                  dowTextBuilder: (date, locale) =>
-                      DateFormat.E(locale)
-                          .format(date)
-                          .substring(0, 1)
-                          .toUpperCase() +
-                      DateFormat.E(locale)
-                          .format(date)
-                          .substring(1, 3)
-                          .toLowerCase(),
-                ),
-                headerStyle: HeaderStyle(
-                  titleTextStyle: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25.0),
-                  titleTextBuilder: (date, locale) =>
-                      DateFormat.yMMMM(locale)
-                          .format(date)
-                          .substring(0, 1)
-                          .toUpperCase() +
-                      DateFormat.yMMMM(locale)
-                          .format(date)
-                          .substring(1, 12)
-                          .toLowerCase(),
-                  centerHeaderTitle: true,
-                  formatButtonDecoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  formatButtonTextStyle: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                  formatButtonShowsNext: false,
-                  formatButtonVisible: false,
-                ),
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                onDaySelected: (date, events) {
-                  print(date
-                      .toIso8601String()); // Pour récupérer la date ultérieurement ( Liste de course du mois etc.. )
-                },
-                builders: CalendarBuilders(
-                  selectedDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.cyanAccent,
-                          borderRadius: BorderRadius.circular(30.0)),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                  holidayDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(30.0)),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.green),
-                      )),
-                  todayDayBuilder: (context, date, events) => Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Text(
-                        date.day.toString(),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                ),
-                calendarController: _controller,
-              ),
-              Divider(
-                thickness: 1.0,
-                color: _colors[_currentIndex],
-              ),
-            ],
-          ),
-        )
-
-        /*
       body: Container(
         padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
         child: Column(
@@ -388,12 +276,9 @@ class _HomePage extends State<HomePage> {
             ),
           ],
         ),
-      ),*/
-        );
-  }
-}
+      ),
 
-/*
+
         
         
 
