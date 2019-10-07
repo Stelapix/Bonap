@@ -16,8 +16,6 @@ import './bilan.dart';
 import './feedback.dart';
 import './settings.dart';
 
-import 'widget/drawer.dart';
-
 void main() async {
   /* Bloquer l'affichage Horizontal */
   await SystemChrome.setPreferredOrientations(
@@ -162,7 +160,116 @@ class _HomePage extends State<HomePage> {
           iconTheme: new IconThemeData(color: Colors.black),
           backgroundColor: _colors[_currentIndex],
         ),
-        drawer: AppDrawer(),
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              DrawerHeader(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: <Color>[
+                    Color.fromRGBO(205, 225, 0, 1),
+                    Color.fromRGBO(0, 191, 255, 1),
+                  ])),
+                  child: Image.asset(
+                    'assets/icon/icon7.png',
+                    width: double.infinity,
+                  )),
+              Expanded(
+                  child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Custom.restaurant_menu),
+                    title: Text('Menu'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Custom.roast_turkey),
+                    title: Text('Repas'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => RepasPage()));
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Custom.harvest),
+                    title: Text('Ingrédients'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  IngredientsPage()));
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Custom.basket),
+                    title: Text('Liste de Course'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ListeCoursePage()));
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Custom.chart_line),
+                    title: Text('Bilan diététique'),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => BilanPage()));
+                    },
+                  ),
+                ],
+              )),
+              Container(
+                  child: Align(
+                child: Column(
+                  children: <Widget>[
+                    Divider(
+                      thickness: 1.0,
+                      color: Colors.white,
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.feedback),
+                      title: Text('Feedback'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    FeedbackPage()));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Custom.settings),
+                      title: Text('Settings'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    SettingsPage()));
+                      },
+                    ),
+                  ],
+                ),
+              )),
+            ],
+          ),
+        ),
         body: SingleChildScrollView(
           padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
