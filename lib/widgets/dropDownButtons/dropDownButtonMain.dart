@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class DropDownButton extends StatefulWidget {
+class DropDownButtonMain extends StatefulWidget {
   @override
-  _DropDownButtonState createState() => _DropDownButtonState();
+  _DropDownButtonMainState createState() => _DropDownButtonMainState();
 }
 
-class _DropDownButtonState extends State<DropDownButton> {
+class _DropDownButtonMainState extends State<DropDownButtonMain> {
   String _value;
   List<String> _midiSoir = new List<String>();
 

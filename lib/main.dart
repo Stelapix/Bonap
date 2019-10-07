@@ -5,8 +5,10 @@ import 'package:intl/date_symbol_data_local.dart';
 // Widgets
 import 'widgets/drawer.dart';
 import 'widgets/calendrier.dart';
-import 'widgets/dropDownButton.dart';
+import 'widgets/dropDownButtons/dropDownButtonMain.dart';
 
+// Icons
+import 'custom/custom_icons.dart';
 
 void main() async {
   await SystemChrome.setPreferredOrientations([
@@ -78,116 +80,7 @@ class _HomePage extends State<HomePage> {
           iconTheme: new IconThemeData(color: Colors.black),
           backgroundColor: bleu,
         ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              DrawerHeader(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: <Color>[
-                    Color.fromRGBO(205, 225, 0, 1),
-                    Color.fromRGBO(0, 191, 255, 1),
-                  ])),
-                  child: Image.asset(
-                    'assets/icon/icon7.png',
-                    width: double.infinity,
-                  )),
-              Expanded(
-                  child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Custom.restaurant_menu),
-                    title: Text('Menu'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Custom.roast_turkey),
-                    title: Text('Repas'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => RepasPage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Custom.harvest),
-                    title: Text('Ingrédients'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  IngredientsPage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Custom.basket),
-                    title: Text('Liste de Course'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ListeCoursePage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Custom.chart_line),
-                    title: Text('Bilan diététique'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => BilanPage()));
-                    },
-                  ),
-                ],
-              )),
-              Container(
-                  child: Align(
-                child: Column(
-                  children: <Widget>[
-                    Divider(
-                      thickness: 1.0,
-                      color: Colors.white,
-                    ),
-                    ListTile(
-                      leading: Icon(Custom.feedback),
-                      title: Text('Feedback'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    FeedbackPage()));
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Custom.settings),
-                      title: Text('Settings'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    SettingsPage()));
-                      },
-                    ),
-                  ],
-                ),
-              )),
-            ],
-          ),
-        ),
+        drawer: AppDrawer(),
         body: SingleChildScrollView(
           padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
@@ -202,28 +95,27 @@ class _HomePage extends State<HomePage> {
                             fontWeight: FontWeight.bold,
                             color: bleu,
                             fontSize: 20.0)),
-                    DropDownButton(),
+                    DropDownButtonMain(),
                   ],
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      jaune,
-                      bleu,
-                    ],
-                  ),
-                ),
                 padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      '\nLundi                                                                         \n\nMardi\n\nMercredi\n\nJeudi\n\nVendredi\n\nSamedi\n\nDimanche\n',
+                      '\nLundi\n'
+                      '\nMardi\n'
+                      '\nMercredi\n'
+                      '\nJeudi\n'
+                      '\nVendredi\n'
+                      '\nSamedi\n'
+                      '\nDimanche\n',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -246,7 +138,7 @@ class _HomePage extends State<HomePage> {
               ),
               Divider(
                 thickness: 1.0,
-                color: bleu,
+                color: null,
               ),
             ],
           ),

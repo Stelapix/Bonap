@@ -45,6 +45,12 @@ class Custom {
   static const IconData basket = const IconData(0xe806, fontFamily: _kFontFam);
   static const IconData roast_turkey = const IconData(0xe807, fontFamily: _kFontFam);
   static const IconData harvest = const IconData(0xe808, fontFamily: _kFontFam);
+  static const IconData meat = const IconData(0xe809, fontFamily: _kFontFam);
+  static const IconData carrot = const IconData(0xe80a, fontFamily: _kFontFam);
+  static const IconData fish = const IconData(0xe80b, fontFamily: _kFontFam);
+  static const IconData baguette = const IconData(0xe80c, fontFamily: _kFontFam);
+  static const IconData cereals = const IconData(0xe80d, fontFamily: _kFontFam);
+  static const IconData cheese = const IconData(0xe80e, fontFamily: _kFontFam);
   static const IconData github_circled = const IconData(0xf09b, fontFamily: _kFontFam);
   static const IconData trello = const IconData(0xf181, fontFamily: _kFontFam);
 }
