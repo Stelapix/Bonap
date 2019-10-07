@@ -34,7 +34,7 @@ class _CalendrierState extends State<Calendrier> {
           todayStyle: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
-              color: Colors.white)),
+              color: Colors.black)),
       daysOfWeekStyle: DaysOfWeekStyle(
         dowTextBuilder: (date, locale) =>
             DateFormat.E(locale).format(date).substring(0, 1).toUpperCase() +
@@ -64,7 +64,7 @@ class _CalendrierState extends State<Calendrier> {
                 borderRadius: BorderRadius.circular(30.0)),
             child: Text(
               date.day.toString(),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             )),
         holidayDayBuilder: (context, date, events) => Container(
             margin: const EdgeInsets.all(4.0),
@@ -82,7 +82,7 @@ class _CalendrierState extends State<Calendrier> {
                 color: Colors.red, borderRadius: BorderRadius.circular(10.0)),
             child: Text(
               date.day.toString(),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             )),
       ),
       calendarController: _controller,

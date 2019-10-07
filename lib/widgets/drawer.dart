@@ -31,13 +31,6 @@ class AppDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               ListTile(
-                leading: Icon(Custom.restaurant_menu),
-                title: Text('Menu'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
                 leading: Icon(Custom.roast_turkey),
                 title: Text('Repas'),
                 onTap: () {
