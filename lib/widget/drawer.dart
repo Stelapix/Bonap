@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:bonap/customIcons/custom_icons.dart';
+import 'package:bonap/presentation/custom_icons.dart';
 
 //Pages
 
-import '../pages/repas.dart';
-import '../pages/ingredients.dart';
-import '../pages/listeCourse.dart';
-import '../pages/bilan.dart';
-import '../pages/feedback.dart';
-import '../pages/settings.dart';
+import '../repas.dart';
+import '../ingredients.dart';
+import '../listeCourse.dart';
+import '../bilan.dart';
+import '../feedback.dart';
+import '../settings.dart';
 
 class AppDrawer extends StatelessWidget {
   @override

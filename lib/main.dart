@@ -1,4 +1,4 @@
-import 'package:bonap/customIcons/custom_icons.dart';
+import 'package:bonap/presentation/custom_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,6 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/painting.dart.';
+
+//Pages
+import './repas.dart';
+import './ingredients.dart';
+import './listeCourse.dart';
+import './bilan.dart';
+import './feedback.dart';
+import './settings.dart';
 
 import 'widget/drawer.dart';
 
