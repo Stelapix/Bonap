@@ -20,11 +20,9 @@ class _CalendrierState extends State<Calendrier> {
   Widget build(BuildContext context) {
     return new TableCalendar(
       locale: 'fr_FR',
-      initialCalendarFormat: CalendarFormat.week,
+      initialCalendarFormat: CalendarFormat.month,
       availableCalendarFormats: const {
         CalendarFormat.month: 'Mois',
-        CalendarFormat.twoWeeks: '15j',
-        CalendarFormat.week: 'Semaine',
       },
       calendarStyle: CalendarStyle(
           todayColor: Colors.orange,
