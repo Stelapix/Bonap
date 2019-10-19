@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "764211714995",
+    "firebase_url": "https://bonap-bc7d6.firebaseio.com",
+    "project_id": "bonap-bc7d6",
+    "storage_bucket": "bonap-bc7d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764211714995:android:aead399d197d406a9dc9c6",
+        "android_client_info": {
+          "package_name": "com.stelapix.bonap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764211714995-bqjg0slue4ndhonfgnmbl924mk6cla99.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stelapix.bonap",
+            "certificate_hash": "8ef37b0c959643fb467cb82b0cb1ddbd87c9e432"
+          }
+        },
+        {
+          "client_id": "764211714995-9dlb31drrtmb8s3sj86or38fjr51epis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKhZvTvrLP45br_SSkIXJQQdYhC3Bo2WI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764211714995-9dlb31drrtmb8s3sj86or38fjr51epis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
