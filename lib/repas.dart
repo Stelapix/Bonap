@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'ingredients.dart';
+
+class Repas {
+  String nom;
+  List<Ingredient> ingredients = new List<Ingredient>();
+  static List<Repas> repas = new List<Repas>();
+}
 
 class RepasPage extends StatefulWidget {
   @override

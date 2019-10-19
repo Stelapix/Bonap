@@ -40,23 +40,25 @@ class _IngredientsPageState extends State<IngredientsPage> {
       body: Container(
           child: Column(
         children: <Widget>[
-          ListView(
-            shrinkWrap: true,
-            children: Ingredient.ingredients
-                .map(
-                  (data) => new Container(
-                    child: ListTile(
-                      leading: _catIcon(data.cat),
-                      title: Text(data.nom),
-                      trailing: IconButton(
-                        icon: Icon(Icons.more_vert),
-                        onPressed: () => _editIngredient(data),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: Ingredient.ingredients
+                  .map(
+                    (data) => new Container(
+                      child: ListTile(
+                        leading: _catIcon(data.cat),
+                        title: Text(data.nom),
+                        trailing: IconButton(
+                          icon: Icon(Icons.more_vert),
+                          onPressed: () => _editIngredient(data),
+                        ),
                       ),
                     ),
-                  ),
-                )
-                .toList(),
-          ),
+                  )
+                  .toList(),
+            ),
+          )
         ],
       )),
       floatingActionButton: FloatingActionButton(
@@ -81,12 +83,13 @@ class _IngredientsPageState extends State<IngredientsPage> {
         // return object of type Dialog
         return AlertDialog(
           title: Text('Modifier ' + I.nom),
-          content: new Row(
+          content: new Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
                 child: DropDownButtonIngredients(),
               ),
-              Expanded(
+              Container(
                   child: new TextField(
                 autofocus: false,
                 decoration:
@@ -129,8 +132,6 @@ class _IngredientsPageState extends State<IngredientsPage> {
             ),
             FlatButton(
               child: Icon(Icons.delete),
-
-
               onPressed: () => _deleteIngredient(I),
             )
           ],
@@ -146,12 +147,13 @@ class _IngredientsPageState extends State<IngredientsPage> {
         // return object of type Dialog
         return AlertDialog(
           title: Text('Ajouter un ingrédient'),
-          content: new Row(
+          content: new Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
                 child: DropDownButtonIngredients(),
               ),
-              Expanded(
+              Container(
                   child: new TextField(
                 autofocus: false,
                 decoration: new InputDecoration(
