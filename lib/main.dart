@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
-// Widgets
-import 'widgets/drawer.dart';
-import 'widgets/calendrier.dart';
-import 'widgets/dropDownButtons/dropDownButtonMain.dart';
-
-// Icons
-import 'custom/custom_icons.dart';
+import 'widgets/splash.dart';
+import 'widgets/account/login.dart';
+import 'homePage.dart';
 
 void main() async {
   await SystemChrome.setPreferredOrientations([
@@ -26,123 +22,26 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       debugShowCheckedModeBanner: false, // Retirer le bandeau de debug
-      home: HomePage(),
+      home: MainScreen(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePage createState() => _HomePage();
-}
-
-enum popUpMenu { deconnexion }
-
-class _HomePage extends State<HomePage> {
-  final bleu = Color.fromRGBO(0, 191, 255, 1);
-  final jaune = Color.fromRGBO(205, 225, 0, 1);
-
+class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "Menu de la semaine",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 23.0,
-                color: Colors.black),
-          ),
-          actions: <Widget>[
-            PopupMenuButton<popUpMenu>(
-              elevation: 3.2,
-              tooltip: 'Option de déconnexion',
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<popUpMenu>>[
-                const PopupMenuItem<popUpMenu>(
-                  value: popUpMenu.deconnexion,
-                  child: Text('Déconnexion'),
-                ),
-              ],
-            )
-          ],
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: 'Afficher le drawer',
-              );
-            },
-          ),
-          iconTheme: new IconThemeData(color: Colors.black),
-          backgroundColor: bleu,
-        ),
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Repas du :  ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: bleu,
-                            fontSize: 20.0)),
-                    DropDownButtonMain(),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '\nLundi\n'
-                      '\nMardi\n'
-                      '\nMercredi\n'
-                      '\nJeudi\n'
-                      '\nVendredi\n'
-                      '\nSamedi\n'
-                      '\nDimanche\n',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 1.0,
-                color: null,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      jaune,
-                      bleu,
-                    ],
-                  ),
-                ),
-                child: Calendrier(),
-              ),
-              Divider(
-                thickness: 1.0,
-                color: null,
-              ),
-            ],
-          ),
-        ));
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SplashScreen();
+        } else if (!snapshot.hasData || snapshot.data == null) {
+          return LoginPage();
+        } else {
+          return HomePage();
+        }
+      },
+    );
   }
 }
 
