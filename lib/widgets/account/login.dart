@@ -79,13 +79,22 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(height: 20.0),
+              RaisedButton(
+                child: Text("Login with Google"),
+                onPressed: () async {
+                  bool res = await AuthProvider().loginWithGoogle();
+                  if(!res)
+                    print("error logging in with google");
+                },
+              ),
+              /*
               GoogleSignInButton(
                 darkMode: true,
                 onPressed: () async {
                   bool res = await AuthProvider().loginWithGoogle();
                   if (!res) print("error login with Google");
                 },
-              ),
+              ),*/
             ],
           ),
         ),
