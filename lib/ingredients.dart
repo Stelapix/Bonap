@@ -14,6 +14,18 @@ class Ingredient {
 
   Ingredient(this.nom, this.cat);
 
+  @override
+  String toString() {
+    return this.nom;
+  }
+
+  String nameWithoutTheEnd() {
+    int max = 25;
+    if (this.nom.length > max)
+      return this.nom.substring(0, max) + '...';
+    else return this.nom;
+  }
+
   static Icon catIcon(Categorie c) {
     switch (c) {
       case (Categorie.autre):
