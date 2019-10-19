@@ -13,95 +13,77 @@ class Ingredient {
   static List<Ingredient> ingredients = new List<Ingredient>();
 
   Ingredient(this.nom, this.cat);
-}
-
-enum popUpMenu { reset }
-
-class IngredientsPage extends StatefulWidget {
-  @override
-  _IngredientsPageState createState() => new _IngredientsPageState();
-}
-
-class _IngredientsPageState extends State<IngredientsPage> {
-  String newIngr = '';
 
   @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Ingrédients'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: _resetIngredients,
-          ),
-        ],
-      ),
-      body: Container(
-          child: Column(
-        children: <Widget>[
-          ListView(
-            shrinkWrap: true,
-            children: Ingredient.ingredients
-                .map(
-                  (data) => new Container(
-                    child: ListTile(
-                      leading: _catIcon(data.cat),
-                      title: Text(data.nom),
-                      trailing: IconButton(
-                        icon: Icon(Icons.more_vert),
-                        onPressed: () => _editIngredient(data),
-                      ),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-        ],
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _ajouterIngredient,
-        tooltip: 'Ajouter un ingrédient',
-        backgroundColor: Color.fromRGBO(0, 191, 255, 1),
-        child: Icon(Icons.add),
-      ),
-    );
+  String toString() {
+    return this.nom;
   }
 
-  void _deleteIngredient(Ingredient I) {
-    Ingredient.ingredients.remove(I);
-    Navigator.of(context).pop();
-    Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Oups")));
+  String nameWithoutTheEnd() {
+    int max = 25;
+    if (this.nom.length > max)
+      return this.nom.substring(0, max) + '...';
+    else return this.nom;
   }
 
-  void _editIngredient(Ingredient I) {
+  static Icon catIcon(Categorie c) {
+    switch (c) {
+      case (Categorie.autre):
+        return Icon(Custom.cereals);
+        break;
+      case (Categorie.feculent):
+        return Icon(Custom.baguette);
+        break;
+      case (Categorie.viande):
+        return Icon(Custom.meat);
+        break;
+      case (Categorie.poisson):
+        return Icon(Custom.fish);
+        break;
+      case (Categorie.fruit):
+        return Icon(Custom.basket);
+        break;
+      case (Categorie.legume):
+        return Icon(Custom.carrot);
+        break;
+      case (Categorie.laitier):
+        return Icon(Custom.cheese);
+        break;
+      default:
+        return Icon(Icons.cake);
+        break;
+    }
+  }
+
+  static void editIngredient(Ingredient I, BuildContext context, String newIngr) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
           title: Text('Modifier ' + I.nom),
-          content: new Row(
+          content: new Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
                 child: DropDownButtonIngredients(),
               ),
-              Expanded(
+              Container(
                   child: new TextField(
-                autofocus: false,
-                decoration:
+                    autofocus: false,
+                    decoration:
                     new InputDecoration(labelText: 'Nom', hintText: I.nom),
-                onChanged: (value) {
-                  newIngr = value;
-                },
-              )),
+                    onChanged: (value) {
+                      newIngr = value;
+                    },
+                  )),
             ],
           ),
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),
               onPressed: () {
-                if (newIngr == '') _deleteIngredient(I);
+                if (newIngr == '') deleteIngredient(I, context);
                 I.nom = newIngr;
                 switch (Ingredient.newCat) {
                   case ("Viande"):
@@ -129,9 +111,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
             ),
             FlatButton(
               child: Icon(Icons.delete),
-
-
-              onPressed: () => _deleteIngredient(I),
+              onPressed: () => deleteIngredient(I, context),
             )
           ],
         );
@@ -139,27 +119,34 @@ class _IngredientsPageState extends State<IngredientsPage> {
     );
   }
 
-  void _ajouterIngredient() {
+  static void deleteIngredient(Ingredient I, BuildContext context) {
+    Ingredient.ingredients.remove(I);
+    Navigator.of(context).pop();
+    Scaffold.of(context).showSnackBar(new SnackBar(content: Text("Oups")));
+  }
+
+  static void ajouterIngredient(BuildContext context, String newIngr) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
           title: Text('Ajouter un ingrédient'),
-          content: new Row(
+          content: new Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
                 child: DropDownButtonIngredients(),
               ),
-              Expanded(
+              Container(
                   child: new TextField(
-                autofocus: false,
-                decoration: new InputDecoration(
-                    labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
-                onChanged: (value) {
-                  newIngr = value;
-                },
-              )),
+                    autofocus: false,
+                    decoration: new InputDecoration(
+                        labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
+                    onChanged: (value) {
+                      newIngr = value;
+                    },
+                  )),
             ],
           ),
           actions: <Widget>[
@@ -212,7 +199,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
     );
   }
 
-  void _resetIngredients() {
+  static void resetIngredients(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -240,33 +227,63 @@ class _IngredientsPageState extends State<IngredientsPage> {
       },
     );
   }
-
-  Icon _catIcon(Categorie c) {
-    switch (c) {
-      case (Categorie.autre):
-        return Icon(Custom.cereals);
-        break;
-      case (Categorie.feculent):
-        return Icon(Custom.baguette);
-        break;
-      case (Categorie.viande):
-        return Icon(Custom.meat);
-        break;
-      case (Categorie.poisson):
-        return Icon(Custom.fish);
-        break;
-      case (Categorie.fruit):
-        return Icon(Custom.basket);
-        break;
-      case (Categorie.legume):
-        return Icon(Custom.carrot);
-        break;
-      case (Categorie.laitier):
-        return Icon(Custom.cheese);
-        break;
-      default:
-        return Icon(Icons.cake);
-        break;
-    }
-  }
 }
+
+enum popUpMenu { reset }
+
+class IngredientsPage extends StatefulWidget {
+  @override
+  _IngredientsPageState createState() => new _IngredientsPageState();
+}
+
+class _IngredientsPageState extends State<IngredientsPage> {
+  String newIngr = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Ingrédients'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () => Ingredient.resetIngredients(context),
+          ),
+        ],
+      ),
+      body: Container(
+          child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: Ingredient.ingredients
+                  .map(
+                    (data) => new Container(
+                      child: ListTile(
+                        leading: Ingredient.catIcon(data.cat),
+                        title: Text(data.nom),
+                        trailing: IconButton(
+                          icon: Icon(Icons.more_vert),
+                          onPressed: () => Ingredient.editIngredient(data, context, newIngr),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
+        ],
+      )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Ingredient.ajouterIngredient(context, newIngr),
+        tooltip: 'Ajouter un ingrédient',
+        backgroundColor: Color.fromRGBO(0, 191, 255, 1),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+}
+
+
