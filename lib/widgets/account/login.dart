@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            height: 600.0,
+            height: 620.0,
             child: Padding(
               padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 200),
               // 30 30 200 50
@@ -66,19 +66,21 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 20.0),
                       buildButtonContainer(),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 20.0),
                       Container(
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("Don't have an account?"),
+                              Text("Pas encore inscrit ?", style: TextStyle(
+                                  color: Colors.black)
+                              ),
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Text("SIGN UP",
+                              Text("Inscrivez-vous",
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,
                                   ))
@@ -227,57 +229,3 @@ class RaisedGradientButton extends StatelessWidget {
     );
   }
 }
-
-//TextField(
-//                        controller: _emailController,
-//                        decoration: InputDecoration(
-//                          enabledBorder: UnderlineInputBorder(
-//                            borderSide: BorderSide(color: Colors.black),
-//                          ),
-//                          focusedBorder: UnderlineInputBorder(
-//                            borderSide: BorderSide(color: Colors.black),
-//                          ),
-//                          hintText: "Adresse email",
-//                          hintStyle: TextStyle(color: _colors[_currentIndex]),
-//                          icon: const Padding(
-//                              padding: const EdgeInsets.only(top: 0.0),
-//                              child: const Icon(Icons.email, color: Colors.black54)
-//                          ),
-//                        ),
-//                      ),
-//                      const SizedBox(height: 10.0),
-//                      FormFieldSample(passwordController: _passwordController),
-
-//                      TextField(
-//                        controller: _passwordController,
-//                        obscureText: true,
-//                        decoration: InputDecoration(
-//                          enabledBorder: UnderlineInputBorder(
-//                            borderSide: BorderSide(color: Colors.black),
-//                          ),
-//                          focusedBorder: UnderlineInputBorder(
-//                            borderSide: BorderSide(color: Colors.black),
-//                          ),
-//                          hintText: "Mot de passe",
-//                          hintStyle: TextStyle(color: _colors[_currentIndex]),
-//                        ),
-//                      ),
-
-//RaisedButton(
-//child: Text("Login",
-//style: TextStyle(color: _colors[_currentIndex])),
-//onPressed: () async {
-//if (_emailController.text.isEmpty) {
-//print("Email required");
-//_onChangedColor();
-//} else if (_passwordController.text.isEmpty) {
-//print("Password required");
-//} else {
-//bool res = await AuthProvider().signInWithEmail(
-//_emailController.text, _passwordController.text);
-//if (!res) {
-//print("Login failed");
-//}
-//}
-//},
-//),
