@@ -37,67 +37,72 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 100.0),
-              Text(
-                "Login",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(hintText: "Adresse email"),
-              ),
-              const SizedBox(height: 10.0),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(hintText: "Mot de passe"),
-              ),
-              const SizedBox(height: 10.0),
-              RaisedButton(
-                child: Text("Login",
-                    style: TextStyle(color: _colors[_currentIndex])),
-                onPressed: () async {
-                  if (_emailController.text.isEmpty) {
-                    print("Email required");
-                    _onChangedColor();
-                  } else if (_passwordController.text.isEmpty) {
-                    print("Password required");
-                  } else {
-                    bool res = await AuthProvider().signInWithEmail(
-                        _emailController.text, _passwordController.text);
-                    if (!res) {
-                      print("Login failed");
-                    }
-                  }
-                },
-              ),
-              const SizedBox(height: 20.0),
-              RaisedButton(
-                child: Text("Login with Google"),
-                onPressed: () async {
-                  bool res = await AuthProvider().loginWithGoogle();
-                  if(!res)
-                    print("error logging in with google");
-                },
-              ),
-              /*
-              GoogleSignInButton(
-                darkMode: true,
-                onPressed: () async {
-                  bool res = await AuthProvider().loginWithGoogle();
-                  if (!res) print("error login with Google");
-                },
-              ),*/
-            ],
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: new Image.asset(
+              'assets/splash/splash2.jpg',
+              width: size.width,
+              height: size.height,
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 100.0),
+                  Text(
+                    "Login",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(hintText: "Adresse email"),
+                  ),
+                  const SizedBox(height: 10.0),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(hintText: "Mot de passe"),
+                  ),
+                  const SizedBox(height: 10.0),
+                  RaisedButton(
+                    child: Text("Login",
+                        style: TextStyle(color: _colors[_currentIndex])),
+                    onPressed: () async {
+                      if (_emailController.text.isEmpty) {
+                        print("Email required");
+                        _onChangedColor();
+                      } else if (_passwordController.text.isEmpty) {
+                        print("Password required");
+                      } else {
+                        bool res = await AuthProvider().signInWithEmail(
+                            _emailController.text, _passwordController.text);
+                        if (!res) {
+                          print("Login failed");
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  GoogleSignInButton(
+                    darkMode: true,
+                    onPressed: () async {
+                      bool res = await AuthProvider().loginWithGoogle();
+                      if (!res) print("error login with Google");
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
