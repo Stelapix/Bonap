@@ -15,13 +15,14 @@ class SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    loadData();
+    //loadData();
   }
 
+  /*
   Future<Timer> loadData() async {
     return new Timer(Duration(seconds: 3), onDoneLoading);
   }
-
+*/
   onDoneLoading() async {
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
   }
