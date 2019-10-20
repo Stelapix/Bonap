@@ -20,7 +20,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -60,7 +62,9 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               "Mot de passe oublié ?",
                               style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme
+                                    .of(context)
+                                    .primaryColor,
                               ),
                             ),
                           ],
@@ -74,15 +78,16 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("Pas encore inscrit ?", style: TextStyle(
-                                  color: Colors.black)
-                              ),
+                              Text("Pas encore inscrit ?",
+                                  style: TextStyle(color: Colors.black)),
                               SizedBox(
                                 width: 10.0,
                               ),
                               Text("Inscrivez-vous",
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme
+                                        .of(context)
+                                        .primaryColor,
                                   ))
                             ],
                           ),
@@ -134,98 +139,51 @@ class _LoginPageState extends State<LoginPage> {
             : Icon(Icons.lock, color: Colors.black),
         suffixIcon: hintText == "Mot de passe"
             ? IconButton(
-                color: Colors.black,
-                onPressed: _toggleVisibility,
-                icon: _isHidden
-                    ? Icon(Icons.visibility)
-                    : Icon(Icons.visibility_off),
-              )
+          color: Colors.black,
+          onPressed: _toggleVisibility,
+          icon: _isHidden
+              ? Icon(Icons.visibility)
+              : Icon(Icons.visibility_off),
+        )
             : null,
       ),
-      obscureText: hintText == "Mot de passe" ? _isHidden : hintText == "Adresse Email" ? false : _isHidden,
-      controller: hintText == "Adresse Email" ? _emailController : _passwordController,
+      obscureText: hintText == "Mot de passe"
+          ? _isHidden
+          : hintText == "Adresse Email" ? false : _isHidden,
+      controller:
+      hintText == "Adresse Email" ? _emailController : _passwordController,
     );
   }
 
   Widget buildButtonContainer() {
-    return Container(
-      height: 56.0,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(23.0),
-        gradient: LinearGradient(
-            colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
-            begin: Alignment.centerRight,
-            end: Alignment.centerLeft),
-      ),
-      child: RaisedGradientButton(
-        child: Text(
-          'LOGIN',
-          style: TextStyle(fontSize: 23, color: Colors.white),
-        ),
-        gradient: LinearGradient(
-            colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
-            begin: Alignment.centerRight,
-            end: Alignment.centerLeft),
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-            side: BorderSide(color: Colors.black)),
-        onPressed: () async {
-          if (_emailController.text.isEmpty) {
-            print("Email required");
-          } else if (_passwordController.text.isEmpty) {
-            print("Password required");
-          } else {
-            bool res = await AuthProvider().signInWithEmail(
-                _emailController.text, _passwordController.text);
-            if (!res) {
-              print("Login failed");
-            }
+    return InkWell(
+      onTap: () async {
+        if (_emailController.text.isEmpty) {
+          print("Email required");
+        } else if (_passwordController.text.isEmpty) {
+          print("Password required");
+        } else {
+          bool res = await AuthProvider().signInWithEmail(
+              _emailController.text, _passwordController.text);
+          if (!res) {
+            print("Login failed");
           }
-        },
-      ),
-    );
-  }
-}
-
-class RaisedGradientButton extends StatelessWidget {
-  final Widget child;
-  final Gradient gradient;
-  final double width;
-  final double height;
-  final Function onPressed;
-  final ShapeBorder shape;
-
-  const RaisedGradientButton({
-    Key key,
-    @required this.child,
-    this.gradient,
-    this.width = double.infinity,
-    this.height = 50.0,
-    this.onPressed,
-    this.shape,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: 50.0,
-      decoration: BoxDecoration(gradient: gradient, boxShadow: [
-        BoxShadow(
-          color: Colors.grey[500],
-          offset: Offset(0.0, 1.5),
-          blurRadius: 1.5,
+        }
+      },
+      child: new Container(
+        height: 50.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          gradient: LinearGradient(
+              colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft),
         ),
-      ]),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-            onTap: onPressed,
-            child: Center(
-              child: child,
-            )),
+        child: new Center(child: new Text('Connectez-vous',
+          style: new TextStyle(fontSize: 22.0, color: Colors.white),),),
       ),
     );
   }
 }
+
+
