@@ -1,3 +1,4 @@
+import 'package:bonap/homePage.dart';
 import 'package:bonap/widgets/account/firebase_auth.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -62,9 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               "Mot de passe oublié ?",
                               style: TextStyle(
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                           ],
@@ -85,22 +82,21 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Text("Inscrivez-vous",
                                   style: TextStyle(
-                                    color: Theme
-                                        .of(context)
-                                        .primaryColor,
+                                    color: Theme.of(context).primaryColor,
                                   ))
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10.0),
-                      GoogleSignInButton(
-                        darkMode: true,
-                        onPressed: () async {
-                          bool res = await AuthProvider().loginWithGoogle();
-                          if (!res) print("error login with Google");
-                        },
-                      ),
+                      const SizedBox(height: 15.0),
+                      _signInButton(),
+//                      GoogleSignInButton(
+//                        darkMode: true,
+//                        onPressed: () async {
+//                          bool res = await AuthProvider().loginWithGoogle();
+//                          if (!res) print("error login with Google");
+//                        },
+//                      ),
                     ],
                   ),
                 ),
@@ -139,19 +135,19 @@ class _LoginPageState extends State<LoginPage> {
             : Icon(Icons.lock, color: Colors.black),
         suffixIcon: hintText == "Mot de passe"
             ? IconButton(
-          color: Colors.black,
-          onPressed: _toggleVisibility,
-          icon: _isHidden
-              ? Icon(Icons.visibility)
-              : Icon(Icons.visibility_off),
-        )
+                color: Colors.black,
+                onPressed: _toggleVisibility,
+                icon: _isHidden
+                    ? Icon(Icons.visibility)
+                    : Icon(Icons.visibility_off),
+              )
             : null,
       ),
       obscureText: hintText == "Mot de passe"
           ? _isHidden
           : hintText == "Adresse Email" ? false : _isHidden,
       controller:
-      hintText == "Adresse Email" ? _emailController : _passwordController,
+          hintText == "Adresse Email" ? _emailController : _passwordController,
     );
   }
 
@@ -163,8 +159,8 @@ class _LoginPageState extends State<LoginPage> {
         } else if (_passwordController.text.isEmpty) {
           print("Password required");
         } else {
-          bool res = await AuthProvider().signInWithEmail(
-              _emailController.text, _passwordController.text);
+          bool res = await signInWithEmail(
+              _emailController.text, _passwordController.text, context);
           if (!res) {
             print("Login failed");
           }
@@ -179,13 +175,60 @@ class _LoginPageState extends State<LoginPage> {
               begin: Alignment.centerRight,
               end: Alignment.centerLeft),
         ),
-        child: new Center(child: new Text('Connectez-vous',
-          style: new TextStyle(fontSize: 22.0, color: Colors.white),),),
+        child: new Center(
+          child: new Text(
+            'Connectez-vous',
+            style: new TextStyle(fontSize: 22.0, color: Colors.white),
+          ),
+        ),
       ),
     );
   }
 
-  
+  Widget _signInButton() {
+    return DecoratedBox(
+      decoration:
+          ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), color: Colors.white),
+      child: OutlineButton(
+        onPressed: () {
+          signInWithGoogle().whenComplete(() {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return HomePage();
+                },
+              ),
+            );
+          });
+        },
+        highlightElevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  'Google',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future navigateToSubPage(context) async {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
+  }
 }
-
-
