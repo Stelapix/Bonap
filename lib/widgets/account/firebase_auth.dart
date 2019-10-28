@@ -38,15 +38,15 @@ void signOutGoogle(context) async {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) {
-        return MainScreen();
+        return LoginPage();
       },
     ),
   );
-  print("User Sign Out");
+  print("---------------------> User Sign Out");
 }
 
 Future navigateToSubPage(context) async {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
+  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
 }
 
 Future navigateToSubPage2(context) async {
@@ -57,7 +57,6 @@ Future<String> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
-
   final AuthCredential credential = GoogleAuthProvider.getCredential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
@@ -72,5 +71,5 @@ Future<String> signInWithGoogle() async {
   final FirebaseUser currentUser = await _auth.currentUser();
   assert(user.uid == currentUser.uid);
 
-  return 'signInWithGoogle succeeded: $user';
+  return '---------------------> signInWithGoogle succeeded: $user';
 }

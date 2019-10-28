@@ -187,18 +187,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _signInButton() {
     return DecoratedBox(
-      decoration:
-          ShapeDecoration(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)), color: Colors.white),
+      decoration: ShapeDecoration(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+          color: Colors.white),
       child: OutlineButton(
         onPressed: () {
           signInWithGoogle().whenComplete(() {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return HomePage();
-                },
-              ),
-            );
+            return HomePage();
           });
         },
         highlightElevation: 0,
@@ -225,10 +221,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future navigateToSubPage(context) async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 }
