@@ -26,6 +26,8 @@ class _RepasPageState extends State<RepasPage> {
   List<Ingredient> allIngr = Ingredient.ingredients;
   List<Ingredient> selectedIngr = [];
 
+  ListView affRepas = new ListView();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +36,14 @@ class _RepasPageState extends State<RepasPage> {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
+          backgroundColor: Color.fromRGBO(0, 191, 255, 1),
+          tooltip: "Ajouter un repas",
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (context) {
                   return _MyDialog(
+                      rps: this,
                       ingr: allIngr,
                       selectedIngr: selectedIngr,
                       onSelectedIngrChanged: (ingr) {
@@ -51,26 +56,31 @@ class _RepasPageState extends State<RepasPage> {
           child: Column(
             children: <Widget>[
               Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: Repas.listRepas
-                      .map(
-                        (data) => new Container(
-                          child: ListTile(
-                            title: Text(data.nom),
-                            subtitle: Text(data.listIngredientToString()),
-                            trailing: IconButton(
-                              icon: Icon(Icons.more_vert),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
+                child: displayRepas(),
               )
             ],
           ),
         ));
+  }
+
+  ListView displayRepas() {
+    return ListView(
+      shrinkWrap: true,
+      children: Repas.listRepas
+          .map(
+            (data) => new Container(
+          child: ListTile(
+            title: Text(data.nom),
+            subtitle: Text(data.listIngredientToString()),
+            trailing: IconButton(
+              icon: Icon(Icons.more_vert),
+            ),
+          ),
+        ),
+      )
+          .toList(),
+    );
+
   }
 }
 
@@ -79,11 +89,13 @@ class _MyDialog extends StatefulWidget {
     this.ingr,
     this.selectedIngr,
     this.onSelectedIngrChanged,
+    this.rps,
   });
 
   final List<Ingredient> ingr;
   final List<Ingredient> selectedIngr;
   final ValueChanged<List<Ingredient>> onSelectedIngrChanged;
+  _RepasPageState rps = _RepasPageState();
 
   @override
   _MyDialogState createState() => _MyDialogState();
@@ -127,9 +139,10 @@ class _MyDialogState extends State<_MyDialog> {
                         }
                       }
                     }
-
                   }
-                  if (weCanAddIt) Repas.listRepas.add(Repas(newRepasName, _tempSelectedIngr));
+                  if (weCanAddIt)
+                    Repas.listRepas.add(Repas(newRepasName, _tempSelectedIngr));
+                  widget.rps.setState(() => widget.rps.affRepas = widget.rps.displayRepas());
                   Navigator.pop(context);
                 },
                 child: Text('Ok'),
@@ -164,7 +177,6 @@ class _MyDialogState extends State<_MyDialog> {
                           children: <Widget>[
                             Ingredient.catIcon(ingrName.cat),
                             Text('    '),
-
                             Text(ingrName.nameWithoutTheEnd()),
                           ],
                         ),
