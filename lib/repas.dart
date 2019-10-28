@@ -95,7 +95,7 @@ class _MyDialog extends StatefulWidget {
   final List<Ingredient> ingr;
   final List<Ingredient> selectedIngr;
   final ValueChanged<List<Ingredient>> onSelectedIngrChanged;
-  _RepasPageState rps = _RepasPageState();
+  final _RepasPageState rps;
 
   @override
   _MyDialogState createState() => _MyDialogState();
@@ -210,3 +210,12 @@ class _MyDialogState extends State<_MyDialog> {
     );
   }
 }
+
+// TO DO LIST
+/*
+* Filtrer les repas
+* Compteur de nombre de fois ou on la pris
+* Menu edit
+* Securite noms, existe deja etc
+* Quand on supprime un ingredient, le supprimer de tous les repas qui l'utilisent
+* */

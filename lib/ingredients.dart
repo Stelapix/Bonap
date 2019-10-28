@@ -93,7 +93,11 @@ class _IngredientsPageState extends State<IngredientsPage> {
             )
           ],
         )),
-        floatingActionButton: FloatingActionButton(onPressed: () {
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            backgroundColor: Color.fromRGBO(0, 191, 255, 1),
+            tooltip: "Ajouter un ingredient",
+            onPressed: () {
           showDialog(
               context: context,
               builder: (context) {
