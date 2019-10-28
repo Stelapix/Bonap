@@ -23,7 +23,8 @@ class Ingredient {
     int max = 25;
     if (this.nom.length > max)
       return this.nom.substring(0, max) + '...';
-    else return this.nom;
+    else
+      return this.nom;
   }
 
   static Icon catIcon(Categorie c) {
@@ -54,35 +55,6 @@ class Ingredient {
         break;
     }
   }
-
-  static void resetIngredients(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text('Réinitialisation des ingrédients?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Non'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('Oui'),
-              onPressed: () {
-                Ingredient.ingredients
-                    .removeRange(0, Ingredient.ingredients.length);
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 enum popUpMenu { reset }
@@ -99,35 +71,35 @@ class _IngredientsPageState extends State<IngredientsPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Ingrédients'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () => Ingredient.resetIngredients(context),
-          ),
-        ],
-      ),
-      body: Container(
-          child: Column(
-        children: <Widget>[
-          Expanded(
-            child: displayIngredients(),
-
-          )
-        ],
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        appBar: new AppBar(
+          title: new Text('Ingrédients'),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _ResetDialog(this);
+                      });
+                }),
+          ],
+        ),
+        body: Container(
+            child: Column(
+          children: <Widget>[
+            Expanded(
+              child: displayIngredients(),
+            )
+          ],
+        )),
+        floatingActionButton: FloatingActionButton(onPressed: () {
           showDialog(
-            context: context,
-            builder: (context) {
-              return _AddDialog(this);
-            }
-          );
-        }
-      )
-    );
+              context: context,
+              builder: (context) {
+                return _AddDialog(this);
+              });
+        }));
   }
 
   ListView displayIngredients() {
@@ -136,50 +108,45 @@ class _IngredientsPageState extends State<IngredientsPage> {
       children: Ingredient.ingredients
           .map(
             (data) => new Container(
-          child: ListTile(
-            leading: Ingredient.catIcon(data.cat),
-            title: Text(data.nom),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return _EditDialog(
-                        I: data,
-                        ips: this,
-                      );
-                    });
-              },
+              child: ListTile(
+                leading: Ingredient.catIcon(data.cat),
+                title: Text(data.nom),
+                trailing: IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return _EditDialog(
+                            I: data,
+                            ips: this,
+                          );
+                        });
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      )
+          )
           .toList(),
     );
   }
 
   void deleteIngredient(Ingredient I) {
     Ingredient.ingredients.remove(I);
-
   }
-
 }
 
 class _AddDialog extends StatefulWidget {
-  _IngredientsPageState ips;
+  final _IngredientsPageState ips;
 
   _AddDialog(this.ips);
 
   @override
-  _AddDialogState createState() => _AddDialogState(ips);
+  _AddDialogState createState() => _AddDialogState();
 }
 
 class _AddDialogState extends State<_AddDialog> {
   String newIngr = '';
-  _IngredientsPageState ips;
-
-  _AddDialogState(this.ips);
 
   @override
   void initState() {
@@ -198,27 +165,23 @@ class _AddDialogState extends State<_AddDialog> {
           ),
           Container(
               child: new TextField(
-                autofocus: false,
-                decoration: new InputDecoration(
-                    labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
-                onChanged: (value) {
-                  newIngr = value;
-                  print("actuel :" + newIngr);
-                },
-
-              )),
+            autofocus: false,
+            decoration: new InputDecoration(
+                labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
+            onChanged: (value) {
+              newIngr = value;
+            },
+          )),
         ],
       ),
       actions: <Widget>[
         FlatButton(
           child: Text('Ok'),
           onPressed: () {
-            print("ajout de : " + newIngr);
             if (newIngr != '') {
               var existe = false;
               for (var o in Ingredient.ingredients) {
-                if (o.nom.toUpperCase() == newIngr.toUpperCase())
-                  existe = true;
+                if (o.nom.toUpperCase() == newIngr.toUpperCase()) existe = true;
               }
               if (!existe)
                 switch (Ingredient.newCat) {
@@ -250,7 +213,8 @@ class _AddDialogState extends State<_AddDialog> {
                     break;
                 }
             }
-            this.ips.setState(() => this.ips.affIngredients = this.ips.displayIngredients());
+            widget.ips.setState(() =>
+                widget.ips.affIngredients = widget.ips.displayIngredients());
             Navigator.of(context).pop();
           },
         ),
@@ -260,7 +224,7 @@ class _AddDialogState extends State<_AddDialog> {
 }
 
 class _EditDialog extends StatefulWidget {
-  _IngredientsPageState ips = _IngredientsPageState();
+  final _IngredientsPageState ips;
   final Ingredient I;
 
   _EditDialog({
@@ -268,22 +232,16 @@ class _EditDialog extends StatefulWidget {
     this.I,
   });
 
-
   @override
-  _EditDialogState createState() => _EditDialogState(ips);
+  _EditDialogState createState() => _EditDialogState();
 }
 
 class _EditDialogState extends State<_EditDialog> {
   String newIngr = '';
-  _IngredientsPageState ips = _IngredientsPageState();
-
-
-  _EditDialogState(this.ips);
 
   @override
   void initState() {
     super.initState();
-    ips = _IngredientsPageState();
   }
 
   @override
@@ -298,13 +256,13 @@ class _EditDialogState extends State<_EditDialog> {
           ),
           Container(
               child: new TextField(
-                autofocus: false,
-                decoration:
+            autofocus: false,
+            decoration:
                 new InputDecoration(labelText: 'Nom', hintText: widget.I.nom),
-                onChanged: (value) {
-                  newIngr = value;
-                },
-              )),
+            onChanged: (value) {
+              newIngr = value;
+            },
+          )),
         ],
       ),
       actions: <Widget>[
@@ -338,17 +296,55 @@ class _EditDialogState extends State<_EditDialog> {
           },
         ),
         FlatButton(
-          child: Icon(Icons.delete),
-          onPressed: () {
-            Ingredient.ingredients.remove(widget.I);
-            Navigator.of(context).pop();
-            widget.ips.setState(() => widget.ips.affIngredients = widget.ips.displayIngredients());
-
-          }
-
-        )
+            child: Icon(Icons.delete),
+            onPressed: () {
+              Ingredient.ingredients.remove(widget.I);
+              Navigator.of(context).pop();
+              widget.ips.setState(() =>
+                  widget.ips.affIngredients = widget.ips.displayIngredients());
+            })
       ],
     );
   }
 }
 
+class _ResetDialog extends StatefulWidget {
+  final _IngredientsPageState ips;
+
+  _ResetDialog(this.ips);
+
+  @override
+  _ResetDialogState createState() => _ResetDialogState();
+}
+
+class _ResetDialogState extends State<_ResetDialog> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Réinitialisation des ingrédients?'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Non'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+          child: Text('Oui'),
+          onPressed: () {
+            Ingredient.ingredients
+                .removeRange(0, Ingredient.ingredients.length);
+            Navigator.of(context).pop();
+            widget.ips.setState(() =>
+                widget.ips.affIngredients = widget.ips.displayIngredients());
+          },
+        ),
+      ],
+    );
+  }
+}
