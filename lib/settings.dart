@@ -15,13 +15,12 @@ class SettingsPage extends StatelessWidget {
             RaisedButton(
               child: Text("Déconnexion"),
               onPressed: (){
-                signOutGoogle(context);
+                AuthProvider().logOut(context);
               },
             )
           ],
         ),
       ),
-
     );
   }
 }
