@@ -1,3 +1,4 @@
+import 'package:bonap/widgets/account/login.dart';
 import 'package:flutter/material.dart';
 
 // Widgets
@@ -5,14 +6,9 @@ import 'widgets/drawer.dart';
 import 'widgets/calendrier.dart';
 import 'widgets/dropDownButtons/dropDownButtonMain.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePage createState() => _HomePage();
-}
-
 enum popUpMenu { deconnexion }
 
-class _HomePage extends State<HomePage> {
+class HomePage extends StatelessWidget {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
@@ -104,6 +100,10 @@ class _HomePage extends State<HomePage> {
             ],
           ),
         ));
+  }
+
+  Future navigateToSubPage(context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
 
