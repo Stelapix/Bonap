@@ -9,7 +9,16 @@ class Repas {
 
   Repas(this.nom, this.listIngredient);
 
+
+
+
   String listIngredientToString() {
+    // Supprime les ingredients s'ils n'existent plus
+    for (var i = 0; i < listIngredient.length; i++) {
+      if (Ingredient.ingredients.contains(listIngredient[i]) == false) {
+        listIngredient.remove(listIngredient[i]);
+      }
+    }
     String str = '';
     listIngredient.forEach((a) => str += ' ' + a.nom);
     return str;
@@ -217,5 +226,4 @@ class _MyDialogState extends State<_MyDialog> {
 * Compteur de nombre de fois ou on la pris
 * Menu edit
 * Securite noms, existe deja etc
-* Quand on supprime un ingredient, le supprimer de tous les repas qui l'utilisent
 * */

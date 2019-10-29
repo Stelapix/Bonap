@@ -4,13 +4,40 @@ import 'package:flutter/material.dart';
 // Widgets
 import 'widgets/drawer.dart';
 import 'widgets/calendrier.dart';
-import 'widgets/dropDownButtons/dropDownButtonMain.dart';
+import 'widgets/dayDisplayMenu.dart';
+import 'repas.dart';
+import 'ingredients.dart';
 
 enum popUpMenu { deconnexion }
+
+class MenuSemaine {
+  int numSemaine;
+  List<List<Repas>> repasSemaine = new List<List<Repas>>();
+
+  // indexs de 0 a 13, de lundi midi a dimanche soir
+
+  MenuSemaine(int numSemaine) {
+    this.numSemaine = numSemaine;
+
+    for (var i = 0; i < 14; i++) {
+      repasSemaine.add(new List<Repas>());
+      repasSemaine[i].add(new Repas('', new List<Ingredient>()));
+    }
+  }
+
+  void choisirRepas(int a, List<Repas> r) {
+    repasSemaine[a] = r;
+  }
+}
 
 class HomePage extends StatelessWidget {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
+
+  // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
+  // Ca prends forme wesh
+  MenuSemaine m = new MenuSemaine(49);
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,37 +70,47 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+//              Container(
+//                child: Row(
+//                  mainAxisAlignment: MainAxisAlignment.center,
+//                  children: <Widget>[
+//                    Text('Repas du :  ',
+//                        style: TextStyle(
+//                            fontWeight: FontWeight.bold,
+//                            color: bleu,
+//                            fontSize: 20.0)),
+//                    DropDownButtonMain(),
+//                  ],
+//                ),
+//              ),
               Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Repas du :  ',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: bleu,
-                            fontSize: 20.0)),
-                    DropDownButtonMain(),
-                  ],
-                ),
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Semaine ' + m.numSemaine.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 26.0,
+                      color: bleu,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )),
+
               Container(
-                padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                padding: EdgeInsets.only(top: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      '\nLundi\n'
-                          '\nMardi\n'
-                          '\nMercredi\n'
-                          '\nJeudi\n'
-                          '\nVendredi\n'
-                          '\nSamedi\n'
-                          '\nDimanche\n',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                          color: Colors.white),
-                    ),
+                    DayDisplayMenu('Lundi', 0, 1, m),
+                    DayDisplayMenu('Mardi', 2, 3, m),
+                    DayDisplayMenu('Mercredi', 4, 5, m),
+                    DayDisplayMenu('Jeudi', 6, 7, m),
+                    DayDisplayMenu('Vendredi', 8, 9, m),
+                    DayDisplayMenu('Samedi', 10, 11, m),
+                    DayDisplayMenu('Dimanche', 12, 13, m),
                   ],
                 ),
               ),
@@ -103,7 +140,8 @@ class HomePage extends StatelessWidget {
   }
 
   Future navigateToSubPage(context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
 

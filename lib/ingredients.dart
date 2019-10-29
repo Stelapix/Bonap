@@ -9,10 +9,15 @@ enum Categorie { viande, poisson, legume, fruit, feculent, laitier, autre }
 class Ingredient {
   String nom;
   Categorie cat;
+  Icon icone;
   static String newCat;
   static List<Ingredient> ingredients = new List<Ingredient>();
 
-  Ingredient(this.nom, this.cat);
+  Ingredient(String nom, Categorie cat) {
+    this.nom = nom;
+    this.cat = cat;
+    this.icone = catIcon(this.cat);
+  }
 
   @override
   String toString() {
@@ -57,7 +62,7 @@ class Ingredient {
   }
 }
 
-enum popUpMenu { reset }
+enum popUpSort { alpha, categorie }
 
 class IngredientsPage extends StatefulWidget {
   @override
@@ -67,6 +72,7 @@ class IngredientsPage extends StatefulWidget {
 class _IngredientsPageState extends State<IngredientsPage> {
   String newIngr = '';
   ListView affIngredients = new ListView();
+  popUpSort _selectionSort;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +80,26 @@ class _IngredientsPageState extends State<IngredientsPage> {
         appBar: new AppBar(
           title: new Text('Ingrédients'),
           actions: <Widget>[
+            PopupMenuButton<popUpSort>(
+              onSelected: (popUpSort result) {
+                setState(() {
+                  _selectionSort = result;
+                });
+              },
+              tooltip: "Trier par ..",
+              icon: Icon(Icons.sort),
+              itemBuilder: (BuildContext context) =>
+              <PopupMenuEntry<popUpSort>>[
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.alpha,
+                  child: Text('Ordre alphabetique'),
+                ),
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.categorie,
+                  child: Text('Categories'),
+                )
+              ],
+            ),
             IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
@@ -87,50 +113,63 @@ class _IngredientsPageState extends State<IngredientsPage> {
         ),
         body: Container(
             child: Column(
-          children: <Widget>[
-            Expanded(
-              child: displayIngredients(),
-            )
-          ],
-        )),
+              children: <Widget>[
+                Expanded(
+                  child: displayIngredients(),
+                )
+              ],
+            )),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             backgroundColor: Color.fromRGBO(0, 191, 255, 1),
             tooltip: "Ajouter un ingredient",
             onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return _AddDialog(this);
-              });
-        }));
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return _AddDialog(this);
+                  });
+            }));
   }
 
   ListView displayIngredients() {
+    switch (this._selectionSort) {
+      case popUpSort.alpha:
+        Ingredient.ingredients
+            .sort((a, b) => a.nom.toString().compareTo(b.nom.toString()));
+        break;
+      case popUpSort.categorie:
+        Ingredient.ingredients
+            .sort((a, b) => a.cat.toString().compareTo(b.cat.toString()));
+        break;
+      default:
+        break;
+    }
     return ListView(
       shrinkWrap: true,
       children: Ingredient.ingredients
           .map(
-            (data) => new Container(
-              child: ListTile(
-                leading: Ingredient.catIcon(data.cat),
-                title: Text(data.nom),
-                trailing: IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return _EditDialog(
-                            I: data,
-                            ips: this,
-                          );
-                        });
-                  },
-                ),
-              ),
+            (data) =>
+        new Container(
+          child: ListTile(
+            leading: Ingredient.catIcon(data.cat),
+            title: Text(data.nom),
+            trailing: IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _EditDialog(
+                        I: data,
+                        ips: this,
+                      );
+                    });
+              },
             ),
-          )
+          ),
+        ),
+      )
           .toList(),
     );
   }
@@ -151,6 +190,7 @@ class _AddDialog extends StatefulWidget {
 
 class _AddDialogState extends State<_AddDialog> {
   String newIngr = '';
+  Icon newIcon = Icon(Custom.meat);
 
   @override
   void initState() {
@@ -164,18 +204,28 @@ class _AddDialogState extends State<_AddDialog> {
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            child: DropDownButtonIngredients(),
+          Row(
+            children: <Widget>[
+              Container(
+                child: DropDownButtonIngredients(),
+              ),
+              IconButton(
+                icon: newIcon,
+                onPressed: () {
+
+                },
+              )
+            ],
           ),
           Container(
               child: new TextField(
-            autofocus: false,
-            decoration: new InputDecoration(
-                labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
-            onChanged: (value) {
-              newIngr = value;
-            },
-          )),
+                autofocus: false,
+                decoration: new InputDecoration(
+                    labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
+                onChanged: (value) {
+                  newIngr = value;
+                },
+              )),
         ],
       ),
       actions: <Widget>[
@@ -218,7 +268,7 @@ class _AddDialogState extends State<_AddDialog> {
                 }
             }
             widget.ips.setState(() =>
-                widget.ips.affIngredients = widget.ips.displayIngredients());
+            widget.ips.affIngredients = widget.ips.displayIngredients());
             Navigator.of(context).pop();
           },
         ),
@@ -260,13 +310,13 @@ class _EditDialogState extends State<_EditDialog> {
           ),
           Container(
               child: new TextField(
-            autofocus: false,
-            decoration:
+                autofocus: false,
+                decoration:
                 new InputDecoration(labelText: 'Nom', hintText: widget.I.nom),
-            onChanged: (value) {
-              newIngr = value;
-            },
-          )),
+                onChanged: (value) {
+                  newIngr = value;
+                },
+              )),
         ],
       ),
       actions: <Widget>[
@@ -305,7 +355,7 @@ class _EditDialogState extends State<_EditDialog> {
               Ingredient.ingredients.remove(widget.I);
               Navigator.of(context).pop();
               widget.ips.setState(() =>
-                  widget.ips.affIngredients = widget.ips.displayIngredients());
+              widget.ips.affIngredients = widget.ips.displayIngredients());
             })
       ],
     );
@@ -345,10 +395,13 @@ class _ResetDialogState extends State<_ResetDialog> {
                 .removeRange(0, Ingredient.ingredients.length);
             Navigator.of(context).pop();
             widget.ips.setState(() =>
-                widget.ips.affIngredients = widget.ips.displayIngredients());
+            widget.ips.affIngredients = widget.ips.displayIngredients());
           },
         ),
       ],
     );
   }
 }
+
+
+
