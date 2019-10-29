@@ -28,6 +28,7 @@ dependencies:
   firebase_auth: ^0.14.0+5
   google_sign_in: ^4.0.7
   flutter_auth_buttons: ^0.6.0
+  vibration: 1.2.2
 
 dev_dependencies:
   flutter_launcher_icons:
