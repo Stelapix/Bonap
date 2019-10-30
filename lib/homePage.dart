@@ -7,6 +7,7 @@ import 'widgets/calendrier.dart';
 import 'widgets/dayDisplayMenu.dart';
 import 'repas.dart';
 import 'ingredients.dart';
+import 'listeCourse.dart';
 
 enum popUpMenu { deconnexion }
 
@@ -28,7 +29,27 @@ class MenuSemaine {
   void choisirRepas(int a, List<Repas> r) {
     repasSemaine[a] = r;
   }
+
+
 }
+
+class FunctionUpdate {
+  static void updateListeCourse(List<List<Repas>> repasSemaine) {
+    for (int i = 0; i < repasSemaine.length; i++) {
+      for (int j = 0; j < repasSemaine[i].length; j++) {
+        if (repasSemaine[i][j] != null) {
+          print("Ajout de " + repasSemaine[i][j].nom);
+          ListeCourse.addRepasToListe(repasSemaine[i][j]);
+          print(ListeCourse.liste.length);
+        }
+      }
+    }
+
+  }
+
+}
+
+MenuSemaine m = new MenuSemaine(49);
 
 class HomePage extends StatelessWidget {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
@@ -36,7 +57,7 @@ class HomePage extends StatelessWidget {
 
   // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
   // Ca prends forme wesh
-  MenuSemaine m = new MenuSemaine(49);
+
 
 
   @override

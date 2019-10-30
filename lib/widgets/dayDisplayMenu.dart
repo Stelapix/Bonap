@@ -46,9 +46,9 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
           minWidth: (MediaQuery.of(context).size.width) / 3,
           height: 50,
           child: RaisedButton(
-            child: new Text(
+            child: (widget.m.repasSemaine[widget.midi].length > 0) ? new Text(
               widget.m.repasSemaine[widget.midi][0].nom,
-            ),
+            ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
@@ -59,6 +59,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
                   context: context,
                   builder: (context) {
                     return _MyDialog(
+                        whichOne: widget.midi,
                         ddms: this,
                         repas: allRepas,
                         selectedRepas: selectedRepas,
@@ -73,19 +74,30 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
           minWidth: (MediaQuery.of(context).size.width) / 3,
           height: 50,
           child: RaisedButton(
-            child: new Text(
+
+            child: (widget.m.repasSemaine[widget.soir].length > 0) ? new Text(
               widget.m.repasSemaine[widget.soir][0].nom,
-            ),
+            ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
               side: BorderSide(color: Color.fromRGBO(0, 191, 255, 1)),
             ),
             onPressed: () {
-              setState(() {
-                widget.m.repasSemaine[widget.soir][0].nom = "Salut";
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return _MyDialog(
+                        whichOne: widget.soir,
+                        ddms: this,
+                        repas: allRepas,
+                        selectedRepas: selectedRepas,
+                        onSelectedRepasChanged: (repas) {
+                          selectedRepas = repas;
+                        }
 
-              });
+                        );
+                  });
             },
           ),
         ),
@@ -97,12 +109,14 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
 
 class _MyDialog extends StatefulWidget {
   _MyDialog({
+    this.whichOne,
     this.repas,
     this.selectedRepas,
     this.onSelectedRepasChanged,
     this.ddms,
   });
 
+  final int whichOne;
   final List<Repas> repas;
   final List<Repas> selectedRepas;
   final ValueChanged<List<Repas>> onSelectedRepasChanged;
@@ -145,7 +159,8 @@ class _MyDialogState extends State<_MyDialog> {
                 child: Text('OK'),
                 onPressed: () {
                   widget.ddms.setState(() {
-                    widget.ddms.widget.m.repasSemaine[widget.ddms.widget.midi] = _tempSelectedRepas;
+                    widget.ddms.widget.m.repasSemaine[widget.whichOne] = _tempSelectedRepas;
+                    FunctionUpdate.updateListeCourse(widget.ddms.widget.m.repasSemaine);
                     Navigator.pop(context);
                   });
 

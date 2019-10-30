@@ -10,8 +10,6 @@ class Repas {
   Repas(this.nom, this.listIngredient);
 
 
-
-
   String listIngredientToString() {
     // Supprime les ingredients s'ils n'existent plus
     for (var i = 0; i < listIngredient.length; i++) {
@@ -54,7 +52,7 @@ class _RepasPageState extends State<RepasPage> {
                   return _MyDialog(
                       rps: this,
                       ingr: allIngr,
-                      selectedIngr: selectedIngr,
+                      selectedIngr: [],
                       onSelectedIngrChanged: (ingr) {
                         selectedIngr = ingr;
                       });
