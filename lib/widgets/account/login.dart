@@ -1,7 +1,21 @@
 import 'package:bonap/homePage.dart';
-import 'package:bonap/widgets/account/firebase_auth.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+final GoogleSignIn googleSignIn = new GoogleSignIn();
+bool isGoogleSignIn = false;
+// Gérer les erreurs
+String errorMessage = '';
+String successMessage = '';
+
+TextEditingController _emailController;
+TextEditingController _passwordController;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,9 +23,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
-
   @override
   void initState() {
     super.initState();
@@ -138,8 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.black,
                 onPressed: _toggleVisibility,
                 icon: _isHidden
-                    ? Icon(Icons.visibility)
-                    : Icon(Icons.visibility_off),
+                    ? Icon(Icons.visibility_off)
+                    : Icon(Icons.visibility),
               )
             : null,
       ),
@@ -193,8 +204,18 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.white),
       child: OutlineButton(
         onPressed: () {
-          signInWithGoogle().whenComplete(() {
-            return HomePage();
+          googleSignin(context).then((user) {
+            if (user != null) {
+              print('Logged in successfully.');
+              if (this.mounted) {
+                setState(() {
+                  isGoogleSignIn = true;
+                  successMessage = 'Logged in successfully';
+                });
+              }
+            } else {
+              print('Error while Login.');
+            }
           });
         },
         highlightElevation: 0,
@@ -222,4 +243,83 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
+  Future<bool> signInWithEmail(String email, String password, context) async {
+    if (email.contains(" ")) {
+      email = email.substring(0, email.indexOf(" "));
+    }
+    try {
+      AuthResult result = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+      if (user != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage();
+            },
+          ),
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  Future<FirebaseUser> googleSignin(BuildContext context) async {
+    FirebaseUser currentUser;
+    try {
+      final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final FirebaseUser user =
+          (await auth.signInWithCredential(credential)).user;
+      assert(user.email != null);
+      assert(user.displayName != null);
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
+
+      currentUser = await auth.currentUser();
+      assert(user.uid == currentUser.uid);
+      print(currentUser);
+      print("User Name  : ${currentUser.displayName}");
+    } catch (e) {
+      handleError(e);
+    }
+    return currentUser;
+  }
+
+  handleError(PlatformException error) {
+    print(error);
+    switch (error.code) {
+      case 'ERROR_USER_NOT_FOUND':
+        setState(() {
+          errorMessage = 'User Not Found!!!';
+        });
+        break;
+      case 'ERROR_WRONG_PASSWORD':
+        setState(() {
+          errorMessage = 'Wrong Password!!!';
+        });
+        break;
+    }
+  }
+
+
+}
+
+Future<bool> googleSignout() async {
+  await auth.signOut();
+  await googleSignIn.signOut();
+  print("---------------------> User Sign Out");
+  return true;
 }
