@@ -1,6 +1,6 @@
 import 'package:bonap/homePage.dart';
 import 'package:bonap/widgets/account/firebase_auth.dart';
-import 'package:vibration/vibration.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -156,16 +156,13 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () async {
         if (_emailController.text.isEmpty) {
           print("Email required");
-          vibration();
         } else if (_passwordController.text.isEmpty) {
           print("Password required");
-          vibration();
         } else {
           bool res = await signInWithEmail(
               _emailController.text, _passwordController.text, context);
           if (!res) {
             print("Login failed");
-            vibration();
           }
         }
       },
@@ -224,11 +221,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-}
-
-void vibration(){
-  if (Vibration.hasVibrator() != null && Vibration.hasAmplitudeControl()!=null) {
-    Vibration.vibrate(duration: 150, amplitude: 20);
   }
 }
