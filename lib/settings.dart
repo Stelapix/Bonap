@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/account/firebase_auth.dart';
+import 'widgets/account/login.dart';
+
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -15,7 +16,11 @@ class SettingsPage extends StatelessWidget {
             RaisedButton(
               child: Text("Déconnexion"),
               onPressed: (){
-                signOutGoogle(context);
+                googleSignout();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()));
               },
             )
           ],
