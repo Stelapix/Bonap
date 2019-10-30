@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "764211714995-lugqksha99onr53q8qd7nj999579ielr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stelapix.bonap",
+            "certificate_hash": "5a2fc078e614e6d3236bae2b9143cb4e4a984242"
+          }
+        },
+        {
           "client_id": "764211714995-bqjg0slue4ndhonfgnmbl924mk6cla99.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
