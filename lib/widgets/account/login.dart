@@ -1,4 +1,5 @@
 import 'package:bonap/homePage.dart';
+import 'package:bonap/register.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -67,12 +68,12 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 20.0),
                       Container(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
+                            const SizedBox(width: 98.0),
                             Text(
                               "Mot de passe oublié ?",
                               style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color:Color(0xFFEE5623),
                               ),
                             ),
                           ],
@@ -82,32 +83,31 @@ class _LoginPageState extends State<LoginPage> {
                       buildButtonContainer(),
                       SizedBox(height: 20.0),
                       Container(
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Pas encore inscrit ?",
-                                  style: TextStyle(color: Colors.black)),
-                              SizedBox(
-                                width: 10.0,
-                              ),
-                              Text("Inscrivez-vous",
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                  ))
-                            ],
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Pas encore inscrit ?",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            GestureDetector(
+                                child: Text(
+                                  " Inscrivez-vous",
+                                  style: TextStyle(color:Color(0xFFEE5623))
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              RegisterPage()));
+                                }
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 15.0),
                       _signInButton(),
-//                      GoogleSignInButton(
-//                        darkMode: true,
-//                        onPressed: () async {
-//                          bool res = await AuthProvider().loginWithGoogle();
-//                          if (!res) print("error login with Google");
-//                        },
-//                      ),
                     ],
                   ),
                 ),
@@ -211,6 +211,10 @@ class _LoginPageState extends State<LoginPage> {
                 setState(() {
                   isGoogleSignIn = true;
                   successMessage = 'Logged in successfully';
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomePage()));
                 });
               }
             } else {
@@ -260,6 +264,7 @@ class _LoginPageState extends State<LoginPage> {
             },
           ),
         );
+        print(user);
         return true;
       } else {
         return false;
@@ -269,13 +274,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-
   Future<FirebaseUser> googleSignin(BuildContext context) async {
     FirebaseUser currentUser;
     try {
       final GoogleSignInAccount googleUser = await googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -313,8 +317,6 @@ class _LoginPageState extends State<LoginPage> {
         break;
     }
   }
-
-
 }
 
 Future<bool> googleSignout() async {

@@ -29,8 +29,6 @@ class MenuSemaine {
   void choisirRepas(int a, List<Repas> r) {
     repasSemaine[a] = r;
   }
-
-
 }
 
 class FunctionUpdate {
@@ -44,53 +42,86 @@ class FunctionUpdate {
         }
       }
     }
-
   }
-
 }
 
 MenuSemaine m = new MenuSemaine(49);
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
   // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
   // Ca prends forme wesh
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Voulez-vous vraiment vous déconnecter ?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Oui"),
+                  onPressed: () {
+                    googleSignout();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => LoginPage()));
+                  },
+                ),
+                FlatButton(
+                  child: Text("Non"),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+              ],
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "Menu de la semaine",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 23.0,
-                color: Colors.black),
-          ),
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
+    return WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+            appBar: new AppBar(
+              title: new Text(
+                "Menu de la semaine",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23.0,
+                    color: Colors.black),
+              ),
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip: 'Afficher le drawer',
+                  );
                 },
-                tooltip: 'Afficher le drawer',
-              );
-            },
-          ),
-          iconTheme: new IconThemeData(color: Colors.black),
-          backgroundColor: bleu,
-        ),
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+              ),
+              iconTheme: new IconThemeData(color: Colors.black),
+              backgroundColor: bleu,
+            ),
+            drawer: AppDrawer(),
+            body: SingleChildScrollView(
+              padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 //              Container(
 //                child: Row(
 //                  mainAxisAlignment: MainAxisAlignment.center,
@@ -104,60 +135,60 @@ class HomePage extends StatelessWidget {
 //                  ],
 //                ),
 //              ),
-              Container(
-                  child: Row(
+                  Container(
+                      child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Semaine ' + m.numSemaine.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 26.0,
-                      color: bleu,
-                      fontWeight: FontWeight.bold,
+                    children: <Widget>[
+                      Text(
+                        'Semaine ' + m.numSemaine.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 26.0,
+                          color: bleu,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
+
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        DayDisplayMenu('Lundi', 0, 1, m),
+                        DayDisplayMenu('Mardi', 2, 3, m),
+                        DayDisplayMenu('Mercredi', 4, 5, m),
+                        DayDisplayMenu('Jeudi', 6, 7, m),
+                        DayDisplayMenu('Vendredi', 8, 9, m),
+                        DayDisplayMenu('Samedi', 10, 11, m),
+                        DayDisplayMenu('Dimanche', 12, 13, m),
+                      ],
                     ),
                   ),
-                ],
-              )),
-
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    DayDisplayMenu('Lundi', 0, 1, m),
-                    DayDisplayMenu('Mardi', 2, 3, m),
-                    DayDisplayMenu('Mercredi', 4, 5, m),
-                    DayDisplayMenu('Jeudi', 6, 7, m),
-                    DayDisplayMenu('Vendredi', 8, 9, m),
-                    DayDisplayMenu('Samedi', 10, 11, m),
-                    DayDisplayMenu('Dimanche', 12, 13, m),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 1.0,
-                color: null,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: LinearGradient(
-                    colors: <Color>[
-                      jaune,
-                      bleu,
-                    ],
+                  Divider(
+                    thickness: 1.0,
+                    color: null,
                   ),
-                ),
-                child: Calendrier(),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      gradient: LinearGradient(
+                        colors: <Color>[
+                          jaune,
+                          bleu,
+                        ],
+                      ),
+                    ),
+                    child: Calendrier(),
+                  ),
+                  Divider(
+                    thickness: 1.0,
+                    color: null,
+                  ),
+                ],
               ),
-              Divider(
-                thickness: 1.0,
-                color: null,
-              ),
-            ],
-          ),
-        ));
+            )));
   }
 
   Future navigateToSubPage(context) async {
@@ -165,7 +196,6 @@ class HomePage extends StatelessWidget {
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
-
 /*
 
 PopupMenuButton<popUpMenu>(
