@@ -35,9 +35,7 @@ class MainScreen extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return SplashScreen();
-        } else if (!snapshot.hasData || snapshot.data == null) {
+        if (!snapshot.hasData || snapshot.data == null) {
           return LoginPage();
         } else {
           return HomePage();

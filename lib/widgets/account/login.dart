@@ -43,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: () => SystemNavigator.pop(),
-      //Pour quitter l'appli quand on clique sur le bouton retour en arrière (exit(0) sur IOS)
+      onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -342,5 +341,23 @@ class _LoginPageState extends State<LoginPage> {
     await googleSignIn.signOut();
     print("User Sign Out");
     return true;
+  }
+
+  Future<bool> onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Voulez-vous quitter l'application ?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Non"),
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                FlatButton(
+                  child: Text("Oui"),
+                  onPressed: () => SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+                ),
+              ],
+            ));
   }
 }

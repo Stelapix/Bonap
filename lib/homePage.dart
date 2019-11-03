@@ -63,24 +63,23 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future<bool> _onBackPressed() {
+  Future<bool> onBackPressed() {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Voulez-vous vraiment vous déconnecter ?"),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Oui"),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => LoginPage(loggout: true)));
-                  },
+                  child: Text("Non"),
+                  onPressed: () =>
+                    Navigator.pop(context, false),
                 ),
                 FlatButton(
-                  child: Text("Non"),
-                  onPressed: () => Navigator.pop(context, false),
+                  child: Text("Oui"),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => LoginPage(loggout: true))),
                 ),
               ],
         )
@@ -90,7 +89,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: _onBackPressed,
+        onWillPop: onBackPressed,
         child: Scaffold(
             appBar: new AppBar(
               title: new Text(
