@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage> {
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
   // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
-  // Ca prends forme wesh
 
   @override
   void initState() {
@@ -73,11 +72,10 @@ class _HomePageState extends State<HomePage> {
                 FlatButton(
                   child: Text("Oui"),
                   onPressed: () {
-                    googleSignout();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => LoginPage()));
+                            builder: (BuildContext context) => LoginPage(loggout: true)));
                   },
                 ),
                 FlatButton(
@@ -113,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              iconTheme: new IconThemeData(color: Colors.black),
+              iconTheme: IconThemeData(color: Colors.black),
               backgroundColor: bleu,
             ),
             drawer: AppDrawer(),

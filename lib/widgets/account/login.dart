@@ -1,132 +1,145 @@
 import 'package:bonap/homePage.dart';
 import 'package:bonap/register.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final FirebaseAuth auth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = new GoogleSignIn();
-bool isGoogleSignIn = false;
-// Gérer les erreurs
-String errorMessage = '';
-String successMessage = '';
-
-TextEditingController _emailController;
-TextEditingController _passwordController;
-
 class LoginPage extends StatefulWidget {
+  LoginPage({Key key, this.loggout}) : super(key: key);
+
+  final loggout;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Paramètres Google
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
+  bool isGoogleSignIn = false;
+
+  //Les variables contenant l'Email et le mot de passe
+  TextEditingController emailController;
+  TextEditingController passwordController;
+
+  // Initialisation des messages d'erreurs
+  String errorMessage = '';
+  String successMessage = '';
+
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController(text: "");
-    _passwordController = TextEditingController(text: "");
+    emailController = TextEditingController(text: "");
+    passwordController = TextEditingController(text: "");
+    if (widget.loggout == true) {
+      googleSignout();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: <Widget>[
-          Center(
-            child: new Image.asset(
-              'assets/splash/splash2.jpg',
-              width: size.width,
-              height: size.height,
-              fit: BoxFit.fill,
+    return WillPopScope(
+      onWillPop: () => SystemNavigator.pop(),
+      //Pour quitter l'appli quand on clique sur le bouton retour en arrière (exit(0) sur IOS)
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: <Widget>[
+            Center(
+              child: new Image.asset(
+                'assets/splash/splash2.jpg',
+                width: size.width,
+                height: size.height,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          Container(
-            height: 620.0,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 200),
-              // 30 30 200 50
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(23.0),
-                  color: Colors.white.withOpacity(0.8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const SizedBox(height: 10.0),
-                      buildTextField("Adresse Email"),
-                      const SizedBox(height: 10.0),
-                      buildTextField("Mot de passe"),
-                      SizedBox(height: 20.0),
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            const SizedBox(width: 98.0),
-                            Text(
-                              "Mot de passe oublié ?",
-                              style: TextStyle(
-                                color:Color(0xFFEE5623),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      buildButtonContainer(),
-                      SizedBox(height: 20.0),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Pas encore inscrit ?",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            GestureDetector(
-                                child: Text(
-                                  " Inscrivez-vous",
-                                  style: TextStyle(color:Color(0xFFEE5623))
+            Container(
+              height: 620.0,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 25.0, right: 25.0, top: 200),
+                // 30 30 200 50
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(23.0),
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(height: 10.0),
+                        buildTextField("Adresse Email"),
+                        const SizedBox(height: 10.0),
+                        buildTextField("Mot de passe"),
+                        SizedBox(height: 20.0),
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              const SizedBox(width: 98.0),
+                              Text(
+                                "Mot de passe oublié ?",
+                                style: TextStyle(
+                                  color: Color(0xFFEE5623),
                                 ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              RegisterPage()));
-                                }
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 15.0),
-                      _signInButton(),
-                    ],
+                        SizedBox(height: 20.0),
+                        buildButtonContainer(),
+                        SizedBox(height: 20.0),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Pas encore inscrit ?",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              GestureDetector(
+                                  child: Text(" Inscrivez-vous",
+                                      style:
+                                          TextStyle(color: Color(0xFFEE5623))),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                RegisterPage()));
+                                  }),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15.0),
+                        _signInButton(),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  bool _isHidden = true;
+  //Pour cacher/afficher le mot de passe
+  bool isHidden = true;
 
   void _toggleVisibility() {
     setState(() {
-      _isHidden = !_isHidden;
+      isHidden = !isHidden;
     });
   }
 
+  //Les 2 champs de saisies pour l'adresse Mail et le mot de passe
   Widget buildTextField(String hintText) {
     return TextField(
       style: TextStyle(color: Colors.black),
@@ -148,30 +161,31 @@ class _LoginPageState extends State<LoginPage> {
             ? IconButton(
                 color: Colors.black,
                 onPressed: _toggleVisibility,
-                icon: _isHidden
+                icon: isHidden
                     ? Icon(Icons.visibility_off)
                     : Icon(Icons.visibility),
               )
             : null,
       ),
       obscureText: hintText == "Mot de passe"
-          ? _isHidden
-          : hintText == "Adresse Email" ? false : _isHidden,
+          ? isHidden
+          : hintText == "Adresse Email" ? false : isHidden,
       controller:
-          hintText == "Adresse Email" ? _emailController : _passwordController,
+          hintText == "Adresse Email" ? emailController : passwordController,
     );
   }
 
+  //Bouton 'Connectez-vous'
   Widget buildButtonContainer() {
     return InkWell(
       onTap: () async {
-        if (_emailController.text.isEmpty) {
+        if (emailController.text.isEmpty) {
           print("Email required");
-        } else if (_passwordController.text.isEmpty) {
+        } else if (passwordController.text.isEmpty) {
           print("Password required");
         } else {
           bool res = await signInWithEmail(
-              _emailController.text, _passwordController.text, context);
+              emailController.text, passwordController.text, context);
           if (!res) {
             print("Login failed");
           }
@@ -196,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  //Bouton connexion de Google
   Widget _signInButton() {
     return DecoratedBox(
       decoration: ShapeDecoration(
@@ -248,6 +263,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  //Se connecter sur Bonap
   Future<bool> signInWithEmail(String email, String password, context) async {
     if (email.contains(" ")) {
       email = email.substring(0, email.indexOf(" "));
@@ -274,6 +290,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  //Se connecter via Google
   Future<FirebaseUser> googleSignin(BuildContext context) async {
     FirebaseUser currentUser;
     try {
@@ -302,26 +319,28 @@ class _LoginPageState extends State<LoginPage> {
     return currentUser;
   }
 
+  //Gérer les erreurs d'identification de Google
   handleError(PlatformException error) {
     print(error);
     switch (error.code) {
       case 'ERROR_USER_NOT_FOUND':
         setState(() {
-          errorMessage = 'User Not Found!!!';
+          errorMessage = 'User Not Found';
         });
         break;
       case 'ERROR_WRONG_PASSWORD':
         setState(() {
-          errorMessage = 'Wrong Password!!!';
+          errorMessage = 'Wrong Password';
         });
         break;
     }
   }
-}
 
-Future<bool> googleSignout() async {
-  await auth.signOut();
-  await googleSignIn.signOut();
-  print("---------------------> User Sign Out");
-  return true;
+  //Se déconnecter de Google
+  Future<bool> googleSignout() async {
+    await auth.signOut();
+    await googleSignIn.signOut();
+    print("User Sign Out");
+    return true;
+  }
 }

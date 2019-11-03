@@ -16,17 +16,15 @@ class SettingsPage extends StatelessWidget {
             RaisedButton(
               child: Text("Déconnexion"),
               onPressed: (){
-                googleSignout();
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()));
+                        builder: (BuildContext context) => LoginPage(loggout: true)));
               },
             )
           ],
         ),
       ),
-
     );
   }
 }
