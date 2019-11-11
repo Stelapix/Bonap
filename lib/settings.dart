@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'widgets/account/login.dart';
 
+import 'widgets/dataStorage.dart';
+
 
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Settings'),

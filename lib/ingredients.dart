@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter/rendering.dart';
+
 import 'custom/custom_icons.dart';
 
 import 'widgets/dropDownButtons/dropDownButtonIngredients.dart';
+import 'widgets/dataStorage.dart';
 
 enum Categorie { viande, poisson, legume, fruit, feculent, laitier, autre }
 
@@ -60,6 +63,16 @@ class Ingredient {
         break;
     }
   }
+
+  // Sauvegarde et chargement
+  Ingredient.fromJson(Map<String, dynamic> json) :
+        nom = json['nom'],
+        cat = Categorie.values.firstWhere((e) => e.toString() == json['categorie']);
+
+  Map<String, dynamic> toJson() => {
+    'nom': nom,
+    'categorie': cat.toString(),
+  };
 }
 
 enum popUpSort { alpha, categorie }
@@ -76,6 +89,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Ingrédients'),
@@ -89,7 +103,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
               tooltip: "Trier par ..",
               icon: Icon(Icons.sort),
               itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<popUpSort>>[
+                  <PopupMenuEntry<popUpSort>>[
                 const PopupMenuItem<popUpSort>(
                   value: popUpSort.alpha,
                   child: Text('Ordre alphabetique'),
@@ -113,12 +127,12 @@ class _IngredientsPageState extends State<IngredientsPage> {
         ),
         body: Container(
             child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: displayIngredients(),
-                )
-              ],
-            )),
+          children: <Widget>[
+            Expanded(
+              child: displayIngredients(),
+            )
+          ],
+        )),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             backgroundColor: Color.fromRGBO(0, 191, 255, 1),
@@ -149,27 +163,26 @@ class _IngredientsPageState extends State<IngredientsPage> {
       shrinkWrap: true,
       children: Ingredient.ingredients
           .map(
-            (data) =>
-        new Container(
-          child: ListTile(
-            leading: Ingredient.catIcon(data.cat),
-            title: Text(data.nom),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return _EditDialog(
-                        I: data,
-                        ips: this,
-                      );
-                    });
-              },
+            (data) => new Container(
+              child: ListTile(
+                leading: Ingredient.catIcon(data.cat),
+                title: Text(data.nom),
+                trailing: IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return _EditDialog(
+                            I: data,
+                            ips: this,
+                          );
+                        });
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      )
+          )
           .toList(),
     );
   }
@@ -211,21 +224,19 @@ class _AddDialogState extends State<_AddDialog> {
               ),
               IconButton(
                 icon: newIcon,
-                onPressed: () {
-
-                },
+                onPressed: () {},
               )
             ],
           ),
           Container(
               child: new TextField(
-                autofocus: false,
-                decoration: new InputDecoration(
-                    labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
-                onChanged: (value) {
-                  newIngr = value;
-                },
-              )),
+            autofocus: false,
+            decoration: new InputDecoration(
+                labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
+            onChanged: (value) {
+              newIngr = value;
+            },
+          )),
         ],
       ),
       actions: <Widget>[
@@ -268,7 +279,8 @@ class _AddDialogState extends State<_AddDialog> {
                 }
             }
             widget.ips.setState(() =>
-            widget.ips.affIngredients = widget.ips.displayIngredients());
+                widget.ips.affIngredients = widget.ips.displayIngredients());
+            DataStorage.saveIngredients();
             Navigator.of(context).pop();
           },
         ),
@@ -310,13 +322,13 @@ class _EditDialogState extends State<_EditDialog> {
           ),
           Container(
               child: new TextField(
-                autofocus: false,
-                decoration:
+            autofocus: false,
+            decoration:
                 new InputDecoration(labelText: 'Nom', hintText: widget.I.nom),
-                onChanged: (value) {
-                  newIngr = value;
-                },
-              )),
+            onChanged: (value) {
+              newIngr = value;
+            },
+          )),
         ],
       ),
       actions: <Widget>[
@@ -345,7 +357,7 @@ class _EditDialogState extends State<_EditDialog> {
                 widget.I.cat = Categorie.autre;
                 break;
             }
-
+            DataStorage.saveIngredients();
             Navigator.of(context).pop();
           },
         ),
@@ -353,9 +365,10 @@ class _EditDialogState extends State<_EditDialog> {
             child: Icon(Icons.delete),
             onPressed: () {
               Ingredient.ingredients.remove(widget.I);
+              DataStorage.saveIngredients();
               Navigator.of(context).pop();
               widget.ips.setState(() =>
-              widget.ips.affIngredients = widget.ips.displayIngredients());
+                  widget.ips.affIngredients = widget.ips.displayIngredients());
             })
       ],
     );
@@ -393,15 +406,13 @@ class _ResetDialogState extends State<_ResetDialog> {
           onPressed: () {
             Ingredient.ingredients
                 .removeRange(0, Ingredient.ingredients.length);
+            DataStorage.saveIngredients();
             Navigator.of(context).pop();
             widget.ips.setState(() =>
-            widget.ips.affIngredients = widget.ips.displayIngredients());
+                widget.ips.affIngredients = widget.ips.displayIngredients());
           },
         ),
       ],
     );
   }
 }
-
-
-

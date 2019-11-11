@@ -8,6 +8,7 @@ import 'widgets/dayDisplayMenu.dart';
 import 'repas.dart';
 import 'ingredients.dart';
 import 'listeCourse.dart';
+import 'widgets/dataStorage.dart';
 
 enum popUpMenu { deconnexion }
 
@@ -88,6 +89,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    DataStorage.loadIngredients();
+    DataStorage.loadRepas();
     return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(

@@ -8,6 +8,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
 
+import 'package:bonap/ingredients.dart';
+import 'package:bonap/widgets/dataStorage.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.loggout}) : super(key: key);
 
@@ -328,6 +331,8 @@ class _LoginPageState extends State<LoginPage> {
                 setState(() {
                   isGoogleSignIn = true;
                   successMessage = 'Logged in successfully';
+                  // Load les ingredients
+                  DataStorage.loadIngredients();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -380,6 +385,8 @@ class _LoginPageState extends State<LoginPage> {
           _facebookSignIn(context).then((user) {
             if (user != null) {
               print('Logged in successfully.');
+              // Load les ingredients
+              DataStorage.loadIngredients();
               if (this.mounted) {
                 setState(() {
                   isFacebookSignIn = true;
@@ -440,6 +447,9 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
+              // Load les ingredients
+              DataStorage.loadIngredients();
+
               return HomePage();
             },
           ),
@@ -454,7 +464,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //Se connecter via Google
+  //Se connecter via Google (Facebook plutot non ?)
   Future<FirebaseUser> _facebookSignIn(BuildContext context) async {
     FirebaseUser currentUser;
     try {
