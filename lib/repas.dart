@@ -27,9 +27,9 @@ class Repas {
 
   // Sauvegarde et chargement
   Repas.fromJson(Map<String, dynamic> json) :
-      nom = json['nom'],
-      listIngredient = createList(json['ingredients']);
-  
+        nom = json['nom'],
+        listIngredient = createList(json['ingredients']);
+
 
 
   Map<String, dynamic> toJson() => {
@@ -123,8 +123,13 @@ class _RepasPageState extends State<RepasPage> {
                     context: context,
                     builder: (context) {
                       return _MyDialogEdit(
-                        r: data,
-                        rps: this,
+                          r: data,
+                          rps: this,
+                          ingr: allIngr,
+                          selectedIngr: [],
+                          onSelectedIngrChanged: (ingr) {
+                            selectedIngr = ingr;
+                          }
                       );
                     });
               },
@@ -143,11 +148,16 @@ class _MyDialogEdit extends StatefulWidget {
     this.r,
     this.rps,
     this.onSelectedIngrChanged,
+    this.ingr,
+    this.selectedIngr,
   });
 
   final Repas r;
   final _RepasPageState rps;
   final ValueChanged<List<Ingredient>> onSelectedIngrChanged;
+  final List<Ingredient> ingr;
+  final List<Ingredient> selectedIngr;
+
 
 
   @override
@@ -163,6 +173,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
   @override
   void initState() {
     for (Ingredient i in widget.r.listIngredient) {
+      widget.selectedIngr.add(i);
       _tempSelectedIngr.add(i);
     }
     super.initState();
@@ -176,14 +187,17 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                'Modification de ' + widget.r.nom,
-                style: TextStyle(
-                    fontSize: 24.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              Expanded(
+                child: Text(
+                  'Modifier ' + widget.r.nom,
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
+
               RaisedButton(
                 onPressed: () {
                   if (newRepasName != '') {
@@ -195,7 +209,10 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                       }
                     }
                   }
+
                   if (weCanEditIt) widget.r.nom = newRepasName;
+                  widget.r.listIngredient = _tempSelectedIngr;
+                  //print(_tempSelectedIngr);
 
                   widget.rps.setState(() => widget.rps.affRepas = widget.rps.displayRepas());
                   DataStorage.saveRepas();
@@ -224,9 +241,10 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: Ingredient.ingredients.length,
+                itemCount: widget.ingr.length,
                 itemBuilder: (BuildContext context, int index) {
                   final ingrName = Ingredient.ingredients[index];
+
                   return Container(
                     child: CheckboxListTile(
                         title: Row(
@@ -236,24 +254,24 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                             Text(ingrName.nameWithoutTheEnd()),
                           ],
                         ),
-                        value: _tempSelectedIngr.contains(ingrName),
+                        value: isIn(_tempSelectedIngr, ingrName),
                         onChanged: (bool value) {
                           if (value) {
-                            if (!_tempSelectedIngr.contains(ingrName)) {
+                            if (!isIn(_tempSelectedIngr, ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.add(ingrName);
                               });
                             }
                           } else {
-                            if (_tempSelectedIngr.contains(ingrName)) {
+                            if (isIn(_tempSelectedIngr, ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.removeWhere(
-                                        (Ingredient ingr) => ingr == ingrName);
+                                        (Ingredient ingr) => ingr.nom == ingrName.nom);
                               });
                             }
                           }
 
-                          //widget.onSelectedIngrChanged(_tempSelectedIngr);
+                          widget.onSelectedIngrChanged(_tempSelectedIngr);
 
                           if (!customName)
                             newRepasName = _tempSelectedIngr.toString();
@@ -264,6 +282,15 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
         ],
       ),
     );
+  }
+
+  bool isIn(List<Ingredient> L, Ingredient I) {
+    var b = false;
+    for (Ingredient A in L) {
+      b = ((A.nom == I.nom) && (A.cat == I.cat));
+      if (b) return true;
+    }
+    return false;
   }
 }
 
@@ -376,7 +403,7 @@ class _MyDialogState extends State<_MyDialog> {
                             if (_tempSelectedIngr.contains(ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.removeWhere(
-                                    (Ingredient ingr) => ingr == ingrName);
+                                        (Ingredient ingr) => ingr == ingrName);
                               });
                             }
                           }

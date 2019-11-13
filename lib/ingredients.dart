@@ -64,15 +64,68 @@ class Ingredient {
     }
   }
 
+  static String catToString(Categorie c) {
+    switch (c) {
+      case (Categorie.feculent):
+        return "Féculent";
+        break;
+      case (Categorie.viande):
+        return "Viande";
+        break;
+      case (Categorie.poisson):
+        return "Poisson";
+        break;
+      case (Categorie.fruit):
+        return "Fruit";
+        break;
+      case (Categorie.legume):
+        return "Légume";
+        break;
+      case (Categorie.laitier):
+        return "Produit Laitier";
+        break;
+      default:
+        return "Autre";
+        break;
+    }
+  }
+
+  static Categorie stringToCategorie(String s) {
+    switch (s) {
+      case "Viande":
+        return Categorie.viande;
+        break;
+      case "Poisson":
+        return Categorie.poisson;
+        break;
+      case "Fruit":
+        return Categorie.fruit;
+        break;
+      case "Légume":
+        return Categorie.legume;
+        break;
+      case "Féculent":
+        return Categorie.feculent;
+        break;
+      case "Produit Laitier":
+        return Categorie.laitier;
+        break;
+      default:
+        return Categorie.autre;
+        break;
+    }
+  }
+
   // Sauvegarde et chargement
-  Ingredient.fromJson(Map<String, dynamic> json) :
-        nom = json['nom'],
-        cat = Categorie.values.firstWhere((e) => e.toString() == json['categorie']);
+  Ingredient.fromJson(Map<String, dynamic> json)
+      : nom = json['nom'],
+        cat = Categorie.values
+            .firstWhere((e) => e.toString() == json['categorie']);
 
   Map<String, dynamic> toJson() => {
-    'nom': nom,
-    'categorie': cat.toString(),
-  };
+        'nom': nom,
+        'categorie': cat.toString(),
+      };
 }
 
 enum popUpSort { alpha, categorie }
@@ -89,7 +142,6 @@ class _IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Ingrédients'),
@@ -180,6 +232,16 @@ class _IngredientsPageState extends State<IngredientsPage> {
                         });
                   },
                 ),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _EditDialog(
+                          I: data,
+                          ips: this,
+                        );
+                      });
+                },
               ),
             ),
           )
@@ -203,12 +265,14 @@ class _AddDialog extends StatefulWidget {
 
 class _AddDialogState extends State<_AddDialog> {
   String newIngr = '';
-  Icon newIcon = Icon(Custom.meat);
+  Icon newIcon;
 
   @override
   void initState() {
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -219,12 +283,15 @@ class _AddDialogState extends State<_AddDialog> {
         children: <Widget>[
           Row(
             children: <Widget>[
+
               Container(
-                child: DropDownButtonIngredients(),
+                child: DropDownButtonIngredients(this),
               ),
               IconButton(
-                icon: newIcon,
-                onPressed: () {},
+                icon: Ingredient.catIcon(Ingredient.stringToCategorie(Ingredient.newCat)),
+                onPressed: () {setState(() {
+
+                });},
               )
             ],
           ),
@@ -249,34 +316,8 @@ class _AddDialogState extends State<_AddDialog> {
                 if (o.nom.toUpperCase() == newIngr.toUpperCase()) existe = true;
               }
               if (!existe)
-                switch (Ingredient.newCat) {
-                  case ("Viande"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.viande));
-                    break;
-                  case ("Poisson"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.poisson));
-                    break;
-                  case ("Légume"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.legume));
-                    break;
-                  case ("Féculent"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.feculent));
-                    break;
-                  case ("Produit Laitier"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.laitier));
-                    break;
-                  case ("Autre"):
-                    Ingredient.ingredients
-                        .add(new Ingredient(newIngr, Categorie.autre));
-                    break;
-                  default:
-                    break;
-                }
+                Ingredient.ingredients.add(new Ingredient(
+                    newIngr, Ingredient.stringToCategorie(Ingredient.newCat)));
             }
             widget.ips.setState(() =>
                 widget.ips.affIngredients = widget.ips.displayIngredients());
@@ -305,21 +346,36 @@ class _EditDialog extends StatefulWidget {
 class _EditDialogState extends State<_EditDialog> {
   String newIngr = '';
 
+
   @override
   void initState() {
+    Ingredient.newCat = Ingredient.catToString(widget.I.cat);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
       title: Text('Modifier ' + widget.I.nom),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            child: DropDownButtonIngredients(),
+          Row(
+            children: <Widget>[
+              Container(
+                child: DropDownButtonIngredients(this),
+              ),
+              IconButton(
+                icon: Ingredient.catIcon(Ingredient.stringToCategorie(Ingredient.newCat)),
+                onPressed: () {setState(() {
+
+                });},
+              ),
+
+            ],
           ),
+
           Container(
               child: new TextField(
             autofocus: false,
@@ -335,7 +391,8 @@ class _EditDialogState extends State<_EditDialog> {
         FlatButton(
           child: Text('Ok'),
           onPressed: () {
-            if (newIngr == '') Ingredient.ingredients.remove(widget.I);
+            if (newIngr == '') newIngr = widget.I.nom;
+            print(Ingredient.newCat.toString());
             widget.I.nom = newIngr;
             switch (Ingredient.newCat) {
               case ("Viande"):
@@ -357,6 +414,7 @@ class _EditDialogState extends State<_EditDialog> {
                 widget.I.cat = Categorie.autre;
                 break;
             }
+            widget.ips.setState((){});
             DataStorage.saveIngredients();
             Navigator.of(context).pop();
           },
