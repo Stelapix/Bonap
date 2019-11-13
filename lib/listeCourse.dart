@@ -24,6 +24,10 @@ class ListeCourse {
     }
   }
 
+  static void resetListe() {
+    ListeCourse.liste.removeRange(0, ListeCourse.liste.length);
+  }
+
   static String afficher() {
     String a = '';
     for (int i = 0; i < ListeCourse.liste.length; i++) {
@@ -80,6 +84,7 @@ class _ListeCoursePageState extends State<ListeCoursePage> {
           .map(
             (data) => new Container(
               child: ExpansionTile(
+                leading: Ingredient.catIcon(data.i.cat),
                 title: Text(data.i.nom),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),

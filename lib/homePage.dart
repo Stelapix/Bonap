@@ -34,18 +34,18 @@ class MenuSemaine {
 
 class FunctionUpdate {
   static void updateListeCourse(List<List<Repas>> repasSemaine) {
+    ListeCourse.resetListe();
     for (int i = 0; i < repasSemaine.length; i++) {
       for (int j = 0; j < repasSemaine[i].length; j++) {
         if (repasSemaine[i][j] != null) {
-          print("Ajout de " + repasSemaine[i][j].nom);
           ListeCourse.addRepasToListe(repasSemaine[i][j]);
-          print(ListeCourse.liste.length);
         }
       }
     }
   }
 }
 
+// Cette ligne va disparaitre quand on loadera le menu depuis la firebase
 MenuSemaine m = new MenuSemaine(49);
 
 class HomePage extends StatefulWidget {
@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage> {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
-  // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
 
   @override
   void initState() {
@@ -91,6 +90,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     DataStorage.loadIngredients();
     DataStorage.loadRepas();
+
+    ListeCourse.resetListe();
+    FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(

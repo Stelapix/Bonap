@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'ingredients.dart';
 import 'widgets/dataStorage.dart';
@@ -134,6 +132,21 @@ class _RepasPageState extends State<RepasPage> {
                     });
               },
             ),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return _MyDialogEdit(
+                        r: data,
+                        rps: this,
+                        ingr: allIngr,
+                        selectedIngr: [],
+                        onSelectedIngrChanged: (ingr) {
+                          selectedIngr = ingr;
+                        }
+                    );
+                  });
+            },
           ),
         ),
       )
@@ -167,7 +180,7 @@ class _MyDialogEdit extends StatefulWidget {
 class _MyDialogEditState extends State<_MyDialogEdit> {
   List<Ingredient> _tempSelectedIngr = [];
   String newRepasName = '';
-  bool customName = false;
+  bool customName = true;
   bool weCanEditIt = true;
 
   @override
@@ -208,9 +221,11 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                         }
                       }
                     }
+                    if (weCanEditIt) widget.r.nom = newRepasName;
                   }
 
-                  if (weCanEditIt) widget.r.nom = newRepasName;
+
+
                   widget.r.listIngredient = _tempSelectedIngr;
                   //print(_tempSelectedIngr);
 

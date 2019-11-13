@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         hintColor: Colors.black,
-        accentColor: Color(0xFFEE5623),
+        accentColor: Colors.blue,
       ),
       debugShowCheckedModeBanner: false, // Retirer le bandeau de debug
       home: MainScreen(),

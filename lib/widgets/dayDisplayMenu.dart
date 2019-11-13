@@ -24,8 +24,9 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return new Row(
+    //print(selectedRepas);
 
+    return new Row(
 
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -61,7 +62,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
                     return _MyDialog(
                         whichOne: widget.midi,
                         ddms: this,
-                        repas: allRepas,
+                        repas: Repas.listRepas,
                         selectedRepas: selectedRepas,
                         onSelectedRepasChanged: (repas) {
                           selectedRepas = repas;
@@ -138,7 +139,9 @@ class _MyDialogState extends State<_MyDialog> {
 
   @override
   Widget build(BuildContext context) {
+
     return Dialog(
+
 
       child: Column(
         children: <Widget>[
@@ -184,19 +187,19 @@ class _MyDialogState extends State<_MyDialog> {
                             Text(repasName.nom),
                           ],
                         ),
-                        value: _tempSelectedRepas.contains(repasName),
+                        value: isIn(_tempSelectedRepas, repasName),
                         onChanged: (bool value) {
                           if (value) {
-                            if (!_tempSelectedRepas.contains(repasName)) {
+                            if (!isIn(_tempSelectedRepas, repasName)) {
                               setState(() {
                                 _tempSelectedRepas.add(repasName);
                               });
                             }
                           } else {
-                            if (_tempSelectedRepas.contains(repasName)) {
+                            if (isIn(_tempSelectedRepas, repasName)) {
                               setState(() {
                                 _tempSelectedRepas.removeWhere(
-                                        (Repas rep) => rep == repasName);
+                                        (Repas rep) => rep.nom == repasName.nom);
                               });
                             }
                           }
@@ -210,5 +213,14 @@ class _MyDialogState extends State<_MyDialog> {
         ],
       ),
     );
+  }
+
+  bool isIn(List<Repas> L, Repas R) {
+    var b = false;
+    for (Repas A in L) {
+      b = (A.nom == R.nom);
+      if (b) return true;
+    }
+    return false;
   }
 }
