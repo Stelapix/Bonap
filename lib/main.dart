@@ -6,6 +6,7 @@ import 'widgets/account/login.dart';
 import 'homePage.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
