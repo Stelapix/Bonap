@@ -132,7 +132,7 @@ class Ingredient {
       };
 }
 
-enum popUpSort { alpha, categorie }
+enum popUpSort { alpha, categorie, favorite}
 
 class IngredientsPage extends StatefulWidget {
   @override
@@ -167,7 +167,12 @@ class _IngredientsPageState extends State<IngredientsPage> {
                 const PopupMenuItem<popUpSort>(
                   value: popUpSort.categorie,
                   child: Text('Categories'),
-                )
+                ),
+                    const PopupMenuItem<popUpSort>(
+                      value: popUpSort.favorite,
+                      child: Text('Favoris'),
+                    ),
+
               ],
             ),
             IconButton(
@@ -211,6 +216,9 @@ class _IngredientsPageState extends State<IngredientsPage> {
       case popUpSort.categorie:
         Ingredient.ingredients
             .sort((a, b) => a.cat.toString().compareTo(b.cat.toString()));
+        break;
+      case popUpSort.favorite:
+        Ingredient.ingredients.sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
         break;
       default:
         break;
@@ -367,7 +375,6 @@ class _EditDialog extends StatefulWidget {
 class _EditDialogState extends State<_EditDialog> {
   String newIngr = '';
 
-
   @override
   void initState() {
     Ingredient.newCat = Ingredient.catToString(widget.I.cat);
@@ -444,8 +451,7 @@ class _EditDialogState extends State<_EditDialog> {
             child: Icon(Icons.delete),
             onPressed: () {
               if (widget.I.fav) {
-
-
+                // Mettre un message ?
               }
               else {
                 Ingredient.ingredients.remove(widget.I);
