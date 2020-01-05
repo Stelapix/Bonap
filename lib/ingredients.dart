@@ -443,11 +443,19 @@ class _EditDialogState extends State<_EditDialog> {
         FlatButton(
             child: Icon(Icons.delete),
             onPressed: () {
-              Ingredient.ingredients.remove(widget.I);
-              DataStorage.saveIngredients();
-              Navigator.of(context).pop();
-              widget.ips.setState(() =>
-                  widget.ips.affIngredients = widget.ips.displayIngredients());
+              if (widget.I.fav) {
+
+
+              }
+              else {
+                Ingredient.ingredients.remove(widget.I);
+                DataStorage.saveIngredients();
+                Navigator.of(context).pop();
+                widget.ips.setState(() =>
+                widget.ips.affIngredients = widget.ips.displayIngredients());
+
+              }
+
             })
       ],
     );
