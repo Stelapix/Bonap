@@ -52,7 +52,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
             ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(18.0),
+              borderRadius: new BorderRadius.circular(12.0),
               side: BorderSide(color: Color.fromRGBO(0, 191, 255, 1)),
             ),
             onPressed: () {
@@ -81,7 +81,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
             ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(18.0),
+              borderRadius: new BorderRadius.circular(12.0),
               side: BorderSide(color: Color.fromRGBO(0, 191, 255, 1)),
             ),
             onPressed: () {

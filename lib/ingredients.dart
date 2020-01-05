@@ -13,6 +13,7 @@ class Ingredient {
   String nom;
   Categorie cat;
   Icon icone;
+  bool fav;
   static String newCat;
   static List<Ingredient> ingredients = new List<Ingredient>();
 
@@ -20,6 +21,7 @@ class Ingredient {
     this.nom = nom;
     this.cat = cat;
     this.icone = catIcon(this.cat);
+    this.fav = false;
   }
 
   @override
@@ -119,11 +121,13 @@ class Ingredient {
   // Sauvegarde et chargement
   Ingredient.fromJson(Map<String, dynamic> json)
       : nom = json['nom'],
+        fav = json['fav'],
         cat = Categorie.values
             .firstWhere((e) => e.toString() == json['categorie']);
 
   Map<String, dynamic> toJson() => {
         'nom': nom,
+        'fav': fav,
         'categorie': cat.toString(),
       };
 }
@@ -219,19 +223,36 @@ class _IngredientsPageState extends State<IngredientsPage> {
               child: ListTile(
                 leading: Ingredient.catIcon(data.cat),
                 title: Text(data.nom),
-                trailing: IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return _EditDialog(
-                            I: data,
-                            ips: this,
-                          );
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    IconButton(
+                      icon: data.fav ? Icon(Icons.star) : Icon(Icons.star_border),
+                      onPressed: () {
+                        setState(() {
+                          data.fav = data.fav ? false : true;
+                          DataStorage.saveIngredients();
                         });
-                  },
+                      }
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return _EditDialog(
+                                I: data,
+                                ips: this,
+                              );
+                            });
+                      },
+                    ),
+
+                  ],
+
                 ),
+
                 onTap: () {
                   showDialog(
                       context: context,

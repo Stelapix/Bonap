@@ -15,35 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "764211714995-hsc6iviakn0od3q8j3evdinvvai24abe.apps.googleusercontent.com",
+          "client_id": "764211714995-5g89rede4ctbgca2jdj0bk9km0uo86fj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.stelapix.bonap",
-            "certificate_hash": "3989d67ef0cf418d7566eeb05aaa80a6d3ce9fba"
-          }
-        },
-        {
-          "client_id": "764211714995-966l1vsg7a85m4i77ok2p36g7k67c74g.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stelapix.bonap",
-            "certificate_hash": "8632c8fb1a1f8b7d1d156dd55f6193be79f4fd15"
-          }
-        },
-        {
-          "client_id": "764211714995-lugqksha99onr53q8qd7nj999579ielr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stelapix.bonap",
-            "certificate_hash": "5a2fc078e614e6d3236bae2b9143cb4e4a984242"
-          }
-        },
-        {
-          "client_id": "764211714995-bqjg0slue4ndhonfgnmbl924mk6cla99.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.stelapix.bonap",
-            "certificate_hash": "8ef37b0c959643fb467cb82b0cb1ddbd87c9e432"
+            "certificate_hash": "e4ca6121f3689947deb34babb06f4a5fc3b333cc"
           }
         },
         {
