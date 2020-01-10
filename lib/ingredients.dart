@@ -9,7 +9,7 @@ import 'widgets/dataStorage.dart';
 
 enum Category { meal, fish, vegetable, fruit, starchy, milk, other }
 //Starchy is feculent
-enum popUpSort { alpha, category, favorite}
+enum popUpSort { alpha, category, favorite }
 
 class Ingredient {
   String name;
@@ -124,8 +124,8 @@ class Ingredient {
   Ingredient.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         fav = json['fav'],
-        cat = Category.values
-            .firstWhere((e) => e.toString() == json['category']);
+        cat =
+            Category.values.firstWhere((e) => e.toString() == json['category']);
 
   Map<String, dynamic> toJson() => {
         'name': name,
@@ -133,8 +133,6 @@ class Ingredient {
         'category': cat.toString(),
       };
 }
-
-
 
 class IngredientsPage extends StatefulWidget {
   @override
@@ -170,11 +168,10 @@ class _IngredientsPageState extends State<IngredientsPage> {
                   value: popUpSort.category,
                   child: Text('Categories'),
                 ),
-                    const PopupMenuItem<popUpSort>(
-                      value: popUpSort.favorite,
-                      child: Text('Favoris'),
-                    ),
-
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.favorite,
+                  child: Text('Favoris'),
+                ),
               ],
             ),
             IconButton(
@@ -220,7 +217,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
             .sort((a, b) => a.cat.toString().compareTo(b.cat.toString()));
         break;
       case popUpSort.favorite:
-        Ingredient.listIngredients.sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
+        Ingredient.listIngredients
+            .sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
         break;
       default:
         break;
@@ -237,14 +235,15 @@ class _IngredientsPageState extends State<IngredientsPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     IconButton(
-                      icon: data.fav ? Icon(Icons.star) : Icon(Icons.star_border),
-                      onPressed: () {
-                        setState(() {
-                          data.fav = data.fav ? false : true;
-                          DataStorage.saveIngredients();
-                        });
-                      }
-                    ),
+                        icon: data.fav
+                            ? Icon(Icons.star)
+                            : Icon(Icons.star_border),
+                        onPressed: () {
+                          setState(() {
+                            data.fav = data.fav ? false : true;
+                            DataStorage.saveIngredients();
+                          });
+                        }),
                     IconButton(
                       icon: Icon(Icons.more_vert),
                       onPressed: () {
@@ -258,11 +257,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
                             });
                       },
                     ),
-
                   ],
-
                 ),
-
                 onTap: () {
                   showDialog(
                       context: context,
@@ -303,8 +299,6 @@ class _AddDialogState extends State<_AddDialog> {
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -314,15 +308,15 @@ class _AddDialogState extends State<_AddDialog> {
         children: <Widget>[
           Row(
             children: <Widget>[
-
               Container(
                 child: DropDownButtonIngredients(this),
               ),
               IconButton(
-                icon: Ingredient.catIcon(Ingredient.stringToCategory(Ingredient.newCat)),
-                onPressed: () {setState(() {
-
-                });},
+                icon: Ingredient.catIcon(
+                    Ingredient.stringToCategory(Ingredient.newCat)),
+                onPressed: () {
+                  setState(() {});
+                },
               )
             ],
           ),
@@ -344,7 +338,8 @@ class _AddDialogState extends State<_AddDialog> {
             if (newIngr != '') {
               var existe = false;
               for (var o in Ingredient.listIngredients) {
-                if (o.name.toUpperCase() == newIngr.toUpperCase()) existe = true;
+                if (o.name.toUpperCase() == newIngr.toUpperCase())
+                  existe = true;
               }
               if (!existe)
                 Ingredient.listIngredients.add(new Ingredient(
@@ -385,7 +380,6 @@ class _EditDialogState extends State<_EditDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: Text('Modifier ' + widget.I.name),
       content: new Column(
@@ -397,15 +391,14 @@ class _EditDialogState extends State<_EditDialog> {
                 child: DropDownButtonIngredients(this),
               ),
               IconButton(
-                icon: Ingredient.catIcon(Ingredient.stringToCategory(Ingredient.newCat)),
-                onPressed: () {setState(() {
-
-                });},
+                icon: Ingredient.catIcon(
+                    Ingredient.stringToCategory(Ingredient.newCat)),
+                onPressed: () {
+                  setState(() {});
+                },
               ),
-
             ],
           ),
-
           Container(
               child: new TextField(
             autofocus: false,
@@ -444,7 +437,7 @@ class _EditDialogState extends State<_EditDialog> {
                 widget.I.cat = Category.other;
                 break;
             }
-            widget.ips.setState((){});
+            widget.ips.setState(() {});
             DataStorage.saveIngredients();
             Navigator.of(context).pop();
           },
@@ -454,16 +447,13 @@ class _EditDialogState extends State<_EditDialog> {
             onPressed: () {
               if (widget.I.fav) {
                 // Mettre un message ?
-              }
-              else {
+              } else {
                 Ingredient.listIngredients.remove(widget.I);
                 DataStorage.saveIngredients();
                 Navigator.of(context).pop();
-                widget.ips.setState(() =>
-                widget.ips.affIngredients = widget.ips.displayIngredients());
-
+                widget.ips.setState(() => widget.ips.affIngredients =
+                    widget.ips.displayIngredients());
               }
-
             })
       ],
     );

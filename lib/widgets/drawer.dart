@@ -99,7 +99,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Custom.settings),
-                  title: Text('Settings'),
+                  title: Text('Paramètres'),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(

@@ -10,8 +10,6 @@ import 'ingredients.dart';
 import 'listeCourse.dart';
 import 'widgets/dataStorage.dart';
 
-enum popUpMenu { deconnexion }
-
 class MenuSemaine {
   int numSemaine;
   List<List<Meal>> repasSemaine = new List<List<Meal>>();

@@ -25,12 +25,9 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
   @override
   Widget build(BuildContext context) {
     //print(selectedRepas);
-
     return new Row(
-
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-
         Container(
           child: Text(
             widget.jour,
@@ -41,7 +38,6 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
             textAlign: TextAlign.center,
           ),
           width: (MediaQuery.of(context).size.width) / 4,
-
         ),
         ButtonTheme(
           minWidth: (MediaQuery.of(context).size.width) / 3,
