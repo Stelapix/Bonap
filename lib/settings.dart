@@ -31,10 +31,10 @@ class SettingsPage extends StatelessWidget {
               child: Text("Reset"),
               onPressed: () {
                 print("Oui");
-                Ingredient.ingredients
-                    .removeRange(0, Ingredient.ingredients.length);
-                Repas.listRepas
-                    .removeRange(0, Repas.listRepas.length);
+                Ingredient.listIngredients
+                    .removeRange(0, Ingredient.listIngredients.length);
+                Meal.listMeal
+                    .removeRange(0, Meal.listMeal.length);
                 DataStorage.saveIngredients();
                 DataStorage.saveRepas();
               },

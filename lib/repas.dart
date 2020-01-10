@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'ingredients.dart';
 import 'widgets/dataStorage.dart';
 
-class Repas {
-  String nom = '';
+class Meal {
+  String name = '';
   List<Ingredient> listIngredient = new List<Ingredient>();
 
-  static List<Repas> listRepas = new List<Repas>();
+  static List<Meal> listMeal = new List<Meal>();
 
-  Repas(this.nom, this.listIngredient);
+  Meal(this.name, this.listIngredient);
 
 
   String listIngredientToString() {
@@ -19,19 +19,19 @@ class Repas {
 //      }
 //    }
     String str = '';
-    listIngredient.forEach((a) => str += ' ' + a.nom);
+    listIngredient.forEach((a) => str += ' ' + a.name);
     return str;
   }
 
   // Sauvegarde et chargement
-  Repas.fromJson(Map<String, dynamic> json) :
-        nom = json['nom'],
+  Meal.fromJson(Map<String, dynamic> json) :
+        name = json['name'],
         listIngredient = createList(json['ingredients']);
 
 
 
   Map<String, dynamic> toJson() => {
-    'nom': nom,
+    'name': name,
     'ingredients': listIngredient,
 
   };
@@ -39,7 +39,7 @@ class Repas {
   static List<Ingredient> createList(List<dynamic> s) {
     List<Ingredient> L = new List<Ingredient>();
     for (int i = 0; i < s.length; i++) {
-      L.add(new Ingredient(s[i]['nom'], Categorie.values.firstWhere((e) => e.toString() == s[i]['categorie'])));
+      L.add(new Ingredient(s[i]['name'], Category.values.firstWhere((e) => e.toString() == s[i]['category'])));
     }
     return L;
   }
@@ -53,10 +53,10 @@ class RepasPage extends StatefulWidget {
 
 class _RepasPageState extends State<RepasPage> {
   bool checkboxValueIngr = false;
-  List<Ingredient> allIngr = Ingredient.ingredients;
+  List<Ingredient> allIngr = Ingredient.listIngredients;
   List<Ingredient> selectedIngr = [];
 
-  ListView affRepas = new ListView();
+  ListView disMeal = new ListView();
 
   @override
   Widget build(BuildContext context) {
@@ -98,21 +98,21 @@ class _RepasPageState extends State<RepasPage> {
           child: Column(
             children: <Widget>[
               Expanded(
-                child: displayRepas(),
+                child: displayMeal(),
               )
             ],
           ),
         ));
   }
 
-  ListView displayRepas() {
+  ListView displayMeal() {
     return ListView(
       shrinkWrap: true,
-      children: Repas.listRepas
+      children: Meal.listMeal
           .map(
             (data) => new Container(
           child: ListTile(
-            title: Text(data.nom),
+            title: Text(data.name),
             subtitle: Text(data.listIngredientToString()),
             trailing: IconButton(
               icon: Icon(Icons.more_vert),
@@ -165,7 +165,7 @@ class _MyDialogEdit extends StatefulWidget {
     this.selectedIngr,
   });
 
-  final Repas r;
+  final Meal r;
   final _RepasPageState rps;
   final ValueChanged<List<Ingredient>> onSelectedIngrChanged;
   final List<Ingredient> ingr;
@@ -179,7 +179,7 @@ class _MyDialogEdit extends StatefulWidget {
 
 class _MyDialogEditState extends State<_MyDialogEdit> {
   List<Ingredient> _tempSelectedIngr = [];
-  String newRepasName = '';
+  String newMealName = '';
   bool customName = true;
   bool weCanEditIt = true;
 
@@ -202,7 +202,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'Modifier ' + widget.r.nom,
+                  'Modifier ' + widget.r.name,
                   style: TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -213,15 +213,15 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
 
               RaisedButton(
                 onPressed: () {
-                  if (newRepasName != '') {
-                    for (int i = 0; i < Repas.listRepas.length; i++) {
+                  if (newMealName != '') {
+                    for (int i = 0; i < Meal.listMeal.length; i++) {
                       if (weCanEditIt) {
-                        if (Repas.listRepas[i].nom == newRepasName) {
+                        if (Meal.listMeal[i].name == newMealName) {
                           weCanEditIt = false;
                         }
                       }
                     }
-                    if (weCanEditIt) widget.r.nom = newRepasName;
+                    if (weCanEditIt) widget.r.name = newMealName;
                   }
 
 
@@ -229,7 +229,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                   widget.r.listIngredient = _tempSelectedIngr;
                   //print(_tempSelectedIngr);
 
-                  widget.rps.setState(() => widget.rps.affRepas = widget.rps.displayRepas());
+                  widget.rps.setState(() => widget.rps.disMeal = widget.rps.displayMeal());
                   DataStorage.saveRepas();
                   Navigator.pop(context);
                 },
@@ -245,11 +245,11 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                   child: TextField(
                     autofocus: false,
                     decoration: new InputDecoration(
-                        labelText: 'Nom du repas', hintText: newRepasName),
+                        labelText: 'Nom du repas', hintText: newMealName),
                     onChanged: (value) {
                       customName = true;
-                      newRepasName = value;
-                      if (newRepasName == '') customName = false;
+                      newMealName = value;
+                      if (newMealName == '') customName = false;
                     },
                   ))
             ],
@@ -258,7 +258,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
             child: ListView.builder(
                 itemCount: widget.ingr.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final ingrName = Ingredient.ingredients[index];
+                  final ingrName = Ingredient.listIngredients[index];
 
                   return Container(
                     child: CheckboxListTile(
@@ -281,7 +281,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                             if (isIn(_tempSelectedIngr, ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.removeWhere(
-                                        (Ingredient ingr) => ingr.nom == ingrName.nom);
+                                        (Ingredient ingr) => ingr.name == ingrName.name);
                               });
                             }
                           }
@@ -289,7 +289,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                           widget.onSelectedIngrChanged(_tempSelectedIngr);
 
                           if (!customName)
-                            newRepasName = _tempSelectedIngr.toString();
+                            newMealName = _tempSelectedIngr.toString();
                         }),
                   );
                 }),
@@ -302,7 +302,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
   bool isIn(List<Ingredient> L, Ingredient I) {
     var b = false;
     for (Ingredient A in L) {
-      b = ((A.nom == I.nom) && (A.cat == I.cat));
+      b = ((A.name == I.name) && (A.cat == I.cat));
       if (b) return true;
     }
     return false;
@@ -357,17 +357,17 @@ class _MyDialogState extends State<_MyDialog> {
               RaisedButton(
                 onPressed: () {
                   if (newRepasName != '') {
-                    for (int i = 0; i < Repas.listRepas.length; i++) {
+                    for (int i = 0; i < Meal.listMeal.length; i++) {
                       if (weCanAddIt) {
-                        if (Repas.listRepas[i].nom == newRepasName) {
+                        if (Meal.listMeal[i].name == newRepasName) {
                           weCanAddIt = false;
                         }
                       }
                     }
                   }
                   if (weCanAddIt)
-                    Repas.listRepas.add(Repas(newRepasName, _tempSelectedIngr));
-                  widget.rps.setState(() => widget.rps.affRepas = widget.rps.displayRepas());
+                    Meal.listMeal.add(Meal(newRepasName, _tempSelectedIngr));
+                  widget.rps.setState(() => widget.rps.disMeal = widget.rps.displayMeal());
                   DataStorage.saveRepas();
                   Navigator.pop(context);
                 },
@@ -466,12 +466,12 @@ class _ResetDialogState extends State<_ResetDialog> {
         FlatButton(
           child: Text('Oui'),
           onPressed: () {
-            Repas.listRepas
-                .removeRange(0, Repas.listRepas.length);
+            Meal.listMeal
+                .removeRange(0, Meal.listMeal.length);
             DataStorage.saveRepas();
             Navigator.of(context).pop();
             widget.rps.setState(() =>
-            widget.rps.affRepas = widget.rps.displayRepas());
+            widget.rps.disMeal = widget.rps.displayMeal());
           },
         ),
       ],

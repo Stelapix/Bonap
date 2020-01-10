@@ -7,57 +7,59 @@ import 'custom/custom_icons.dart';
 import 'widgets/dropDownButtons/dropDownButtonIngredients.dart';
 import 'widgets/dataStorage.dart';
 
-enum Categorie { viande, poisson, legume, fruit, feculent, laitier, autre }
+enum Category { meal, fish, vegetable, fruit, starchy, milk, other }
+//Starchy is feculent
+enum popUpSort { alpha, category, favorite}
 
 class Ingredient {
-  String nom;
-  Categorie cat;
-  Icon icone;
+  String name;
+  Category cat;
+  Icon icon;
   bool fav;
   static String newCat;
-  static List<Ingredient> ingredients = new List<Ingredient>();
+  static List<Ingredient> listIngredients = new List<Ingredient>();
 
-  Ingredient(String nom, Categorie cat) {
-    this.nom = nom;
+  Ingredient(String name, Category cat) {
+    this.name = name;
     this.cat = cat;
-    this.icone = catIcon(this.cat);
+    this.icon = catIcon(this.cat);
     this.fav = false;
   }
 
   @override
   String toString() {
-    return this.nom;
+    return this.name;
   }
 
   String nameWithoutTheEnd() {
     int max = 25;
-    if (this.nom.length > max)
-      return this.nom.substring(0, max) + '...';
+    if (this.name.length > max)
+      return this.name.substring(0, max) + '...';
     else
-      return this.nom;
+      return this.name;
   }
 
-  static Icon catIcon(Categorie c) {
+  static Icon catIcon(Category c) {
     switch (c) {
-      case (Categorie.autre):
+      case (Category.other):
         return Icon(Custom.cereals);
         break;
-      case (Categorie.feculent):
+      case (Category.starchy):
         return Icon(Custom.baguette);
         break;
-      case (Categorie.viande):
+      case (Category.meal):
         return Icon(Custom.meat);
         break;
-      case (Categorie.poisson):
+      case (Category.fish):
         return Icon(Custom.fish);
         break;
-      case (Categorie.fruit):
+      case (Category.fruit):
         return Icon(Custom.basket);
         break;
-      case (Categorie.legume):
+      case (Category.vegetable):
         return Icon(Custom.carrot);
         break;
-      case (Categorie.laitier):
+      case (Category.milk):
         return Icon(Custom.cheese);
         break;
       default:
@@ -66,24 +68,24 @@ class Ingredient {
     }
   }
 
-  static String catToString(Categorie c) {
+  static String catToString(Category c) {
     switch (c) {
-      case (Categorie.feculent):
+      case (Category.starchy):
         return "Féculent";
         break;
-      case (Categorie.viande):
+      case (Category.meal):
         return "Viande";
         break;
-      case (Categorie.poisson):
+      case (Category.fish):
         return "Poisson";
         break;
-      case (Categorie.fruit):
+      case (Category.fruit):
         return "Fruit";
         break;
-      case (Categorie.legume):
+      case (Category.vegetable):
         return "Légume";
         break;
-      case (Categorie.laitier):
+      case (Category.milk):
         return "Produit Laitier";
         break;
       default:
@@ -92,47 +94,47 @@ class Ingredient {
     }
   }
 
-  static Categorie stringToCategorie(String s) {
+  static Category stringToCategory(String s) {
     switch (s) {
       case "Viande":
-        return Categorie.viande;
+        return Category.meal;
         break;
       case "Poisson":
-        return Categorie.poisson;
+        return Category.fish;
         break;
       case "Fruit":
-        return Categorie.fruit;
+        return Category.fruit;
         break;
       case "Légume":
-        return Categorie.legume;
+        return Category.vegetable;
         break;
       case "Féculent":
-        return Categorie.feculent;
+        return Category.starchy;
         break;
       case "Produit Laitier":
-        return Categorie.laitier;
+        return Category.milk;
         break;
       default:
-        return Categorie.autre;
+        return Category.other;
         break;
     }
   }
 
   // Sauvegarde et chargement
   Ingredient.fromJson(Map<String, dynamic> json)
-      : nom = json['nom'],
+      : name = json['name'],
         fav = json['fav'],
-        cat = Categorie.values
-            .firstWhere((e) => e.toString() == json['categorie']);
+        cat = Category.values
+            .firstWhere((e) => e.toString() == json['category']);
 
   Map<String, dynamic> toJson() => {
-        'nom': nom,
+        'name': name,
         'fav': fav,
-        'categorie': cat.toString(),
+        'category': cat.toString(),
       };
 }
 
-enum popUpSort { alpha, categorie, favorite}
+
 
 class IngredientsPage extends StatefulWidget {
   @override
@@ -165,7 +167,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
                   child: Text('Ordre alphabetique'),
                 ),
                 const PopupMenuItem<popUpSort>(
-                  value: popUpSort.categorie,
+                  value: popUpSort.category,
                   child: Text('Categories'),
                 ),
                     const PopupMenuItem<popUpSort>(
@@ -210,27 +212,27 @@ class _IngredientsPageState extends State<IngredientsPage> {
   ListView displayIngredients() {
     switch (this._selectionSort) {
       case popUpSort.alpha:
-        Ingredient.ingredients
-            .sort((a, b) => a.nom.toString().compareTo(b.nom.toString()));
+        Ingredient.listIngredients
+            .sort((a, b) => a.name.toString().compareTo(b.name.toString()));
         break;
-      case popUpSort.categorie:
-        Ingredient.ingredients
+      case popUpSort.category:
+        Ingredient.listIngredients
             .sort((a, b) => a.cat.toString().compareTo(b.cat.toString()));
         break;
       case popUpSort.favorite:
-        Ingredient.ingredients.sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
+        Ingredient.listIngredients.sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
         break;
       default:
         break;
     }
     return ListView(
       shrinkWrap: true,
-      children: Ingredient.ingredients
+      children: Ingredient.listIngredients
           .map(
             (data) => new Container(
               child: ListTile(
                 leading: Ingredient.catIcon(data.cat),
-                title: Text(data.nom),
+                title: Text(data.name),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -279,7 +281,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
   }
 
   void deleteIngredient(Ingredient I) {
-    Ingredient.ingredients.remove(I);
+    Ingredient.listIngredients.remove(I);
   }
 }
 
@@ -317,7 +319,7 @@ class _AddDialogState extends State<_AddDialog> {
                 child: DropDownButtonIngredients(this),
               ),
               IconButton(
-                icon: Ingredient.catIcon(Ingredient.stringToCategorie(Ingredient.newCat)),
+                icon: Ingredient.catIcon(Ingredient.stringToCategory(Ingredient.newCat)),
                 onPressed: () {setState(() {
 
                 });},
@@ -341,12 +343,12 @@ class _AddDialogState extends State<_AddDialog> {
           onPressed: () {
             if (newIngr != '') {
               var existe = false;
-              for (var o in Ingredient.ingredients) {
-                if (o.nom.toUpperCase() == newIngr.toUpperCase()) existe = true;
+              for (var o in Ingredient.listIngredients) {
+                if (o.name.toUpperCase() == newIngr.toUpperCase()) existe = true;
               }
               if (!existe)
-                Ingredient.ingredients.add(new Ingredient(
-                    newIngr, Ingredient.stringToCategorie(Ingredient.newCat)));
+                Ingredient.listIngredients.add(new Ingredient(
+                    newIngr, Ingredient.stringToCategory(Ingredient.newCat)));
             }
             widget.ips.setState(() =>
                 widget.ips.affIngredients = widget.ips.displayIngredients());
@@ -385,7 +387,7 @@ class _EditDialogState extends State<_EditDialog> {
   Widget build(BuildContext context) {
 
     return AlertDialog(
-      title: Text('Modifier ' + widget.I.nom),
+      title: Text('Modifier ' + widget.I.name),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -395,7 +397,7 @@ class _EditDialogState extends State<_EditDialog> {
                 child: DropDownButtonIngredients(this),
               ),
               IconButton(
-                icon: Ingredient.catIcon(Ingredient.stringToCategorie(Ingredient.newCat)),
+                icon: Ingredient.catIcon(Ingredient.stringToCategory(Ingredient.newCat)),
                 onPressed: () {setState(() {
 
                 });},
@@ -408,7 +410,7 @@ class _EditDialogState extends State<_EditDialog> {
               child: new TextField(
             autofocus: false,
             decoration:
-                new InputDecoration(labelText: 'Nom', hintText: widget.I.nom),
+                new InputDecoration(labelText: 'Nom', hintText: widget.I.name),
             onChanged: (value) {
               newIngr = value;
             },
@@ -419,27 +421,27 @@ class _EditDialogState extends State<_EditDialog> {
         FlatButton(
           child: Text('Ok'),
           onPressed: () {
-            if (newIngr == '') newIngr = widget.I.nom;
+            if (newIngr == '') newIngr = widget.I.name;
             print(Ingredient.newCat.toString());
-            widget.I.nom = newIngr;
+            widget.I.name = newIngr;
             switch (Ingredient.newCat) {
               case ("Viande"):
-                widget.I.cat = Categorie.viande;
+                widget.I.cat = Category.meal;
                 break;
               case ("Légume"):
-                widget.I.cat = Categorie.legume;
+                widget.I.cat = Category.vegetable;
                 break;
               case ("Poisson"):
-                widget.I.cat = Categorie.poisson;
+                widget.I.cat = Category.fish;
                 break;
               case ("Féculent"):
-                widget.I.cat = Categorie.feculent;
+                widget.I.cat = Category.starchy;
                 break;
               case ("Produit Laitier"):
-                widget.I.cat = Categorie.laitier;
+                widget.I.cat = Category.milk;
                 break;
               default:
-                widget.I.cat = Categorie.autre;
+                widget.I.cat = Category.other;
                 break;
             }
             widget.ips.setState((){});
@@ -454,7 +456,7 @@ class _EditDialogState extends State<_EditDialog> {
                 // Mettre un message ?
               }
               else {
-                Ingredient.ingredients.remove(widget.I);
+                Ingredient.listIngredients.remove(widget.I);
                 DataStorage.saveIngredients();
                 Navigator.of(context).pop();
                 widget.ips.setState(() =>
@@ -497,8 +499,8 @@ class _ResetDialogState extends State<_ResetDialog> {
         FlatButton(
           child: Text('Oui'),
           onPressed: () {
-            Ingredient.ingredients
-                .removeRange(0, Ingredient.ingredients.length);
+            Ingredient.listIngredients
+                .removeRange(0, Ingredient.listIngredients.length);
             DataStorage.saveIngredients();
             Navigator.of(context).pop();
             widget.ips.setState(() =>

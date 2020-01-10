@@ -17,8 +17,8 @@ class DayDisplayMenu extends StatefulWidget{
 
 class DayDisplayMenuState extends State<DayDisplayMenu> {
   bool checkboxValueIngr = false;
-  List<Repas> allRepas = Repas.listRepas;
-  List<Repas> selectedRepas = [];
+  List<Meal> allRepas = Meal.listMeal;
+  List<Meal> selectedRepas = [];
 
 
 
@@ -48,7 +48,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
           height: 50,
           child: RaisedButton(
             child: (widget.m.repasSemaine[widget.midi].length > 0) ? new Text(
-              widget.m.repasSemaine[widget.midi][0].nom,
+              widget.m.repasSemaine[widget.midi][0].name,
             ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
@@ -62,7 +62,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
                     return _MyDialog(
                         whichOne: widget.midi,
                         ddms: this,
-                        repas: Repas.listRepas,
+                        repas: Meal.listMeal,
                         selectedRepas: selectedRepas,
                         onSelectedRepasChanged: (repas) {
                           selectedRepas = repas;
@@ -77,7 +77,7 @@ class DayDisplayMenuState extends State<DayDisplayMenu> {
           child: RaisedButton(
 
             child: (widget.m.repasSemaine[widget.soir].length > 0) ? new Text(
-              widget.m.repasSemaine[widget.soir][0].nom,
+              widget.m.repasSemaine[widget.soir][0].name,
             ) : null,
             color: Colors.black,
             shape: RoundedRectangleBorder(
@@ -118,9 +118,9 @@ class _MyDialog extends StatefulWidget {
   });
 
   final int whichOne;
-  final List<Repas> repas;
-  final List<Repas> selectedRepas;
-  final ValueChanged<List<Repas>> onSelectedRepasChanged;
+  final List<Meal> repas;
+  final List<Meal> selectedRepas;
+  final ValueChanged<List<Meal>> onSelectedRepasChanged;
   final DayDisplayMenuState ddms;
 
   @override
@@ -128,7 +128,7 @@ class _MyDialog extends StatefulWidget {
 }
 
 class _MyDialogState extends State<_MyDialog> {
-  List<Repas> _tempSelectedRepas = [];
+  List<Meal> _tempSelectedRepas = [];
 
 
   @override
@@ -184,7 +184,7 @@ class _MyDialogState extends State<_MyDialog> {
                           children: <Widget>[
 
                             Text('    '),
-                            Text(repasName.nom),
+                            Text(repasName.name),
                           ],
                         ),
                         value: isIn(_tempSelectedRepas, repasName),
@@ -199,7 +199,7 @@ class _MyDialogState extends State<_MyDialog> {
                             if (isIn(_tempSelectedRepas, repasName)) {
                               setState(() {
                                 _tempSelectedRepas.removeWhere(
-                                        (Repas rep) => rep.nom == repasName.nom);
+                                        (Meal rep) => rep.name == repasName.name);
                               });
                             }
                           }
@@ -215,10 +215,10 @@ class _MyDialogState extends State<_MyDialog> {
     );
   }
 
-  bool isIn(List<Repas> L, Repas R) {
+  bool isIn(List<Meal> L, Meal R) {
     var b = false;
-    for (Repas A in L) {
-      b = (A.nom == R.nom);
+    for (Meal A in L) {
+      b = (A.name == R.name);
       if (b) return true;
     }
     return false;

@@ -33,7 +33,7 @@ class DataStorage {
       // Read the file
       String content = await file.readAsString();
       List collection = json.decode(content);
-      Ingredient.ingredients =
+      Ingredient.listIngredients =
           collection.map((json) => Ingredient.fromJson(json)).toList();
       if (debug) print("LOADING INGR : " + collection.toString());
 
@@ -47,7 +47,7 @@ class DataStorage {
 
   static Future<File> saveIngredients() async {
     final file = await _localFileIngredients;
-    String json = jsonEncode(Ingredient.ingredients);
+    String json = jsonEncode(Ingredient.listIngredients);
     if (debug) print("SAVING INGR : " + json);
 
     return file.writeAsString(json);
@@ -61,8 +61,8 @@ class DataStorage {
       // Read the file
       String content = await file.readAsString();
       List collection = json.decode(content);
-      Repas.listRepas =
-          collection.map((json) => Repas.fromJson(json)).toList();
+      Meal.listMeal =
+          collection.map((json) => Meal.fromJson(json)).toList();
       if (debug) print("LOADING REPAS : " + collection.toString());
 
       return 1;
@@ -75,7 +75,7 @@ class DataStorage {
 
   static Future<File> saveRepas() async {
     final file = await _localFileRepas;
-    String json = jsonEncode(Repas.listRepas);
+    String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
 
     return file.writeAsString(json);

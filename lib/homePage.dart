@@ -14,7 +14,7 @@ enum popUpMenu { deconnexion }
 
 class MenuSemaine {
   int numSemaine;
-  List<List<Repas>> repasSemaine = new List<List<Repas>>();
+  List<List<Meal>> repasSemaine = new List<List<Meal>>();
 
   // indexs de 0 a 13, de lundi midi a dimanche soir
 
@@ -22,18 +22,18 @@ class MenuSemaine {
     this.numSemaine = numSemaine;
 
     for (var i = 0; i < 14; i++) {
-      repasSemaine.add(new List<Repas>());
-      repasSemaine[i].add(new Repas('', new List<Ingredient>()));
+      repasSemaine.add(new List<Meal>());
+      repasSemaine[i].add(new Meal('', new List<Ingredient>()));
     }
   }
 
-  void choisirRepas(int a, List<Repas> r) {
+  void choisirRepas(int a, List<Meal> r) {
     repasSemaine[a] = r;
   }
 }
 
 class FunctionUpdate {
-  static void updateListeCourse(List<List<Repas>> repasSemaine) {
+  static void updateListeCourse(List<List<Meal>> repasSemaine) {
     ListeCourse.resetListe();
     for (int i = 0; i < repasSemaine.length; i++) {
       for (int j = 0; j < repasSemaine[i].length; j++) {

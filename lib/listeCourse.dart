@@ -5,11 +5,11 @@ import 'repas.dart';
 class ListeCourse {
   static List<IngredientListeCourse> liste = new List<IngredientListeCourse>();
 
-  static void addRepasToListe(Repas r) {
+  static void addRepasToListe(Meal r) {
     bool weCanAddIt = true;
     for (int i = 0; i < r.listIngredient.length; i++) {
       for (int j = 0; j < ListeCourse.liste.length; j++) {
-        if (ListeCourse.liste[j].i.nom == r.listIngredient[i].nom) {
+        if (ListeCourse.liste[j].i.name == r.listIngredient[i].name) {
           weCanAddIt = false;
           if (!ListeCourse.liste[j].repas.contains(r))
             ListeCourse.liste[j].repas.add(r);
@@ -31,7 +31,7 @@ class ListeCourse {
   static String afficher() {
     String a = '';
     for (int i = 0; i < ListeCourse.liste.length; i++) {
-      a += ListeCourse.liste[i].i.nom;
+      a += ListeCourse.liste[i].i.name;
     }
     return a;
   }
@@ -39,10 +39,10 @@ class ListeCourse {
 
 class IngredientListeCourse {
   Ingredient i;
-  List<Repas> repas =
-      new List<Repas>(); // Tous les repas qui utilisent l'ingredient
+  List<Meal> repas =
+      new List<Meal>(); // Tous les repas qui utilisent l'ingredient
 
-  IngredientListeCourse(Ingredient i, Repas r) {
+  IngredientListeCourse(Ingredient i, Meal r) {
     this.i = i;
     this.repas.add(r);
   }
@@ -50,7 +50,7 @@ class IngredientListeCourse {
   String afficherRepas() {
     String a = '';
     for (int b = 0; b < repas.length; b++) {
-      a += ('\n' + repas[b].nom);
+      a += ('\n' + repas[b].name);
     }
     return a;
   }
@@ -85,7 +85,7 @@ class _ListeCoursePageState extends State<ListeCoursePage> {
             (data) => new Container(
               child: ExpansionTile(
                 leading: Ingredient.catIcon(data.i.cat),
-                title: Text(data.i.nom),
+                title: Text(data.i.name),
                 trailing: IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () {
