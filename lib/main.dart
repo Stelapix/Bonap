@@ -1,8 +1,10 @@
+import 'package:bonap/widgets/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'widgets/account/login.dart';
+import 'package:provider/provider.dart';
 import 'homePage.dart';
 
 void main() async {
@@ -17,15 +19,22 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        hintColor: Colors.black,
-        accentColor: Colors.blue,
-    ),
-      debugShowCheckedModeBanner: false, // Retirer le bandeau de debug
-      home: MainScreen(),
+    return ChangeNotifierProvider<ThemeChanger>(
+      builder: (_) => ThemeChanger(ThemeData.dark()),
+      child: MaterialAppWithTheme(),
     );
+  }
+}
+
+class MaterialAppWithTheme extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    final theme = Provider.of<ThemeChanger>(context);
+    return MaterialApp(
+      home: MainScreen(),
+      theme: theme.getTheme(),
+      debugShowCheckedModeBanner: false, // Retirer le bandeau de debug
+      );
   }
 }
 

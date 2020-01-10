@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'widgets/account/login.dart';
+import 'widgets/theme.dart';
 import 'ingredients.dart';
+import 'package:provider/provider.dart';
 import 'repas.dart';
 
 import 'widgets/dataStorage.dart';
@@ -19,6 +21,7 @@ class _SettingsPage extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Paramètres'),
@@ -36,7 +39,6 @@ class _SettingsPage extends State<SettingsPage> {
                     'Mode Nuit',
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Colors.white,
                     ),
                   ),
                   Switch(
@@ -44,6 +46,8 @@ class _SettingsPage extends State<SettingsPage> {
                     onChanged: (value) {
                       setState(() {
                         isSwitched = value;
+                        if(isSwitched) _themeChanger.setTheme(ThemeData.dark());
+                        else _themeChanger.setTheme(ThemeData.light());                 
                       });
                     },
                     activeTrackColor: Colors.lightGreenAccent,
@@ -57,7 +61,6 @@ class _SettingsPage extends State<SettingsPage> {
                     "Supprimer les données",
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Colors.white,
                     ),
                   ),
                   onTap: () {
@@ -73,7 +76,6 @@ class _SettingsPage extends State<SettingsPage> {
                     "Déconnexion",
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Colors.white,
                     ),
                   ),
                   onTap: () {
