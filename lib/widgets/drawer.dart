@@ -84,7 +84,6 @@ class AppDrawer extends StatelessWidget {
               children: <Widget>[
                 Divider(
                   thickness: 1.0,
-                  color: Colors.white,
                 ),
                 ListTile(
                   leading: Icon(Custom.feedback),

@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
-
   @override
   void initState() {
     super.initState();
@@ -68,20 +67,19 @@ class _HomePageState extends State<HomePage> {
               title: Text("Voulez-vous vraiment vous déconnecter ?"),
               actions: <Widget>[
                 FlatButton(
-                  child: Text("Non"),
-                  onPressed: () =>
-                    Navigator.pop(context, false),
+                  child: Text("ANNULER"),
+                  onPressed: () => Navigator.pop(context, false),
                 ),
                 FlatButton(
-                  child: Text("Oui"),
+                  child: Text("OK"),
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => LoginPage(loggout: true))),
+                          builder: (BuildContext context) =>
+                              LoginPage(loggout: true))),
                 ),
               ],
-        )
-    );
+            ));
   }
 
   @override

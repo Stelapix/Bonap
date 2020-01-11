@@ -179,9 +179,13 @@ class _RegisterPageState extends State<RegisterPage>{
           color: Colors.black,
           fontSize: 16.0,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
+        focusColor: Colors.orange,
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Color(0xFFEE5623))),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Color(0xFFEE5623))),
         prefixIcon: hintText == "Adresse Email"
             ? Icon(Icons.email, color: Colors.black)
             : hintText == "Mot de passe"

@@ -1,5 +1,5 @@
 import 'package:bonap/homePage.dart';
-import 'package:bonap/register.dart';
+import 'package:bonap/widgets/account/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -226,9 +226,12 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.black,
           fontSize: 16.0,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Color(0xFFEE5623))),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: Color(0xFFEE5623))),
         prefixIcon: hintText == "Adresse Email"
             ? Icon(Icons.email, color: Colors.black)
             : Icon(Icons.lock, color: Colors.black),
@@ -537,18 +540,27 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          "Voulez-vous quitter l'application ?",
-          style: TextStyle(color: Colors.black),
-          textAlign: TextAlign.center,
+          "Voulez-vous vraiment quitter l'application ?",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            ),
+          textAlign: TextAlign.left,
         ),
         backgroundColor: Colors.white.withOpacity(0.9),
         actions: <Widget>[
           FlatButton(
-            child: Text("Non"),
+            child: Text("ANNULER",
+            style: TextStyle(
+              color: Colors.black
+            ),),
             onPressed: () => Navigator.pop(context, false),
           ),
           FlatButton(
-            child: Text("Oui"),
+            child: Text("OK",
+            style: TextStyle(
+              color: Colors.black
+            ),),
             onPressed: () =>
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
           ),
