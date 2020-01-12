@@ -17,7 +17,9 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> {
   //Pour cacher/afficher le mot de passe
-  bool isSwitched = true;
+  bool isSwitchedNight = true;
+  bool isSwitchedVegetarian = false;
+  bool isSwitchedVegan = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +30,12 @@ class _SettingsPage extends State<SettingsPage> {
       ),
       body: Container(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Text("Préférences"),
+              SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -42,12 +46,64 @@ class _SettingsPage extends State<SettingsPage> {
                     ),
                   ),
                   Switch(
-                    value: isSwitched,
+                    value: isSwitchedNight,
                     onChanged: (value) {
                       setState(() {
-                        isSwitched = value;
-                        if(isSwitched) _themeChanger.setTheme(ThemeData.dark());
-                        else _themeChanger.setTheme(ThemeData.light());                 
+                        isSwitchedNight = value;
+                        if (isSwitchedNight)
+                          _themeChanger.setTheme(ThemeData.dark());
+                        else
+                          _themeChanger.setTheme(ThemeData.light());
+                      });
+                    },
+                    activeTrackColor: Colors.grey[300],
+                    activeColor: Colors.white,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Mode Végétarien',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Switch(
+                    value: isSwitchedVegetarian,
+                    onChanged: (value) {
+                      setState(() {
+                        isSwitchedVegetarian = value;
+                        isSwitchedVegan = !value;
+                      });
+                    },
+                    activeTrackColor: Colors.yellow[300],
+                    activeColor: Colors.yellow,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Mode Vegan',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Switch(
+                    value: isSwitchedVegan,
+                    onChanged: (value) {
+                      setState(() {
+                        isSwitchedVegan = value;
+                        isSwitchedVegetarian = !value;
                       });
                     },
                     activeTrackColor: Colors.lightGreenAccent,
@@ -55,7 +111,12 @@ class _SettingsPage extends State<SettingsPage> {
                   ),
                 ],
               ),
+              Divider(
+                thickness: 1.0,
+              ),
               SizedBox(height: 10.0),
+              Text("Paramètres généraux"),
+              SizedBox(height: 20.0),
               GestureDetector(
                   child: Text(
                     "Supprimer les données",
@@ -70,7 +131,7 @@ class _SettingsPage extends State<SettingsPage> {
                     DataStorage.saveIngredients();
                     DataStorage.saveRepas();
                   }),
-              SizedBox(height: 20.0),
+              SizedBox(height: 30.0),
               GestureDetector(
                   child: Text(
                     "Déconnexion",
@@ -85,6 +146,19 @@ class _SettingsPage extends State<SettingsPage> {
                             builder: (BuildContext context) =>
                                 LoginPage(loggout: true)));
                   }),
+              SizedBox(height: 20.0),
+              Divider(
+                thickness: 1.0,
+              ),
+              SizedBox(height: 10.0),
+              Text("À propos"),
+              SizedBox(height: 20.0),
+              Text(
+                "Version de Bonap",
+                style: TextStyle(fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              Text("Version : 0.1"),
             ],
           ),
         ),

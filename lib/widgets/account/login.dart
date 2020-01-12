@@ -409,7 +409,6 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.white.withOpacity(0),
         ),
         splashColor: Colors.white.withOpacity(0),
-        //disable white color when click
         highlightElevation: 0,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -467,21 +466,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //Se connecter via Google (Facebook plutot non ?)
+  //Se connecter via Facebook
   Future<FirebaseUser> _facebookSignIn(BuildContext context) async {
     FirebaseUser currentUser;
     try {
-      FacebookLoginResult result =
+      final FacebookLoginResult result =
           await facebookSignIn.logInWithReadPermissions(['email']);
 
       final FacebookAccessToken accessToken = result.accessToken; //Erreur
 
-      AuthCredential credential =
-          FacebookAuthProvider.getCredential(accessToken: accessToken.token);
+      final AuthCredential credential =
+          FacebookAuthProvider.getCredential(
+            accessToken: accessToken.token);
 
       final FirebaseUser user =
           (await auth.signInWithCredential(credential)).user;
-      assert(user.email != null);
       assert(user.displayName != null);
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
@@ -525,7 +524,7 @@ class _LoginPageState extends State<LoginPage> {
     return currentUser;
   }
 
-  //Se déconnecter de Google
+  //Se déconnecter de Facebook et Google
   Future<bool> signOut() async {
     await auth.signOut();
     await googleSignIn.signOut();
@@ -544,26 +543,27 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.normal,
-            ),
+          ),
           textAlign: TextAlign.left,
         ),
         backgroundColor: Colors.white.withOpacity(0.9),
         actions: <Widget>[
           FlatButton(
-            child: Text("ANNULER",
-            style: TextStyle(
-              color: Colors.black
-            ),),
+            child: Text(
+              "ANNULER",
+              style: TextStyle(color: Colors.black),
+            ),
             onPressed: () => Navigator.pop(context, false),
           ),
           FlatButton(
-            child: Text("OK",
-            style: TextStyle(
-              color: Colors.black
-            ),),
-            onPressed: () =>
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
-          ),
+              child: Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                signOut();
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              }),
         ],
       ),
     );

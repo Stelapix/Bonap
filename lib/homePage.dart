@@ -86,7 +86,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     DataStorage.loadIngredients();
     DataStorage.loadRepas();
-
     ListeCourse.resetListe();
     FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
