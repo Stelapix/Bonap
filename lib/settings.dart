@@ -120,20 +120,49 @@ class _SettingsPage extends State<SettingsPage> {
               SizedBox(height: 10.0),
               Text("Paramètres généraux"),
               SizedBox(height: 20.0),
-              GestureDetector(
-                  child: Text(
-                    "Supprimer les données",
-                    style: TextStyle(
-                      fontSize: 20.0,
+              ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: ListTile(
+                      title: Text(
+                        "Supprimer les données",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      onTap: () {
+                        Ingredient.listIngredients
+                            .removeRange(0, Ingredient.listIngredients.length);
+                        Meal.listMeal.removeRange(0, Meal.listMeal.length);
+                        DataStorage.saveIngredients();
+                        DataStorage.saveRepas();
+                      },
                     ),
                   ),
-                  onTap: () {
-                    Ingredient.listIngredients
-                        .removeRange(0, Ingredient.listIngredients.length);
-                    Meal.listMeal.removeRange(0, Meal.listMeal.length);
-                    DataStorage.saveIngredients();
-                    DataStorage.saveRepas();
-                  }),
+                ],
+              ),
+
+              // ListView(
+              //   children: [
+              //     ListTile(
+              //       onTap: () {
+              //         Ingredient.listIngredients
+              //             .removeRange(0, Ingredient.listIngredients.length);
+              //         Meal.listMeal.removeRange(0, Meal.listMeal.length);
+              //         DataStorage.saveIngredients();
+              //         DataStorage.saveRepas();
+              //       },
+              //       title: Text(
+              //         "Supprimer les données",
+              //         style: TextStyle(
+              //           fontSize: 20.0,
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 30.0),
               GestureDetector(
                   child: Text(
