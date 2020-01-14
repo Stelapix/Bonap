@@ -2,6 +2,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_database/firebase_database.dart';
 
 import '../ingredients.dart';
 import '../repas.dart';
@@ -26,7 +27,7 @@ class DataStorage {
   }
 
   static Future<int> loadIngredients() async {
-
+    // Load from the device
     try {
       final file = await _localFileIngredients;
 
@@ -46,6 +47,7 @@ class DataStorage {
   }
 
   static Future<File> saveIngredients() async {
+    // Save to the device
     final file = await _localFileIngredients;
     String json = jsonEncode(Ingredient.listIngredients);
     if (debug) print("SAVING INGR : " + json);
@@ -54,15 +56,13 @@ class DataStorage {
   }
 
   static Future<int> loadRepas() async {
-
     try {
       final file = await _localFileRepas;
 
       // Read the file
       String content = await file.readAsString();
       List collection = json.decode(content);
-      Meal.listMeal =
-          collection.map((json) => Meal.fromJson(json)).toList();
+      Meal.listMeal = collection.map((json) => Meal.fromJson(json)).toList();
       if (debug) print("LOADING REPAS : " + collection.toString());
 
       return 1;
@@ -74,15 +74,25 @@ class DataStorage {
   }
 
   static Future<File> saveRepas() async {
+    DataStorageCloud.saveIngredients();
+
     final file = await _localFileRepas;
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
 
     return file.writeAsString(json);
   }
-
 }
 
+class DataStorageCloud {
+  static void saveIngredients() {
+    var storageRef = FirebaseDatabase.instance.reference();
+    var logoBonap = storageRef.child('assets/logo_bonap.png');
+    var uploadTask = logoBonap.push();
+    print("Oui");
+
+  }
+}
 
 /*
 * pb ingredients
