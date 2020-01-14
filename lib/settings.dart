@@ -50,10 +50,13 @@ class _SettingsPage extends State<SettingsPage> {
                     onChanged: (value) {
                       setState(() {
                         isSwitchedNight = value;
+                        // if(_themeChanger.getTheme() == ThemeData.dark()) isSwitchedNight = true;
+                        // else isSwitchedNight = false;
                         if (isSwitchedNight)
                           _themeChanger.setTheme(ThemeData.dark());
-                        else
+                        else {
                           _themeChanger.setTheme(ThemeData.light());
+                        }
                       });
                     },
                     activeTrackColor: Colors.grey[300],
@@ -78,7 +81,7 @@ class _SettingsPage extends State<SettingsPage> {
                     onChanged: (value) {
                       setState(() {
                         isSwitchedVegetarian = value;
-                        isSwitchedVegan = !value;
+                        if (isSwitchedVegan) isSwitchedVegan = !value;
                       });
                     },
                     activeTrackColor: Colors.yellow[300],
@@ -103,7 +106,7 @@ class _SettingsPage extends State<SettingsPage> {
                     onChanged: (value) {
                       setState(() {
                         isSwitchedVegan = value;
-                        isSwitchedVegetarian = !value;
+                        if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
                       });
                     },
                     activeTrackColor: Colors.lightGreenAccent,
