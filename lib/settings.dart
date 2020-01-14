@@ -29,170 +29,152 @@ class _SettingsPage extends State<SettingsPage> {
         title: new Text('Paramètres'),
       ),
       body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Préférences"),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Mode Nuit',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  Switch(
-                    value: isSwitchedNight,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitchedNight = value;
-                        // if(_themeChanger.getTheme() == ThemeData.dark()) isSwitchedNight = true;
-                        // else isSwitchedNight = false;
-                        if (isSwitchedNight)
-                          _themeChanger.setTheme(ThemeData.dark());
-                        else {
-                          _themeChanger.setTheme(ThemeData.light());
-                        }
-                      });
-                    },
-                    activeTrackColor: Colors.grey[300],
-                    activeColor: Colors.white,
-                  ),
-                ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 20.0),
+            Text("     Préférences"),
+            SizedBox(height: 10.0),
+            ListTile(
+              title: Text(
+                'Mode Nuit',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
-              SizedBox(
-                height: 10.0,
+              onTap: () {
+                setState(() {
+                  if (isSwitchedNight)
+                    isSwitchedNight = false;
+                  else
+                    isSwitchedNight = true;
+                  if (isSwitchedNight)
+                    _themeChanger.setTheme(ThemeData.dark());
+                  else {
+                    _themeChanger.setTheme(ThemeData.light());
+                  }
+                });
+              },
+              trailing: Switch(
+                value: isSwitchedNight,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitchedNight = value;
+                    if (isSwitchedNight)
+                      _themeChanger.setTheme(ThemeData.dark());
+                    else {
+                      _themeChanger.setTheme(ThemeData.light());
+                    }
+                  });
+                },
+                activeTrackColor: Colors.grey[300],
+                activeColor: Colors.white,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Mode Végétarien',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  Switch(
-                    value: isSwitchedVegetarian,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitchedVegetarian = value;
-                        if (isSwitchedVegan) isSwitchedVegan = !value;
-                      });
-                    },
-                    activeTrackColor: Colors.yellow[300],
-                    activeColor: Colors.yellow,
-                  ),
-                ],
+            ),
+            ListTile(
+              title: Text(
+                'Mode Végétarien',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
-              SizedBox(
-                height: 10.0,
+              onTap: () {
+                setState(() {
+                  if (isSwitchedVegetarian)
+                    isSwitchedVegetarian = false;
+                  else
+                    isSwitchedVegetarian = true;
+                  if (isSwitchedVegan) isSwitchedVegan = false;
+                });
+              },
+              trailing: Switch(
+                value: isSwitchedVegetarian,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitchedVegetarian = value;
+                    if (isSwitchedVegan) isSwitchedVegan = !value;
+                  });
+                },
+                activeTrackColor: Colors.yellow[300],
+                activeColor: Colors.yellow,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'Mode Vegan',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  Switch(
-                    value: isSwitchedVegan,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitchedVegan = value;
-                        if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
-                      });
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                  ),
-                ],
+            ),
+            ListTile(
+              title: Text(
+                'Mode Vegan',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
-              Divider(
-                thickness: 1.0,
+              onTap: () {
+                setState(() {
+                  if (isSwitchedVegan)
+                    isSwitchedVegan = false;
+                  else
+                    isSwitchedVegan = true;
+                  if (isSwitchedVegetarian) isSwitchedVegetarian = false;
+                });
+              },
+              trailing: Switch(
+                value: isSwitchedVegan,
+                onChanged: (value) {
+                  setState(() {
+                    isSwitchedVegan = value;
+                    if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
+                  });
+                },
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
               ),
-              SizedBox(height: 10.0),
-              Text("Paramètres généraux"),
-              SizedBox(height: 20.0),
-              ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: ListTile(
-                      title: Text(
-                        "Supprimer les données",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      onTap: () {
-                        Ingredient.listIngredients
-                            .removeRange(0, Ingredient.listIngredients.length);
-                        Meal.listMeal.removeRange(0, Meal.listMeal.length);
-                        DataStorage.saveIngredients();
-                        DataStorage.saveRepas();
-                      },
-                    ),
-                  ),
-                ],
+            ),
+            Divider(
+              thickness: 1.0,
+            ),
+            SizedBox(height: 10.0),
+            Text("     Paramètres généraux"),
+            SizedBox(height: 10.0),
+            ListTile(
+              title: Text(
+                "Supprimer les données",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
-
-              // ListView(
-              //   children: [
-              //     ListTile(
-              //       onTap: () {
-              //         Ingredient.listIngredients
-              //             .removeRange(0, Ingredient.listIngredients.length);
-              //         Meal.listMeal.removeRange(0, Meal.listMeal.length);
-              //         DataStorage.saveIngredients();
-              //         DataStorage.saveRepas();
-              //       },
-              //       title: Text(
-              //         "Supprimer les données",
-              //         style: TextStyle(
-              //           fontSize: 20.0,
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              SizedBox(height: 30.0),
-              GestureDetector(
-                  child: Text(
-                    "Déconnexion",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                LoginPage(loggout: true)));
-                  }),
-              SizedBox(height: 20.0),
-              Divider(
-                thickness: 1.0,
+              onTap: () {
+                Ingredient.listIngredients
+                    .removeRange(0, Ingredient.listIngredients.length);
+                Meal.listMeal.removeRange(0, Meal.listMeal.length);
+                DataStorage.saveIngredients();
+                DataStorage.saveRepas();
+              },
+            ),
+            ListTile(
+              title: Text(
+                "Déconnexion",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
-              SizedBox(height: 10.0),
-              Text("À propos"),
-              SizedBox(height: 20.0),
-              Text(
-                "Version de Bonap",
-                style: TextStyle(fontSize: 20.0),
-              ),
-              SizedBox(height: 5.0),
-              Text("Version : 0.1"),
-            ],
-          ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            LoginPage(loggout: true)));
+              },
+            ),
+            SizedBox(height: 20.0),
+            Divider(
+              thickness: 1.0,
+            ),
+            SizedBox(height: 10.0),
+            Text("     À propos"),
+            SizedBox(height: 20.0),
+            ListTile(
+              title: Text("Version de Bonap\nVersion : 0.1"),
+              onTap: () {},
+            ),
+          ],
         ),
       ),
     );

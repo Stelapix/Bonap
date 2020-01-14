@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bonap/ingredients.dart';
 
 class DropDownButtonIngredients extends StatefulWidget {
-  State s;
+  final State s;
   DropDownButtonIngredients(this.s);
 
    @override
