@@ -137,12 +137,18 @@ class Ingredient {
 class IngredientsPage extends StatefulWidget {
   @override
   _IngredientsPageState createState() => new _IngredientsPageState();
+
 }
 
 class _IngredientsPageState extends State<IngredientsPage> {
   String newIngr = '';
   ListView affIngredients = new ListView();
   popUpSort _selectionSort;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -380,6 +386,7 @@ class _EditDialogState extends State<_EditDialog> {
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
       title: Text('Modifier ' + widget.I.name),
       content: new Column(
@@ -501,3 +508,4 @@ class _ResetDialogState extends State<_ResetDialog> {
     );
   }
 }
+

@@ -221,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage>{
           try {
             FirebaseUser user = (await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: emailController.text, password: passwordController.text)).user;
-//            user.sendEmailVerification();
+          //  user.sendEmailVerification();
             print("Login succesfully");
             await widget.functionLoginFailed("Votre compte a été créé.\nVeuillez vous connecter.",context);
             Navigator.push(
