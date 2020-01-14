@@ -145,6 +145,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
 
   @override
   void initState() {
+    Ingredient.filter = "";
+    Ingredient.searching = false;
     super.initState();
     
   }
@@ -157,7 +159,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.search),
-                tooltip: "Chercher un ingrédient",
+                tooltip: "Chercher un ingrédient ..",
                 onPressed: () {
                   setState(() {
                     Ingredient.searching = !Ingredient.searching;
