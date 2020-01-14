@@ -41,9 +41,6 @@ class _LoginPageState extends State<LoginPage> {
   String errorMessage = '';
   String successMessage = '';
 
-  //Taille de la box
-  double sizeLogin = 600.0;
-
   @override
   void initState() {
     super.initState();
@@ -56,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: onBackPressed,
       child: Scaffold(
@@ -66,93 +62,90 @@ class _LoginPageState extends State<LoginPage> {
             Center(
               child: new Image.asset(
                 'assets/splash/splash2.jpg',
-                width: size.width,
-                height: size.height,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 fit: BoxFit.fill,
               ),
             ),
-            Container(
-              height: sizeLogin,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 200),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(23.0),
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Form(
-                          key: formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 10.0),
-                              buildTextField("Adresse Email"),
-                              SizedBox(height: 10.0),
-                              buildTextField("Mot de passe"),
-                              SizedBox(height: 15.0),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Row(
-                            children: <Widget>[
-                              const SizedBox(width: 117.0),
-                              Text(
-                                "Mot de passe oublié ?",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        buildButtonContainer(),
-                        SizedBox(height: 20.0),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "Pas encore inscrit ?",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              GestureDetector(
-                                  child: Text(" Inscrivez-vous",
-                                      style:
-                                          TextStyle(color: Color(0xFFEE5623))),
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                RegisterPage(
-                                                    loginSize,
-                                                    validateAndSave,
-                                                    signInWithEmail,
-                                                    vibration,
-                                                    loginFailed)));
-                                  }),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 200),
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2 +
+                    MediaQuery.of(context).size.height / 6,
+                width: MediaQuery.of(context).size.width - 20,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(23.0),
+                  color: Colors.white.withOpacity(0.8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            _signInGoogleButton(),
-                            SizedBox(width: 5.0),
-                            _signInFacebookButton(),
+                            SizedBox(height: 10.0),
+                            buildTextField("Adresse Email"),
+                            SizedBox(height: 10.0),
+                            buildTextField("Mot de passe"),
+                            SizedBox(height: 15.0),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 117.0),
+                            Text(
+                              "Mot de passe oublié ?",
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      buttonConnexion(),
+                      SizedBox(height: 20.0),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Pas encore inscrit ?",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            GestureDetector(
+                                child: Text(" Inscrivez-vous",
+                                    style: TextStyle(color: Color(0xFFEE5623))),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              RegisterPage(
+                                                  validateAndSave,
+                                                  signInWithEmail,
+                                                  vibration,
+                                                  loginFailed)));
+                                }),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          _signInGoogleButton(),
+                          SizedBox(width: 5.0),
+                          _signInFacebookButton(),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -182,36 +175,24 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //Changer la taille de box en fonction des informations affichées
-  void loginSize(double newSize) {
-    setState(() {
-      sizeLogin = newSize;
-    });
-  }
-
   //Les 2 champs de saisies pour l'adresse Mail et le mot de passe
   Widget buildTextField(String hintText) {
     return TextFormField(
       enableInteractiveSelection: true,
       validator: (value) {
         if (value.isEmpty && hintText == 'Adresse Email') {
-          loginSize(657.0);
           print("Email required");
           return 'Vous devez saisir une adresse email.';
         } else if (value.isEmpty && hintText == 'Mot de passe') {
-          loginSize(657.0);
           print("Password required");
           return 'Vous devez saisir un mot de passe.';
         } else if (hintText == 'Adresse Email' &&
             !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                 .hasMatch(value)) {
-          loginSize(657.0);
           return "Format d'adresse email invalide.";
         } else if (hintText == 'Mot de passe' && value.length < 6) {
-          loginSize(657.0);
           return "Votre mot de passe doit comporter\nau moins 6 caractères.";
         } else {
-          loginSize(600.0);
           return null;
         }
       },
@@ -252,21 +233,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //AlertDialogue identifiants incorrects qui relance la page Login
-  Future<bool> loginFailed(String text, BuildContext context) {
+  Future<bool> loginFailed(String texte, BuildContext context) {
     return showDialog(
         context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              text,
-              style: TextStyle(color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            backgroundColor: Colors.white.withOpacity(0.9),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30.0))),
-          );
-        });
+        builder: (context) => AlertDialog(
+              title: Text(
+                texte,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              backgroundColor: Colors.white.withOpacity(0.9),
+            ));
   }
 
   //Vibrer en cas d'identifiants incorrects
@@ -278,27 +258,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //Bouton 'Connectez-vous'
-  Widget buildButtonContainer() {
-    return InkWell(
-      onTap: () async {
-        if (validateAndSave() == 0) {
-          bool res = await signInWithEmail(
-              emailController.text, passwordController.text, context);
-          if (!res) {
-            vibration();
-            print("Login failed");
-            await loginFailed(
-                "Vos identifiants sont incorrects.\nMerci de réessayer.",
-                context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()));
-          }
-        }
-      },
-      child: new Container(
-        height: 50.0,
+  Widget buttonConnexion() {
+    return Material(
+      animationDuration: const Duration(seconds: 10),
+      borderRadius: BorderRadius.circular(20.0),
+      child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           gradient: LinearGradient(
@@ -306,10 +270,32 @@ class _LoginPageState extends State<LoginPage> {
               begin: Alignment.centerRight,
               end: Alignment.centerLeft),
         ),
-        child: new Center(
-          child: new Text(
-            'Connectez-vous',
-            style: new TextStyle(fontSize: 22.0, color: Colors.white),
+        child: InkWell(
+          onTap: () {},
+          // onTap: () async {
+          //   if (validateAndSave() == 0) {
+          //     bool res = await signInWithEmail(
+          //         emailController.text, passwordController.text, context);
+          //     if (!res) {
+          //       vibration();
+          //       print("Login failed");
+          //       await loginFailed(
+          //           "Identifiants incorrects.\nMerci de réessayer.", context);
+          //       Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //               builder: (BuildContext context) => LoginPage()));
+          //     }
+          //   }
+          // },
+          child: Container(
+            height: 50.0,
+            child: new Center(
+              child: new Text(
+                'Connexion',
+                style: new TextStyle(fontSize: 22.0, color: Colors.white),
+              ),
+            ),
           ),
         ),
       ),
@@ -474,8 +460,7 @@ class _LoginPageState extends State<LoginPage> {
       final FacebookAccessToken accessToken = result.accessToken; //Erreur
 
       final AuthCredential credential =
-          FacebookAuthProvider.getCredential(
-            accessToken: accessToken.token);
+          FacebookAuthProvider.getCredential(accessToken: accessToken.token);
 
       final FirebaseUser user =
           (await auth.signInWithCredential(credential)).user;
