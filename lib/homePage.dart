@@ -57,6 +57,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    DataStorage.loadIngredients();
+    DataStorage.loadRepas();
     super.initState();
   }
 
@@ -84,8 +86,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    DataStorage.loadIngredients();
-    DataStorage.loadRepas();
+    
     ListeCourse.resetListe();
     FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(

@@ -89,7 +89,7 @@ class DataStorageCloud {
     var storageRef = FirebaseDatabase.instance.reference();
     var logoBonap = storageRef.child('assets/logo_bonap.png');
     var uploadTask = logoBonap.push();
-    print("Oui");
+  
 
   }
 }
