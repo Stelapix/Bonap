@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/rendering.dart';
-
 import 'custom/custom_icons.dart';
-
 import 'widgets/dropDownButtons/dropDownButtonIngredients.dart';
 import 'widgets/dataStorage.dart';
 
@@ -18,6 +15,8 @@ class Ingredient {
   bool fav;
   static String newCat;
   static List<Ingredient> listIngredients = new List<Ingredient>();
+  static bool searching = false;
+  static String filter = "";
 
   Ingredient(String name, Category cat) {
     this.name = name;
@@ -145,11 +144,28 @@ class _IngredientsPageState extends State<IngredientsPage> {
   popUpSort _selectionSort;
 
   @override
+  void initState() {
+    Ingredient.filter = "";
+    Ingredient.searching = false;
+    super.initState();
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Ingrédients'),
           actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.search),
+                tooltip: "Chercher un ingrédient ..",
+                onPressed: () {
+                  setState(() {
+                    Ingredient.searching = !Ingredient.searching;
+                    if (!Ingredient.searching) Ingredient.filter = "";
+                  });
+                }),
             PopupMenuButton<popUpSort>(
               onSelected: (popUpSort result) {
                 setState(() {
@@ -162,11 +178,11 @@ class _IngredientsPageState extends State<IngredientsPage> {
                   <PopupMenuEntry<popUpSort>>[
                 const PopupMenuItem<popUpSort>(
                   value: popUpSort.alpha,
-                  child: Text('Ordre alphabetique'),
+                  child: Text('Ordre alphabétique'),
                 ),
                 const PopupMenuItem<popUpSort>(
                   value: popUpSort.category,
-                  child: Text('Categories'),
+                  child: Text('Catégories'),
                 ),
                 const PopupMenuItem<popUpSort>(
                   value: popUpSort.favorite,
@@ -176,6 +192,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
             ),
             IconButton(
                 icon: Icon(Icons.delete),
+                tooltip: "Supprimer tous les ingrédients",
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -188,6 +205,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
         body: Container(
             child: Column(
           children: <Widget>[
+            Ingredient.searching ? searchBar() : new Row(),
             Expanded(
               child: displayIngredients(),
             )
@@ -223,9 +241,19 @@ class _IngredientsPageState extends State<IngredientsPage> {
       default:
         break;
     }
+    List<Ingredient> newList = new List();
+    if (Ingredient.filter != "") {
+      for (Ingredient i in Ingredient.listIngredients) {
+        if (i.name.contains(Ingredient.filter)) {
+          newList.add(i);
+        }
+      }
+    }
+    else newList = Ingredient.listIngredients;
+
     return ListView(
       shrinkWrap: true,
-      children: Ingredient.listIngredients
+      children: newList
           .map(
             (data) => new Container(
               child: ListTile(
@@ -273,6 +301,26 @@ class _IngredientsPageState extends State<IngredientsPage> {
             ),
           )
           .toList(),
+    );
+  }
+
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
+            ),
+            onChanged: (value) {
+              setState(() {
+                Ingredient.filter = value;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 

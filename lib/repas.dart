@@ -5,11 +5,17 @@ import 'widgets/dataStorage.dart';
 class Meal {
   String name = '';
   List<Ingredient> listIngredient = new List<Ingredient>();
+  bool fav;
 
   static List<Meal> listMeal = new List<Meal>();
+  static String filter = "";
+  static bool searching = false;
 
-  Meal(this.name, this.listIngredient);
-
+  Meal(String name, List<Ingredient> listIngredient) {
+    this.name = name;
+    this.listIngredient = listIngredient;
+    this.fav = false;
+  }
 
   String listIngredientToString() {
     // Supprime les ingredients s'ils n'existent plus
@@ -24,26 +30,25 @@ class Meal {
   }
 
   // Sauvegarde et chargement
-  Meal.fromJson(Map<String, dynamic> json) :
-        name = json['name'],
+  Meal.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        fav = json['fav'],
         listIngredient = createList(json['ingredients']);
 
-
-
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'ingredients': listIngredient,
-
-  };
+        'name': name,
+        'fav': fav,
+        'ingredients': listIngredient,
+      };
 
   static List<Ingredient> createList(List<dynamic> s) {
     List<Ingredient> L = new List<Ingredient>();
     for (int i = 0; i < s.length; i++) {
-      L.add(new Ingredient(s[i]['name'], Category.values.firstWhere((e) => e.toString() == s[i]['category'])));
+      L.add(new Ingredient(s[i]['name'],
+          Category.values.firstWhere((e) => e.toString() == s[i]['category'])));
     }
     return L;
   }
-
 }
 
 class RepasPage extends StatefulWidget {
@@ -55,18 +60,56 @@ class _RepasPageState extends State<RepasPage> {
   bool checkboxValueIngr = false;
   List<Ingredient> allIngr = Ingredient.listIngredients;
   List<Ingredient> selectedIngr = [];
+  popUpSort _selectionSort;
 
   ListView disMeal = new ListView();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    Meal.filter = "";
+    Meal.searching = false;
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
           title: new Text('Repas'),
           actions: <Widget>[
             IconButton(
+              icon: Icon(Icons.search),
+              tooltip: "Chercher un repas ..",
+              onPressed: () {
+                setState(() {
+                  Meal.searching = !Meal.searching;
+                  if (!Meal.searching) Meal.filter = "";
+                });
+              },
+            ),
+            PopupMenuButton<popUpSort>(
+              onSelected: (popUpSort result) {
+                setState(() {
+                  _selectionSort = result;
+                });
+              },
+              tooltip: "Trier par ..",
+              icon: Icon(Icons.sort),
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<popUpSort>>[
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.alpha,
+                  child: Text('Ordre alphabétique'),
+                ),
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.favorite,
+                  child: Text('Favoris'),
+                ),
+              ],
+            ),
+            IconButton(
                 icon: Icon(Icons.delete),
+                tooltip: "Supprimer tous les repas",
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -97,6 +140,7 @@ class _RepasPageState extends State<RepasPage> {
         body: Container(
           child: Column(
             children: <Widget>[
+              Meal.searching ? searchBar() : new Row(),
               Expanded(
                 child: displayMeal(),
               )
@@ -106,53 +150,108 @@ class _RepasPageState extends State<RepasPage> {
   }
 
   ListView displayMeal() {
+    switch (this._selectionSort) {
+      case popUpSort.alpha:
+        Meal.listMeal
+            .sort((a, b) => a.name.toString().compareTo(b.name.toString()));
+        break;
+      case popUpSort.favorite:
+        Meal.listMeal
+            .sort((b, a) => a.fav.toString().compareTo(b.fav.toString()));
+        break;
+      default:
+        break;
+    }
+    List<Meal> newList = new List();
+    var listMeal = Meal.listMeal;
+    if (Meal.filter != "") {
+      for (Meal m in Meal.listMeal) {
+        if (m.name.contains(Meal.filter)) {
+          newList.add(m);
+        }
+      }
+    } else
+      newList = listMeal;
+
     return ListView(
       shrinkWrap: true,
-      children: Meal.listMeal
+      children: newList
           .map(
             (data) => new Container(
-          child: ListTile(
-            title: Text(data.name),
-            subtitle: Text(data.listIngredientToString()),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return _MyDialogEdit(
-                          r: data,
-                          rps: this,
-                          ingr: allIngr,
-                          selectedIngr: [],
-                          onSelectedIngrChanged: (ingr) {
-                            selectedIngr = ingr;
-                          }
-                      );
-                    });
-              },
+              child: ListTile(
+                title: Text(data.name),
+                subtitle: Text(data.listIngredientToString()),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    IconButton(
+                        icon: data.fav
+                            ? Icon(Icons.star)
+                            : Icon(Icons.star_border),
+                        onPressed: () {
+                          setState(() {
+                            data.fav = data.fav ? false : true;
+                            DataStorage.saveIngredients();
+                          });
+                        }),
+                    IconButton(
+                      icon: Icon(Icons.more_vert),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return _MyDialogEdit(
+                                  r: data,
+                                  rps: this,
+                                  ingr: allIngr,
+                                  selectedIngr: [],
+                                  onSelectedIngrChanged: (ingr) {
+                                    selectedIngr = ingr;
+                                  });
+                            });
+                      },
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _MyDialogEdit(
+                            r: data,
+                            rps: this,
+                            ingr: allIngr,
+                            selectedIngr: [],
+                            onSelectedIngrChanged: (ingr) {
+                              selectedIngr = ingr;
+                            });
+                      });
+                },
+              ),
             ),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return _MyDialogEdit(
-                        r: data,
-                        rps: this,
-                        ingr: allIngr,
-                        selectedIngr: [],
-                        onSelectedIngrChanged: (ingr) {
-                          selectedIngr = ingr;
-                        }
-                    );
-                  });
+          )
+          .toList(),
+    );
+  }
+
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
+            ),
+            onChanged: (value) {
+              setState(() {
+                Meal.filter = value;
+              });
             },
           ),
         ),
-      )
-          .toList(),
+      ],
     );
-
   }
 }
 
@@ -170,8 +269,6 @@ class _MyDialogEdit extends StatefulWidget {
   final ValueChanged<List<Ingredient>> onSelectedIngrChanged;
   final List<Ingredient> ingr;
   final List<Ingredient> selectedIngr;
-
-
 
   @override
   _MyDialogEditState createState() => _MyDialogEditState();
@@ -210,7 +307,6 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                   textAlign: TextAlign.center,
                 ),
               ),
-
               RaisedButton(
                 onPressed: () {
                   if (newMealName != '') {
@@ -224,12 +320,11 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                     if (weCanEditIt) widget.r.name = newMealName;
                   }
 
-
-
                   widget.r.listIngredient = _tempSelectedIngr;
                   //print(_tempSelectedIngr);
 
-                  widget.rps.setState(() => widget.rps.disMeal = widget.rps.displayMeal());
+                  widget.rps.setState(
+                      () => widget.rps.disMeal = widget.rps.displayMeal());
                   DataStorage.saveRepas();
                   Navigator.pop(context);
                 },
@@ -281,7 +376,8 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                             if (isIn(_tempSelectedIngr, ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.removeWhere(
-                                        (Ingredient ingr) => ingr.name == ingrName.name);
+                                    (Ingredient ingr) =>
+                                        ingr.name == ingrName.name);
                               });
                             }
                           }
@@ -294,6 +390,23 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                   );
                 }),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  if (!widget.r.fav) {
+                    Meal.listMeal.remove(widget.r);
+                    widget.rps.setState(() {});
+                    DataStorage.saveRepas();
+                    Navigator.pop(context);
+                  }
+                  
+                },
+              )
+            ],
+          )
         ],
       ),
     );
@@ -367,7 +480,8 @@ class _MyDialogState extends State<_MyDialog> {
                   }
                   if (weCanAddIt)
                     Meal.listMeal.add(Meal(newRepasName, _tempSelectedIngr));
-                  widget.rps.setState(() => widget.rps.disMeal = widget.rps.displayMeal());
+                  widget.rps.setState(
+                      () => widget.rps.disMeal = widget.rps.displayMeal());
                   DataStorage.saveRepas();
                   Navigator.pop(context);
                 },
@@ -418,7 +532,7 @@ class _MyDialogState extends State<_MyDialog> {
                             if (_tempSelectedIngr.contains(ingrName)) {
                               setState(() {
                                 _tempSelectedIngr.removeWhere(
-                                        (Ingredient ingr) => ingr == ingrName);
+                                    (Ingredient ingr) => ingr == ingrName);
                               });
                             }
                           }
@@ -466,12 +580,11 @@ class _ResetDialogState extends State<_ResetDialog> {
         FlatButton(
           child: Text('Oui'),
           onPressed: () {
-            Meal.listMeal
-                .removeRange(0, Meal.listMeal.length);
+            Meal.listMeal.removeRange(0, Meal.listMeal.length);
             DataStorage.saveRepas();
             Navigator.of(context).pop();
-            widget.rps.setState(() =>
-            widget.rps.disMeal = widget.rps.displayMeal());
+            widget.rps
+                .setState(() => widget.rps.disMeal = widget.rps.displayMeal());
           },
         ),
       ],
