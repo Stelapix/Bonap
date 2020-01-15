@@ -272,22 +272,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
         child: InkWell(
           onTap: () {},
-          // onTap: () async {
-          //   if (validateAndSave() == 0) {
-          //     bool res = await signInWithEmail(
-          //         emailController.text, passwordController.text, context);
-          //     if (!res) {
-          //       vibration();
-          //       print("Login failed");
-          //       await loginFailed(
-          //           "Identifiants incorrects.\nMerci de réessayer.", context);
-          //       Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //               builder: (BuildContext context) => LoginPage()));
-          //     }
-          //   }
-          // },
           child: Container(
             height: 50.0,
             child: new Center(
@@ -492,7 +476,6 @@ class _LoginPageState extends State<LoginPage> {
 
       final FirebaseUser user =
           (await auth.signInWithCredential(credential)).user;
-      assert(user.email != null);
       assert(user.displayName != null);
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
