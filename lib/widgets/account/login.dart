@@ -1,11 +1,13 @@
 import 'package:bonap/homePage.dart';
 import 'package:bonap/widgets/account/register.dart';
+import 'package:bonap/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
+import 'dart:async';
 
 import 'package:bonap/widgets/dataStorage.dart';
 
@@ -41,9 +43,12 @@ class _LoginPageState extends State<LoginPage> {
   String errorMessage = '';
   String successMessage = '';
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
+    isLoading = false;
     emailController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
     if (widget.loggout == true) {
@@ -59,12 +64,12 @@ class _LoginPageState extends State<LoginPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: <Widget>[
-            Center(
-              child: new Image.asset(
-                'assets/splash/splash2.jpg',
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                fit: BoxFit.fill,
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/splash/splash2.jpg'),
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             Padding(
@@ -149,6 +154,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+            ),
+            Center(
+              child: Loader(isLoading: isLoading),
             ),
           ],
         ),
@@ -275,7 +283,11 @@ class _LoginPageState extends State<LoginPage> {
             if (validateAndSave() == 0) {
               int res = await signInWithEmail(
                   emailController.text, passwordController.text, context);
-              if (res == 0) {
+              setState(() {
+                isLoading = true;
+              });
+              if (res == 0){
+              Timer(Duration(seconds: 3), (){
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
@@ -284,23 +296,24 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 );
+              });
               } else if (res == 1) {
+                // isLoading = false;
                 vibration();
-                await alertDialog("Veuillez d'abord vérifier votre e-mail.", context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()));
+                await alertDialog(
+                    "Veuillez d'abord vérifier votre e-mail.", context);
+                emailController.text = "";
+                passwordController.text = "";
               } else if (res == 2) {
+                // isLoading = false;
                 vibration();
                 await alertDialog(
                     "Vos identifiants sont incorrects.\nMerci de réessayer.",
                     context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()));
-              }
+                emailController.text = "";
+                passwordController.text = "";
+              } else
+                print("error");
             }
           },
           child: Container(
@@ -333,17 +346,14 @@ class _LoginPageState extends State<LoginPage> {
                 setState(() {
                   isGoogleSignIn = true;
                   successMessage = 'Logged in successfully';
-                  // Load les ingredients
                   DataStorage.loadIngredients();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => HomePage()));
                 });
-          }
-          } else {
-            print('Login Canceled');
-          }
+              }
+            } else print('Login Canceled');
           });
         },
         borderSide: BorderSide(

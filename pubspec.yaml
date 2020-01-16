@@ -35,6 +35,7 @@ dependencies:
   http: ^0.12.0+2
   provider: ^2.0.1
   path_provider: any
+  load: ^0.1.5+1
 
 dev_dependencies:
   flutter_launcher_icons:
@@ -64,6 +65,7 @@ flutter:
     - assets/
     - assets/icon/
     - assets/splash/
+    - assets/loader/
 
 
 

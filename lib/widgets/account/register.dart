@@ -1,4 +1,6 @@
 import 'package:bonap/widgets/account/login.dart';
+import 'package:bonap/widgets/loader.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,6 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
   //Pour cacher/afficher le mot de passe
   bool isHidden = true;
 
+  bool isLoading = false;
+
   void toggleVisibility() {
     setState(() {
       isHidden = !isHidden;
@@ -38,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
+    isLoading = false;
     emailController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
     passwordCheckController = TextEditingController(text: "");
@@ -103,6 +108,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+            ),
+            Center(
+              child: Loader(isLoading: isLoading),
             ),
           ],
         ),
@@ -198,21 +206,37 @@ class _RegisterPageState extends State<RegisterPage> {
                 .substring(0, emailController.text.indexOf(" "));
           }
           try {
-            FirebaseUser user = (await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              email: emailController.text,
-              password: passwordController.text)).user;
-            user.sendEmailVerification();
-            print("Sign Up");
-            await widget.functionAlertDialog(
-                "Votre compte a été créé.\n\nVeuillez vérifier l'adresse e-mail : " + user.email +"\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.", context);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => LoginPage()));
+            setState(() {
+              isLoading = true;
+            });
+            FirebaseUser user = (await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text))
+                .user;
+            Timer(Duration(seconds: 3), () async {
+              setState(() {
+              isLoading = false;
+            });
+              user.sendEmailVerification();
+              print("Sign Up");
+              await widget.functionAlertDialog(
+                  "Votre compte a été créé.\n\nVeuillez vérifier l'adresse e-mail : " +
+                      user.email +
+                      "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
+                  context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LoginPage()));
+            });
           } catch (e) {
             print(e.message);
             await widget.functionAlertDialog(
                 "Adresse déjà utilisée.\nMerci de réessayer.", context);
+            emailController.text = "";
+            passwordController.text = "";
+            passwordCheckController.text = "";
           }
         }
       },
