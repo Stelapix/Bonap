@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   validateAndSave,
                                                   signInWithEmail,
                                                   vibration,
-                                                  loginFailed)));
+                                                  alertDialog)));
                                 }),
                           ],
                         ),
@@ -232,8 +232,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //AlertDialogue identifiants incorrects qui relance la page Login
-  Future<bool> loginFailed(String texte, BuildContext context) {
+  //AlertDialogue qui relance la page Login
+  Future<bool> alertDialog(String texte, BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -271,7 +271,38 @@ class _LoginPageState extends State<LoginPage> {
               end: Alignment.centerLeft),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (validateAndSave() == 0) {
+              int res = await signInWithEmail(
+                  emailController.text, passwordController.text, context);
+              if (res == 0) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      DataStorage.loadIngredients();
+                      return HomePage();
+                    },
+                  ),
+                );
+              } else if (res == 1) {
+                vibration();
+                await alertDialog("Veuillez d'abord vérifier votre e-mail.", context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()));
+              } else if (res == 2) {
+                vibration();
+                await alertDialog(
+                    "Vos identifiants sont incorrects.\nMerci de réessayer.",
+                    context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()));
+              }
+            }
+          },
           child: Container(
             height: 50.0,
             child: new Center(
@@ -309,10 +340,10 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(
                           builder: (BuildContext context) => HomePage()));
                 });
-              }
-            } else {
-              print('Login Canceled');
-            }
+          }
+          } else {
+            print('Login Canceled');
+          }
           });
         },
         borderSide: BorderSide(
@@ -356,9 +387,8 @@ class _LoginPageState extends State<LoginPage> {
           _facebookSignIn(context).then((user) {
             if (user != null) {
               print('Logged in successfully.');
-              // Load les ingredients
               DataStorage.loadIngredients();
-              if (this.mounted) {
+              if (this.mounted)
                 setState(() {
                   isFacebookSignIn = true;
                   successMessage = 'Logged in successfully';
@@ -367,10 +397,8 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(
                           builder: (BuildContext context) => HomePage()));
                 });
-              }
-            } else {
+            } else
               print('Login Canceled');
-            }
           });
         },
         borderSide: BorderSide(
@@ -405,7 +433,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //Se connecter sur Bonap
-  Future<bool> signInWithEmail(String email, String password, context) async {
+  Future<int> signInWithEmail(String email, String password, context) async {
     if (email.contains(" ")) {
       email = email.substring(0, email.indexOf(" "));
     }
@@ -414,23 +442,20 @@ class _LoginPageState extends State<LoginPage> {
           email: email, password: password);
       FirebaseUser user = result.user;
       if (user != null) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              // Load les ingredients
-              DataStorage.loadIngredients();
-
-              return HomePage();
-            },
-          ),
-        );
-        print(user);
-        return true;
+        if (user.isEmailVerified) {
+          print(user);
+          return 0;
+        } else {
+          print("email is not verified");
+          return 1;
+        }
       } else {
-        return false;
+        print("user is null");
+        return -1;
       }
     } catch (e) {
-      return false;
+      print(e);
+      return 2;
     }
   }
 
