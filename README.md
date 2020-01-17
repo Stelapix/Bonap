@@ -4,8 +4,8 @@
  Confectionné avec amour par CARRY Quentin et LE FEYER Aymeric  
 
 ## Mises à jour
- 0.1.0 - 22/01/2020 - Mise en place Play Store
- ...
+ 0.1.0 - 22/01/2020 - Mise en place Play Store  
+ ...  
  0.0.22 - 16/01/2020 - Animation de chargement  
  0.0.21 - 16/01/2020 - Email de vérification  
  0.0.20 - 14/01/2020 - Menu options amélioré  
@@ -28,5 +28,13 @@
  0.0.3 - 23/09/2019 - Création du logo  
  0.0.2 - 23/09/2019 - Esthétique du drawer   
  0.0.1 - 13/09/2019 - Création du projet  
+
+ ## Nous suivre
+ [Instagram](https://www.instagram.com/itsbonap/?hl=fr) Bonap  
+ [Twitter](https://twitter.com/Aymeric_Zepix) Aymeric LE FEYER  
+ [Twitter](https://twitter.com/quentin_carry) Quentin CARRY  
+ 
+ 
+
   
 
