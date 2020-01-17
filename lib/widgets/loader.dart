@@ -155,20 +155,20 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   }
 }
 
-class Dot extends StatelessWidget {
-  final double radius;
-  final Color color;
+// class Dot extends StatelessWidget {
+//   final double radius;
+//   final Color color;
 
-  Dot({this.radius, this.color});
+//   Dot({this.radius, this.color});
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: this.radius,
-        height: this.radius,
-        decoration: BoxDecoration(color: this.color, shape: BoxShape.circle),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: Container(
+//         width: this.radius,
+//         height: this.radius,
+//         decoration: BoxDecoration(color: this.color, shape: BoxShape.circle),
+//       ),
+//     );
+//   }
+// }
