@@ -73,20 +73,22 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 200),
+              padding: const EdgeInsets.all(0),
               child: Container(
-                height: MediaQuery.of(context).size.height / 2 +
-                    MediaQuery.of(context).size.height / 6,
-                width: MediaQuery.of(context).size.width - 20,
+                height: double.infinity,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(23.0),
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withOpacity(0.65),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Image.asset(
+                        'assets/logo_bonap.png',
+                      ),
                       Form(
                         key: formKey,
                         child: Column(

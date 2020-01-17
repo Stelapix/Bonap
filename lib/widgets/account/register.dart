@@ -71,41 +71,38 @@ class _RegisterPageState extends State<RegisterPage> {
                 fit: BoxFit.fill,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0, right: 12.0, top: 200),
-              child: Container(
-                height: MediaQuery.of(context).size.height / 2 +
-                    MediaQuery.of(context).size.height / 6,
-                width: MediaQuery.of(context).size.width - 20,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(23.0),
-                  color: Colors.white.withOpacity(0.8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Form(
-                        key: formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 10.0),
-                            textField("Adresse Email"),
-                            SizedBox(height: 10.0),
-                            textField("Mot de passe"),
-                            SizedBox(height: 10.0),
-                            textField("Confirmer le mot de passe"),
-                            SizedBox(height: 15.0),
-                          ],
-                        ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(23.0),
+                color: Colors.white.withOpacity(0.65),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                        'assets/logo_bonap.png',
                       ),
-                      SizedBox(height: 20.0),
-                      buildButtonContainer(),
-                      SizedBox(height: 20.0),
-                    ],
-                  ),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(height: 10.0),
+                          textField("Adresse Email"),
+                          SizedBox(height: 10.0),
+                          textField("Mot de passe"),
+                          SizedBox(height: 10.0),
+                          textField("Confirmer le mot de passe"),
+                          SizedBox(height: 15.0),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    buildButtonContainer(),
+                    SizedBox(height: 20.0),
+                  ],
                 ),
               ),
             ),

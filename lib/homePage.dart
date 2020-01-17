@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 // Widgets
 import 'widgets/drawer.dart';
-import 'widgets/calendrier.dart';
 import 'widgets/dayDisplayMenu.dart';
 import 'repas.dart';
 import 'ingredients.dart';
@@ -120,19 +119,6 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-//              Container(
-//                child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.center,
-//                  children: <Widget>[
-//                    Text('Repas du :  ',
-//                        style: TextStyle(
-//                            fontWeight: FontWeight.bold,
-//                            color: bleu,
-//                            fontSize: 20.0)),
-//                    DropDownButtonMain(),
-//                  ],
-//                ),
-//              ),
                   Container(
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -164,26 +150,8 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Divider(
-                    thickness: 1.0,
-                    color: null,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          jaune,
-                          bleu,
-                        ],
-                      ),
-                    ),
-                    child: Calendrier(),
-                  ),
-                  Divider(
-                    thickness: 1.0,
-                    color: null,
-                  ),
+                 
+                 
                 ],
               ),
             )));
@@ -194,18 +162,4 @@ class _HomePageState extends State<HomePage> {
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
-/*
 
-PopupMenuButton<popUpMenu>(
-              elevation: 3.2,
-              tooltip: 'Option de déconnexion',
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<popUpMenu>>[
-                const PopupMenuItem<popUpMenu>(
-                  value: popUpMenu.deconnexion,
-                  child: Text('Déconnexion'),
-                ),
-              ],
-            )
-
- */
