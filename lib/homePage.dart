@@ -123,13 +123,16 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        'Semaine ' + m.numSemaine.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 26.0,
-                          color: bleu,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.only(top:10, bottom: 30),
+                        child: Text(
+                          'Semaine ' + m.numSemaine.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            color: bleu,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -140,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        DayMenu(),
+                        WeekMenu(),
                       
                       ],
                     ),

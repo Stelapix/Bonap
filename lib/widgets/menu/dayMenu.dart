@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class DayMenu extends StatefulWidget{
+  final String dayName;
+
+  DayMenu(this.dayName);
+
   @override
   DayMenuState createState() => DayMenuState();
 }
@@ -17,7 +21,7 @@ class DayMenuState extends State<DayMenu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Lundi",
+              widget.dayName,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -250,5 +254,29 @@ class AddMealDialogState extends State<AddMealDialog> {
   }
 
   
+  
+}
+
+class WeekMenu extends StatefulWidget{
+  @override
+  WeekMenuState createState() => WeekMenuState();
+}
+
+class WeekMenuState extends State<WeekMenu> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        DayMenu("Lundi"),
+        DayMenu("Mardi"),
+        DayMenu("Mercredi"),
+        DayMenu("Jeudi"),
+        DayMenu("Vendredi"),
+        DayMenu("Samedi"),
+        DayMenu("Dimanche"),
+        
+      ],
+    );
+  }
   
 }
