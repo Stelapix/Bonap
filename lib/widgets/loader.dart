@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:flutter/scheduler.dart';
-
 class Loader extends StatefulWidget {
   Loader({Key key, this.isLoading}) : super(key: key);
 

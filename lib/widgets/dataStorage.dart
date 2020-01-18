@@ -2,7 +2,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_database/firebase_database.dart';
 
 import '../ingredients.dart';
 import '../repas.dart';
@@ -74,8 +73,6 @@ class DataStorage {
   }
 
   static Future<File> saveRepas() async {
-    DataStorageCloud.saveIngredients();
-
     final file = await _localFileRepas;
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
@@ -84,15 +81,6 @@ class DataStorage {
   }
 }
 
-class DataStorageCloud {
-  static void saveIngredients() {
-    var storageRef = FirebaseDatabase.instance.reference();
-    var logoBonap = storageRef.child('assets/logo_bonap.png');
-    var uploadTask = logoBonap.push();
-  
-
-  }
-}
 
 /*
 * pb ingredients
