@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 // Widgets
 import 'widgets/drawer.dart';
-import 'widgets/dayDisplayMenu.dart';
 import 'repas.dart';
 import 'ingredients.dart';
 import 'listeCourse.dart';
 import 'widgets/dataStorage.dart';
+import 'widgets/menu/dayMenu.dart';
 
 class MenuSemaine {
   int numSemaine;
@@ -140,13 +140,8 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        DayDisplayMenu('Lundi', 0, 1, m),
-                        DayDisplayMenu('Mardi', 2, 3, m),
-                        DayDisplayMenu('Mercredi', 4, 5, m),
-                        DayDisplayMenu('Jeudi', 6, 7, m),
-                        DayDisplayMenu('Vendredi', 8, 9, m),
-                        DayDisplayMenu('Samedi', 10, 11, m),
-                        DayDisplayMenu('Dimanche', 12, 13, m),
+                        DayMenu(),
+                      
                       ],
                     ),
                   ),
