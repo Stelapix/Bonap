@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 
 class DayMenu extends StatefulWidget{
   final String dayName;
+  
 
   DayMenu(this.dayName);
 
@@ -13,8 +14,46 @@ class DayMenu extends StatefulWidget{
 
 
 class DayMenuState extends State<DayMenu> {
+  bool currentDay = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
+    
+
+    final bleu = Color.fromRGBO(0, 191, 255, 1);
+    // Bold the current day
+    var now = DateTime.now();
+    switch (now.weekday) {
+      case 1:
+        if (widget.dayName == "Lundi") currentDay = true;
+        break;
+      case 2:
+        if (widget.dayName == "Mardi") currentDay = true;
+        break;
+      case 3:
+        if (widget.dayName == "Mercredi") currentDay = true;
+        break;
+      case 4:
+        if (widget.dayName == "Jeudi") currentDay = true;
+        break;
+      case 5:
+        if (widget.dayName == "Vendredi") currentDay = true;
+        break;
+      case 6:
+        if (widget.dayName == "Samedi") currentDay = true;
+        break;
+      case 7:
+        if (widget.dayName == "Dimanche") currentDay = true;
+        break;
+      default:
+        break;
+    }
+    // Column
     return Column(
       children: <Widget>[
         Row(
@@ -22,9 +61,14 @@ class DayMenuState extends State<DayMenu> {
           children: <Widget>[
             Text(
               widget.dayName,
-              style: TextStyle(
+              style: currentDay ? 
+              TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: bleu,
+              ) :
+              TextStyle(
+                fontSize: 20,
               ),
             ),
 

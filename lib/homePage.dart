@@ -9,6 +9,7 @@ import 'listeCourse.dart';
 import 'widgets/dataStorage.dart';
 import 'widgets/menu/dayMenu.dart';
 
+
 class MenuSemaine {
   int numSemaine;
   List<List<Meal>> repasSemaine = new List<List<Meal>>();
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+
   Future<bool> onBackPressed() {
     return showDialog(
         context: context,
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
+    print(getNumberOfTheNDay(1));
     ListeCourse.resetListe();
     FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
@@ -124,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top:10, bottom: 30),
+                        padding: const EdgeInsets.only(top:10, bottom: 10),
                         child: Text(
                           'Semaine ' + m.numSemaine.toString(),
                           textAlign: TextAlign.center,
@@ -153,6 +155,21 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )));
+    }
+
+  String getNumberOfTheNDay(int n) {
+
+    String result = '';
+    DateTime now = DateTime.now();
+    DateTime newe = DateTime(now.millisecondsSinceEpoch);
+    result += newe.day.toString();
+    
+
+
+
+    
+    
+    return result;
   }
 
   Future navigateToSubPage(context) async {
