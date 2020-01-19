@@ -6,8 +6,8 @@ import 'package:bonap/custom/custom_icons.dart';
 import '../repas.dart';
 import '../ingredients.dart';
 import '../listeCourse.dart';
-import '../bilan.dart';
-import '../feedback.dart';
+// import '../bilan.dart';
+// import '../feedback.dart';
 import '../settings.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -69,11 +69,11 @@ class AppDrawer extends StatelessWidget {
                 leading: Icon(Custom.chart_line),
                 title: Text('Bilan diététique'),
                 onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => BilanPage()));
+                  // Navigator.of(context).pop();
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (BuildContext context) => BilanPage()));
                 },
               ),
             ],
@@ -89,11 +89,11 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Custom.feedback),
                   title: Text('Feedback'),
                   onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => FeedbackPage()));
+                    // Navigator.of(context).pop();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (BuildContext context) => FeedbackPage()));
                   },
                 ),
                 ListTile(
