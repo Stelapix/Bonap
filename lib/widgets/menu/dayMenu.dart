@@ -110,18 +110,24 @@ class DayButtonState extends State<DayButton>{
         
         child: OutlineButton(
           
+          
           padding: EdgeInsets.all(8.0),
           onPressed: () {
             setState(() {
+              widget.listMeal.length > 0 ? 
+              showDialog(
+                context: context,
+                      builder: (context) {
+                        return DisplayInfosDialog(this, widget.listMeal);
+                      }) :
               showDialog(
                 context: context,
                       builder: (context) {
                         return AddMealDialog(this);
-                      });
-             
+                      });             
             });
+          } ,
 
-          },
           child: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -224,8 +230,6 @@ class AddMealDialog extends StatefulWidget {
 }
 
 class AddMealDialogState extends State<AddMealDialog> {
-
-  
   @override
   void initState() {  
     super.initState();
@@ -305,6 +309,89 @@ class AddMealDialogState extends State<AddMealDialog> {
 
   
   
+}
+
+class DisplayInfosDialog extends StatefulWidget {
+  final DayButtonState dbs;
+  final List<Meal> listMeal;
+
+  DisplayInfosDialog(this.dbs, this.listMeal);
+
+  @override
+  DisplayInfosDialogState createState() => DisplayInfosDialogState();
+}
+
+class DisplayInfosDialogState extends State<DisplayInfosDialog> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Ok"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+      
+      content: Container(
+         width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.6,
+        
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Expanded(
+              child: displayInfos(),
+            )
+          ],
+        ),
+      )
+      ,
+    );
+  }
+
+  ListView displayInfos() {
+    return ListView(
+      shrinkWrap: true,
+      children: widget.listMeal.map(
+          (data) => new Container(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: Text(data.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),),
+                ),
+                Column(
+                  children: data.listIngredient.map(
+                    (data2) => new Container (
+                      child: ListTile(
+                        title: Text(data2.name),
+                        leading: data2.icon,
+
+                      )
+
+                    )
+                  ).toList(),
+                )
+              ],
+            ),
+          )
+        ).toList()
+      
+    );
+  }
 }
 
 class WeekMenu extends StatefulWidget{
