@@ -93,20 +93,28 @@ class DayMenuState extends State<DayMenu> {
 
 class DayButton extends StatefulWidget {
   final List<Meal> listMeal = new List<Meal>();
-
+  
   @override
   DayButtonState createState() => DayButtonState();
 
 }
 
 class DayButtonState extends State<DayButton>{
+  bool settingsMode = false;
+  @override
+  void initState() {
+ 
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    if (settingsMode == null) settingsMode = false;
+    print(settingsMode);
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, bottom: 5),
       child: Container(
         
-        width: MediaQuery.of(context).size.width / 3,
+        width: MediaQuery.of(context).size.width / 2.5,
         
         child: OutlineButton(
           
@@ -126,7 +134,19 @@ class DayButtonState extends State<DayButton>{
                         return AddMealDialog(this);
                       });             
             });
-          } ,
+          },
+
+          onLongPress: () {
+            setState(() {
+              widget.listMeal.length > 0 ?
+              settingsMode = !settingsMode : 
+              showDialog(
+                context: context,
+                      builder: (context) {
+                        return AddMealDialog(this);
+                      });    
+            });
+          },
 
           child: Container(
             child: Column(
@@ -147,6 +167,42 @@ class DayButtonState extends State<DayButton>{
                     Icon(Icons.add),
                   ],
                 ),
+
+                settingsMode ? 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      tooltip: "Changer l'ordre des ingrédients",
+                        icon: Icon(Icons.menu),
+                        onPressed: () {
+
+                        },
+                      ),
+
+                   
+
+                    IconButton(
+                      tooltip: "Changer les repas",
+                        icon: Icon(Icons.settings),
+                        onPressed: () {
+                          
+                        },
+                      ),
+
+                 
+                   IconButton(
+                     tooltip: "Supprimer les repas",
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          
+                        },
+                      ),
+
+                   
+                  ],
+
+                ):
 
                 widget.listMeal.length > 0 ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -341,8 +397,8 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
       ],
       
       content: Container(
-         width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.6,
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.4,
         
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
