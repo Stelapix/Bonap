@@ -402,7 +402,6 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                     DataStorage.saveRepas();
                     Navigator.pop(context);
                   }
-                  
                 },
               )
             ],

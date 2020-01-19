@@ -9,7 +9,6 @@ import 'listeCourse.dart';
 import 'widgets/dataStorage.dart';
 import 'widgets/menu/dayMenu.dart';
 
-
 class MenuSemaine {
   int numSemaine;
   List<List<Meal>> repasSemaine = new List<List<Meal>>();
@@ -67,7 +66,6 @@ class _HomePageState extends State<HomePage> {
     DataStorage.loadRepas();
     super.initState();
   }
-
 
   Future<bool> onBackPressed() {
     return showDialog(
@@ -131,9 +129,12 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top:10, bottom: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
-                          'Semaine du ' + MenuSemaine.getTheNDayOfTheWeek(1).toString() + ' au ' + MenuSemaine.getTheNDayOfTheWeek(7).toString(),
+                          'Semaine du ' +
+                              MenuSemaine.getTheNDayOfTheWeek(1).toString() +
+                              ' au ' +
+                              MenuSemaine.getTheNDayOfTheWeek(7).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 26.0,
@@ -144,27 +145,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   )),
-
                   Container(
                     padding: EdgeInsets.only(top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         WeekMenu(),
-                      
                       ],
                     ),
                   ),
-                 
-                 
                 ],
               ),
             )));
-    }
+  }
 
   Future navigateToSubPage(context) async {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
-
