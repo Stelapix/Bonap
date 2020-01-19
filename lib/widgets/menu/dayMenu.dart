@@ -5,6 +5,32 @@ import 'package:bonap/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+class Day {
+  static List<Day> listDay = new List<Day>(14);
+
+  List<Meal> listMeal;
+  Ingredient ing1;
+  Ingredient ing2;
+  Ingredient ing3;
+
+  // Sauvegarde et chargement
+  Day.fromJson(Map<String, dynamic> json)
+      : listMeal = json['listMeal'],
+        ing1 = json['ing1'],
+        ing2 = json['ing2'],
+        ing3 = json['ing3'];
+
+
+  Map<String, dynamic> toJson() => {
+        'listMeal': listMeal,
+        'ing1': ing1,
+        'ing2': ing2,
+        'ing3': ing3,
+      };
+
+
+}
+
 class DayMenu extends StatefulWidget {
   final String dayName;
   final int weekday;
@@ -80,8 +106,8 @@ class DayMenuState extends State<DayMenu> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            DayButton(),
-            DayButton(),
+            DayButton((widget.weekday-1)*2),
+            DayButton((widget.weekday-1)*2+1),
           ],
         )
       ],
@@ -91,9 +117,14 @@ class DayMenuState extends State<DayMenu> {
 
 class DayButton extends StatefulWidget {
   final List<Meal> listMeal = new List<Meal>();
+  final int index;
+
+  DayButton(this.index);
 
   @override
   DayButtonState createState() => DayButtonState();
+
+  
 }
 
 class DayButtonState extends State<DayButton> {
