@@ -130,7 +130,10 @@ class DayButtonState extends State<DayButton>{
                     widget.listMeal.length > 0 ? 
                     Text(
                       nameWithoutTheEnd(widget.listMeal[0].name),
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: widget.listMeal[0].fav ? FontWeight.bold : FontWeight.normal),
+
                     ) : 
                     Icon(Icons.add),
                   ],
