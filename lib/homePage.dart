@@ -28,6 +28,12 @@ class MenuSemaine {
   void choisirRepas(int a, List<Meal> r) {
     repasSemaine[a] = r;
   }
+
+  static String getTheNDayOfTheWeek(int n) {
+    DateTime now = DateTime.now();
+    DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
+    return newDate.day.toString() + '/' + newDate.month.toString();
+  }
 }
 
 class FunctionUpdate {
@@ -87,7 +93,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(getNumberOfTheNDay(1));
     ListeCourse.resetListe();
     FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
@@ -128,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.only(top:10, bottom: 10),
                         child: Text(
-                          'Semaine ' + m.numSemaine.toString(),
+                          'Semaine du ' + MenuSemaine.getTheNDayOfTheWeek(1).toString() + ' au ' + MenuSemaine.getTheNDayOfTheWeek(7).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 26.0,
@@ -156,21 +161,6 @@ class _HomePageState extends State<HomePage> {
               ),
             )));
     }
-
-  String getNumberOfTheNDay(int n) {
-
-    String result = '';
-    DateTime now = DateTime.now();
-    DateTime newe = DateTime(now.millisecondsSinceEpoch);
-    result += newe.day.toString();
-    
-
-
-
-    
-    
-    return result;
-  }
 
   Future navigateToSubPage(context) async {
     Navigator.push(

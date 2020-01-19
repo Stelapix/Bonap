@@ -1,12 +1,15 @@
 import 'package:bonap/repas.dart';
+import 'package:bonap/homePage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class DayMenu extends StatefulWidget{
   final String dayName;
+  final int weekday;
   
 
-  DayMenu(this.dayName);
+  DayMenu(this.dayName, this.weekday);
 
   @override
   DayMenuState createState() => DayMenuState();
@@ -29,25 +32,25 @@ class DayMenuState extends State<DayMenu> {
     // Bold the current day
     var now = DateTime.now();
     switch (now.weekday) {
-      case 1:
+      case DateTime.monday:
         if (widget.dayName == "Lundi") currentDay = true;
         break;
-      case 2:
+      case DateTime.tuesday:
         if (widget.dayName == "Mardi") currentDay = true;
         break;
-      case 3:
+      case DateTime.wednesday:
         if (widget.dayName == "Mercredi") currentDay = true;
         break;
-      case 4:
+      case DateTime.thursday:
         if (widget.dayName == "Jeudi") currentDay = true;
         break;
-      case 5:
+      case DateTime.friday:
         if (widget.dayName == "Vendredi") currentDay = true;
         break;
-      case 6:
+      case DateTime.saturday:
         if (widget.dayName == "Samedi") currentDay = true;
         break;
-      case 7:
+      case DateTime.sunday:
         if (widget.dayName == "Dimanche") currentDay = true;
         break;
       default:
@@ -60,7 +63,7 @@ class DayMenuState extends State<DayMenu> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              widget.dayName,
+              widget.dayName +' '+ MenuSemaine.getTheNDayOfTheWeek(widget.weekday).toString().split('/')[0],
               style: currentDay ? 
               TextStyle(
                 fontSize: 20,
@@ -314,13 +317,13 @@ class WeekMenuState extends State<WeekMenu> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        DayMenu("Lundi"),
-        DayMenu("Mardi"),
-        DayMenu("Mercredi"),
-        DayMenu("Jeudi"),
-        DayMenu("Vendredi"),
-        DayMenu("Samedi"),
-        DayMenu("Dimanche"),
+        DayMenu("Lundi", 1),
+        DayMenu("Mardi", 2),
+        DayMenu("Mercredi", 3),
+        DayMenu("Jeudi", 4),
+        DayMenu("Vendredi", 5),
+        DayMenu("Samedi", 6),
+        DayMenu("Dimanche", 7),
         
       ],
     );
