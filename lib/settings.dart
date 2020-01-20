@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'widgets/account/login.dart';
 import 'widgets/theme.dart';
 import 'ingredients.dart';
@@ -21,6 +23,30 @@ class _SettingsPage extends State<SettingsPage> {
   bool isSwitchedVegetarian = false;
   bool isSwitchedVegan = false;
 
+  static FirebaseAuth auth = FirebaseAuth.instance;
+
+  Future<void> resetPassword() async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    await auth.sendPasswordResetEmail(email: user.email);
+  }
+
+  //AlertDialogue qui relance la page Login
+  Future<bool> alertDialog(String texte, BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                texte,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              backgroundColor: Colors.white.withOpacity(0.9),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
@@ -29,8 +55,7 @@ class _SettingsPage extends State<SettingsPage> {
         title: new Text('Paramètres'),
       ),
       body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: <Widget>[
             SizedBox(height: 20.0),
             Text("     Préférences"),
@@ -72,6 +97,7 @@ class _SettingsPage extends State<SettingsPage> {
               ),
             ),
             ListTile(
+              enabled: false,
               title: Text(
                 'Mode Végétarien',
                 style: TextStyle(
@@ -100,6 +126,7 @@ class _SettingsPage extends State<SettingsPage> {
               ),
             ),
             ListTile(
+              enabled: false,
               title: Text(
                 'Mode Vegan',
                 style: TextStyle(
@@ -133,6 +160,19 @@ class _SettingsPage extends State<SettingsPage> {
             SizedBox(height: 10.0),
             Text("     Paramètres généraux"),
             SizedBox(height: 10.0),
+            ListTile(
+              title: Text(
+                "Changer de mot de passe",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              onTap: () {
+                resetPassword();
+                alertDialog("Un email de réinitialisation va vous être envoyé",
+                    context);
+              },
+            ),
             ListTile(
               title: Text(
                 "Supprimer les données",
@@ -171,7 +211,95 @@ class _SettingsPage extends State<SettingsPage> {
             Text("     À propos"),
             SizedBox(height: 20.0),
             ListTile(
-              title: Text("Version de Bonap\nVersion : 0.1"),
+              title: Text(
+                "Crédits",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext contexte) {
+                    return AlertDialog(
+                      title: Text(
+                        "Crédits",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      content: SizedBox(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Column(
+                          children: <Widget>[
+                            Text("Codeurs", style: TextStyle(color: Colors.amber),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text("Aymeric    "),
+                                InkWell(
+                                  child: Image.asset("assets/linkedin_logo.png",
+                                      width: MediaQuery.of(context).size.width /
+                                          10,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              10),
+                                  onTap: () => launch(
+                                      'https://www.linkedin.com/in/aymericlefeyer/'),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text("Quentin     "),
+                                InkWell(
+                                  child: Image.asset("assets/linkedin_logo.png",
+                                      width: MediaQuery.of(context).size.width /
+                                          10,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              10),
+                                  onTap: () => launch(
+                                      'https://www.linkedin.com/in/quentincarry/'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Text("Réseaux Sociaux", style: TextStyle(color: Colors.red),),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text("Louise     "),
+                                InkWell(
+                                  child: Image.asset("assets/instagram_logo.png",
+                                      width: MediaQuery.of(context).size.width /
+                                          10,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              10),
+                                  onTap: () => launch(
+                                      'https://www.instagram.com/louisehennecart_/?hl=fr'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            ListTile(
+              title: Text(
+                "Version de Bonap",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              subtitle: Text("Version : 0.1"),
               onTap: () {},
             ),
           ],

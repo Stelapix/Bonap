@@ -12,6 +12,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
       appBar: new AppBar(
         title: new Text('Feedback'),
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+            "Cette application est une beta, pourriez vous s'il vous plait envoyez vos suggestions ou des bugs que vous auriez trouvé à l'adresse : Stelapix.bonap@gmail.com"),
+      ),
     );
   }
 }

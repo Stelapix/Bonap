@@ -47,7 +47,7 @@ class MainScreen extends StatelessWidget {
         if (!snapshot.hasData || snapshot.data == null) {
           return LoginPage();
         } else {
-          return HomePage();
+          return LoginPage();
         }
       },
     );
