@@ -20,15 +20,12 @@ class Day {
         ing2 = json['ing2'],
         ing3 = json['ing3'];
 
-
   Map<String, dynamic> toJson() => {
         'listMeal': listMeal,
         'ing1': ing1,
         'ing2': ing2,
         'ing3': ing3,
       };
-
-
 }
 
 class DayMenu extends StatefulWidget {
@@ -106,8 +103,8 @@ class DayMenuState extends State<DayMenu> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            DayButton((widget.weekday-1)*2),
-            DayButton((widget.weekday-1)*2+1),
+            DayButton((widget.weekday - 1) * 2),
+            DayButton((widget.weekday - 1) * 2 + 1),
           ],
         )
       ],
@@ -123,8 +120,6 @@ class DayButton extends StatefulWidget {
 
   @override
   DayButtonState createState() => DayButtonState();
-
-  
 }
 
 class DayButtonState extends State<DayButton> {
@@ -141,6 +136,7 @@ class DayButtonState extends State<DayButton> {
 
   @override
   Widget build(BuildContext context) {
+    var size = 9;
     if (settingsMode == null) settingsMode = false;
     if (!(widget.listMeal.length > 0)) settingsMode = false;
     return Padding(
@@ -176,6 +172,7 @@ class DayButtonState extends State<DayButton> {
             });
           },
           child: Container(
+            width: MediaQuery.of(context).size.width / 2.5,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -198,7 +195,6 @@ class DayButtonState extends State<DayButton> {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          
                           IconButton(
                             tooltip: "Changer les repas",
                             icon: Icon(Icons.settings),
@@ -226,61 +222,77 @@ class DayButtonState extends State<DayButton> {
                     : widget.listMeal.length > 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               widget.listMeal[0].listIngredient.length > 0
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
-                                      child: IconButton(
-                                        icon: ing1.icon,
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return ChangeIngredientDialog(
-                                                    this,
-                                                    1,
-                                                    widget.listMeal[0]);
-                                              });
-                                        },
-                                        tooltip: ing1.name,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                size,
+                                        child: IconButton(
+                                          icon: ing1.icon,
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return ChangeIngredientDialog(
+                                                      this,
+                                                      1,
+                                                      widget.listMeal[0]);
+                                                });
+                                          },
+                                          tooltip: ing1.name,
+                                        ),
                                       ),
                                     )
                                   : Text(''),
                               widget.listMeal[0].listIngredient.length > 1
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
-                                      child: IconButton(
-                                        icon: ing2.icon,
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return ChangeIngredientDialog(
-                                                    this,
-                                                    2,
-                                                    widget.listMeal[0]);
-                                              });
-                                        },
-                                        tooltip: ing2.name,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                size,
+                                        child: IconButton(
+                                          icon: ing2.icon,
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return ChangeIngredientDialog(
+                                                      this,
+                                                      2,
+                                                      widget.listMeal[0]);
+                                                });
+                                          },
+                                          tooltip: ing2.name,
+                                        ),
                                       ),
                                     )
                                   : Text(''),
                               widget.listMeal[0].listIngredient.length > 2
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
-                                      child: IconButton(
-                                        icon: ing3.icon,
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return ChangeIngredientDialog(
-                                                    this,
-                                                    3,
-                                                    widget.listMeal[0]);
-                                              });
-                                        },
-                                        tooltip: ing3.name,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                size,
+                                        child: IconButton(
+                                          icon: ing3.icon,
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return ChangeIngredientDialog(
+                                                      this,
+                                                      3,
+                                                      widget.listMeal[0]);
+                                                });
+                                          },
+                                          tooltip: ing3.name,
+                                        ),
                                       ),
                                     )
                                   : Text(''),
@@ -466,7 +478,10 @@ class AddMealDialogState extends State<AddMealDialog> {
           FlatButton(
             child: Text("Ok"),
             onPressed: () {
-              if (widget.dbs.widget.listMeal[0].listIngredient.length > 0)
+              if (widget.dbs.widget.listMeal.length != 0) {
+
+              
+                if (widget.dbs.widget.listMeal[0].listIngredient.length > 0)
                 widget.dbs.ing1 =
                     widget.dbs.widget.listMeal[0].listIngredient[0];
 
@@ -477,6 +492,8 @@ class AddMealDialogState extends State<AddMealDialog> {
               if (widget.dbs.widget.listMeal[0].listIngredient.length > 2)
                 widget.dbs.ing3 =
                     widget.dbs.widget.listMeal[0].listIngredient[2];
+              }
+              
 
               widget.dbs.setState(() => true);
               Navigator.of(context).pop();
