@@ -60,22 +60,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return WillPopScope(
       onWillPop: onBackPressed,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: <Widget>[
-            Center(
-              child: new Image.asset(
-                'assets/splash/splash2.jpg',
-                width: size.width,
-                height: size.height,
-                fit: BoxFit.fill,
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(23.0),
-                color: Colors.white.withOpacity(0.65),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
               Center(
+                child: Image.asset(
+                  'assets/splash/splash2.jpg',
+                  width: size.width,
+                  fit: BoxFit.fill,
+                ),
               ),
               Container(
                 height: MediaQuery.of(context).size.height,
