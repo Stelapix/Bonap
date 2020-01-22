@@ -116,10 +116,10 @@ class _SettingsPage extends State<SettingsPage> {
               trailing: Switch(
                 value: isSwitchedVegetarian,
                 onChanged: (value) {
-                  setState(() {
-                    isSwitchedVegetarian = value;
-                    if (isSwitchedVegan) isSwitchedVegan = !value;
-                  });
+                  // setState(() {
+                  //   isSwitchedVegetarian = value;
+                  //   if (isSwitchedVegan) isSwitchedVegan = !value;
+                  // });
                 },
                 activeTrackColor: Colors.yellow[300],
                 activeColor: Colors.yellow,
@@ -133,7 +133,7 @@ class _SettingsPage extends State<SettingsPage> {
                   fontSize: 20.0,
                 ),
               ),
-              onTap: () {
+              onTap: () {              
                 setState(() {
                   if (isSwitchedVegan)
                     isSwitchedVegan = false;
@@ -145,10 +145,10 @@ class _SettingsPage extends State<SettingsPage> {
               trailing: Switch(
                 value: isSwitchedVegan,
                 onChanged: (value) {
-                  setState(() {
-                    isSwitchedVegan = value;
-                    if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
-                  });
+                  // setState(() {
+                  //   isSwitchedVegan = value;
+                  //   if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
+                  // });
                 },
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,

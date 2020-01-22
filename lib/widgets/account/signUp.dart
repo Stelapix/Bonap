@@ -4,20 +4,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RegisterPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   final Function functionValidateAndSave;
   final Function functionSignInWithEmail;
   final Function functionVibration;
   final Function functionAlertDialog;
 
-  RegisterPage(this.functionValidateAndSave, this.functionSignInWithEmail,
+  SignUpPage(this.functionValidateAndSave, this.functionSignInWithEmail,
       this.functionVibration, this.functionAlertDialog);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _SignUpPageState extends State<SignUpPage> {
   //Clé du formulaire
   final formKey = GlobalKey<FormState>();
 
@@ -63,13 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
-              Center(
-                child: Image.asset(
-                  'assets/splash/splash2.jpg',
-                  width: size.width,
-                  fit: BoxFit.fill,
-                ),
-              ),
               Container(
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
@@ -85,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: <Widget>[
-                      Loader(isLoading: true),
+                      Loader(isLoading: isLoading),
                       SizedBox(height: 30.0),
                       Form(
                         key: formKey,
