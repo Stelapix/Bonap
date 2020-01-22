@@ -16,7 +16,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   Animation<double> animationRadiusIn;
   Animation<double> animationRadiusOut;
 
-  final double initialRadius = 80.0;
+  final double initialRadius = 100.0;
   double radius = 0.0;
 
   @override
@@ -27,7 +27,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    if(controller != null) controller.dispose();
+    if (controller != null) controller.dispose();
     super.initState();
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
@@ -65,91 +65,85 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return widget.isLoading == true
-        ? Container(
-            width: MediaQuery.of(context).size.width / 4,
-            height: MediaQuery.of(context).size.height / 8,
-            child: Center(
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/icon/icon5.png',
-                  ),
-                  Center(
-                    child: RotationTransition(
-                      turns: animationRotation,
-                      child: Stack(
-                        children: <Widget>[
-                          Transform.translate(
-                            offset: Offset(radius * cos(2 * pi / 3),
-                                radius * sin(2 * pi / 3)),
-                            child: Image.asset(
-                              'assets/loader/banane.png',
-                              width: MediaQuery.of(context).size.width / 8,
-                              height: MediaQuery.of(context).size.height / 8,
-                            ),
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height/3,
+      child: Stack(
+        children: <Widget>[
+          Center(
+            child: Image.asset(
+              'assets/icon/icon5.png',
+              width: size.width / 3,
+              height: size.height / 3,
+            ),
+          ),
+          widget.isLoading == true
+              ? Center(
+                  child: RotationTransition(
+                    turns: animationRotation,
+                    child: Stack(
+                      children: <Widget>[
+                        Transform.translate(
+                          offset: Offset(radius * cos(2 * pi / 3),
+                              radius * sin(2 * pi / 3)),
+                          child: Image.asset(
+                            'assets/loader/banane.png',
+                            width: MediaQuery.of(context).size.width / 8,
+                            height: MediaQuery.of(context).size.height / 8,
                           ),
-                          Transform.translate(
-                            offset: Offset(radius * cos(pi), radius * sin(pi)),
-                            child: Image.asset(
-                              'assets/loader/pomme.png',
-                              width: MediaQuery.of(context).size.width / 10,
-                              height: MediaQuery.of(context).size.height / 10,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(radius * cos(pi), radius * sin(pi)),
+                          child: Image.asset(
+                            'assets/loader/pomme.png',
+                            width: MediaQuery.of(context).size.width / 10,
+                            height: MediaQuery.of(context).size.height / 10,
                           ),
-                          Transform.translate(
-                            offset: Offset(radius * cos(4 * pi / 3),
-                                radius * sin(4 * pi / 3)),
-                            child: Image.asset(
-                              'assets/loader/glace.png',
-                              width: MediaQuery.of(context).size.width / 10,
-                              height: MediaQuery.of(context).size.height / 10,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(radius * cos(4 * pi / 3),
+                              radius * sin(4 * pi / 3)),
+                          child: Image.asset(
+                            'assets/loader/glace.png',
+                            width: MediaQuery.of(context).size.width / 10,
+                            height: MediaQuery.of(context).size.height / 10,
                           ),
-                          Transform.translate(
-                            offset: Offset(radius * cos(5 * pi / 3),
-                                radius * sin(5 * pi / 3)),
-                            child: Image.asset(
-                              'assets/loader/carotte.png',
-                              width: MediaQuery.of(context).size.width / 8,
-                              height: MediaQuery.of(context).size.height / 8,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(radius * cos(5 * pi / 3),
+                              radius * sin(5 * pi / 3)),
+                          child: Image.asset(
+                            'assets/loader/carotte.png',
+                            width: MediaQuery.of(context).size.width / 8,
+                            height: MediaQuery.of(context).size.height / 8,
                           ),
-                          Transform.translate(
-                            offset: Offset(radius * cos(6 * pi / 3),
-                                radius * sin(6 * pi / 3)),
-                            child: Image.asset(
-                              'assets/loader/cookie.png',
-                              width: MediaQuery.of(context).size.width / 8,
-                              height: MediaQuery.of(context).size.height / 8,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(radius * cos(6 * pi / 3),
+                              radius * sin(6 * pi / 3)),
+                          child: Image.asset(
+                            'assets/loader/cookie.png',
+                            width: MediaQuery.of(context).size.width / 8,
+                            height: MediaQuery.of(context).size.height / 8,
                           ),
-                          Transform.translate(
-                            offset: Offset(radius * cos(7 * pi / 3),
-                                radius * sin(7 * pi / 3)),
-                            child: Image.asset(
-                              'assets/loader/salade.png',
-                              width: MediaQuery.of(context).size.width / 8,
-                              height: MediaQuery.of(context).size.height / 8,
-                            ),
+                        ),
+                        Transform.translate(
+                          offset: Offset(radius * cos(7 * pi / 3),
+                              radius * sin(7 * pi / 3)),
+                          child: Image.asset(
+                            'assets/loader/salade.png',
+                            width: MediaQuery.of(context).size.width / 8,
+                            height: MediaQuery.of(context).size.height / 8,
                           ),
-                          // Transform.translate(
-                          //   offset: Offset(radius * cos(7 * pi / 4),
-                          //       radius * sin(7 * pi / 4)),
-                          //   child: Dot(
-                          //     radius: 5.0,
-                          //     color: Colors.cyanAccent,
-                          //   ),
-                          // ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          )
-        : Container();
+                )
+              : Container(),
+        ],
+      ),
+    );
   }
 }
 

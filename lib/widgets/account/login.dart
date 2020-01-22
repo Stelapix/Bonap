@@ -8,8 +8,32 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
+import 'package:bonap/widgets/dataStorage.dart';
+
 import 'dart:async';
 import 'package:flutter/material.dart';
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path p = new Path();
+    p.lineTo(size.width, 0.0);
+    p.lineTo(size.width, size.height * 0.85);
+    p.arcToPoint(
+      Offset(0.0, size.height * 0.85),
+      radius: const Radius.elliptical(50.0, 10.0),
+      rotation: 0.0,
+    );
+    p.lineTo(0.0, 0.0);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
+  }
+}
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.loggout}) : super(key: key);
@@ -61,111 +85,46 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/splash/splash2.jpg'),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(23.0),
-                color: Colors.white.withOpacity(0.50),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(top: size.height/4.5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/logo_bonap.png',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.center,
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new OutlineButton(
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
-                    color: Colors.redAccent,
-                    highlightedBorderColor: Colors.white,
-                    onPressed: () {},
-                    child: new Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
-                      ),
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Expanded(
-                            child: Text(
-                              "SIGN UP",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/splash/splash2.jpg'),
+              fit: BoxFit.cover,
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0),
-            alignment: Alignment.center,
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new FlatButton(
-                    shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
-                    color: Colors.white,
-                    onPressed: () {},
-                    child: new Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
-                      ),
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Expanded(
-                            child: Text(
-                              "LOGIN",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.redAccent,
-                                  fontWeight: FontWeight.bold),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ClipPath(
+                clipper: MyClipper(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.60),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(height: size.height / 14),
+                            Image.asset(
+                              'assets/logo_bonap.png',
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: size.height / 4),
+              buttonFirstScreen("Connexion"),
+              SizedBox(height: size.height / 20),
+              buttonFirstScreen("S'inscrire"),
+            ],
           ),
-        ],
-      ),
+        ),
       ),
     );
   }
@@ -693,13 +652,138 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             controller: _controller,
             physics: new AlwaysScrollableScrollPhysics(),
             children: <Widget>[
-              RegisterPage(null, null, null, null),
+              LoginPage(),
               az(context),
-              LoginPage()
+              RegisterPage(
+                  validateAndSave, signInWithEmail, vibration, alertDialog),
             ],
             scrollDirection: Axis.horizontal,
           )),
     );
+  }
+
+  //Pour cacher/afficher le mot de passe
+  bool isHidden = true;
+
+  void toggleVisibility() {
+    setState(() {
+      isHidden = !isHidden;
+    });
+  }
+
+  //Vérifier qu'une fois le formulaire bien remplit, l'utilisateur existe dans la bdd
+  int validateAndSave() {
+    final form = formKey.currentState;
+    if (form.validate()) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
+  //Bouton 'Connectez-vous'
+  Widget buttonFirstScreen(String buttonName) {
+    return Material(
+      animationDuration: Duration(seconds: 10),
+      borderRadius: BorderRadius.circular(50.0),
+      child: Ink(
+        decoration: BoxDecoration(
+          // border: Border.all(color: Colors.white, width: 1.5),
+          borderRadius: BorderRadius.circular(50.0),
+          gradient: LinearGradient(
+              colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50.0),
+          onTap: () async {
+            goto(buttonName == "Connexion" ? 0 : 2);
+            // if (validateAndSave() == 0) {
+
+            //   int res = await signInWithEmail(
+            //       emailController.text, passwordController.text, context);
+            //   setState(() {
+            //     isLoading = true;
+            //   });
+            //   if (res == 0) {
+            //     Timer(Duration(seconds: 5), () {
+            //       Navigator.of(context).push(
+            //         MaterialPageRoute(
+            //           builder: (context) {
+            //             DataStorage.loadIngredients();
+            //             return HomePage();
+            //           },
+            //         ),
+            //       );
+            //     });
+            //   } else if (res == 1) {
+            //     // isLoading = false;
+            //     vibration();
+            //     await alertDialog(
+            //         "Veuillez d'abord vérifier votre e-mail.", context);
+            //     emailController.text = "";
+            //     passwordController.text = "";
+            //   } else if (res == 2) {
+            //     // isLoading = false;
+            //     vibration();
+            //     await alertDialog(
+            //         "Vos identifiants sont incorrects.\nMerci de réessayer.",
+            //         context);
+            //     emailController.text = "";
+            //     passwordController.text = "";
+            //   } else
+            //     print("error");
+            // }
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height / 12,
+            width: MediaQuery.of(context).size.width / 1.2,
+            child: Center(
+              child: Text(
+                buttonName,
+                style: TextStyle(color: Colors.white, fontSize: 26.0),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  goto(int numPage) {
+    _controller.animateToPage(
+      numPage,
+      duration: Duration(milliseconds: 1150),
+      curve: Curves.bounceOut,
+    );
+  }
+
+  //Se connecter sur Bonap
+  Future<int> signInWithEmail(String email, String password, context) async {
+    if (email.contains(" ")) {
+      email = email.substring(0, email.indexOf(" "));
+    }
+    try {
+      AuthResult result = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+      if (user != null) {
+        if (user.isEmailVerified) {
+          print(user);
+          return 0;
+        } else {
+          print("email is not verified");
+          return 1;
+        }
+      } else {
+        print("user is null");
+        return -1;
+      }
+    } catch (e) {
+      print(e);
+      return 2;
+    }
   }
 
   //Se déconnecter de Facebook et Google
@@ -712,7 +796,32 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     return true;
   }
 
-    //Gérer le retour en arrière sur la page Login
+  //AlertDialogue qui relance la page Login
+  Future<bool> alertDialog(String texte, BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                texte,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              backgroundColor: Colors.white.withOpacity(0.9),
+            ));
+  }
+
+  //Vibrer en cas d'identifiants incorrects
+  void vibration() {
+    if (Vibration.hasVibrator() != null &&
+        Vibration.hasAmplitudeControl() != null) {
+      Vibration.vibrate(duration: 200, amplitude: 20);
+    }
+  }
+
+  //Gérer le retour en arrière sur la page Login
   Future<bool> onBackPressed() {
     return showDialog(
       context: context,
@@ -1286,39 +1395,39 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 //     return true;
 //   }
 
-  // //Gérer le retour en arrière sur la page Login
-  // Future<bool> onBackPressed() {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text(
-  //         "Voulez-vous vraiment quitter l'application ?",
-  //         style: TextStyle(
-  //           color: Colors.black,
-  //           fontWeight: FontWeight.normal,
-  //         ),
-  //         textAlign: TextAlign.left,
-  //       ),
-  //       backgroundColor: Colors.white.withOpacity(0.9),
-  //       actions: <Widget>[
-  //         FlatButton(
-  //           child: Text(
-  //             "ANNULER",
-  //             style: TextStyle(color: Colors.black),
-  //           ),
-  //           onPressed: () => Navigator.pop(context, false),
-  //         ),
-  //         FlatButton(
-  //             child: Text(
-  //               "OK",
-  //               style: TextStyle(color: Colors.black),
-  //             ),
-  //             onPressed: () {
-  //               signOut();
-  //               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-  //             }),
-  //       ],
-  //     ),
-  //   );
-  // }
+// //Gérer le retour en arrière sur la page Login
+// Future<bool> onBackPressed() {
+//   return showDialog(
+//     context: context,
+//     builder: (context) => AlertDialog(
+//       title: Text(
+//         "Voulez-vous vraiment quitter l'application ?",
+//         style: TextStyle(
+//           color: Colors.black,
+//           fontWeight: FontWeight.normal,
+//         ),
+//         textAlign: TextAlign.left,
+//       ),
+//       backgroundColor: Colors.white.withOpacity(0.9),
+//       actions: <Widget>[
+//         FlatButton(
+//           child: Text(
+//             "ANNULER",
+//             style: TextStyle(color: Colors.black),
+//           ),
+//           onPressed: () => Navigator.pop(context, false),
+//         ),
+//         FlatButton(
+//             child: Text(
+//               "OK",
+//               style: TextStyle(color: Colors.black),
+//             ),
+//             onPressed: () {
+//               signOut();
+//               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+//             }),
+//       ],
+//     ),
+//   );
+// }
 // }
