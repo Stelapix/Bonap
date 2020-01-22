@@ -25,10 +25,10 @@ class DataStorage {
     return File('$path/repas.json');
   }
 
-  static Future<File> get _localFileWeek async {
-    final path = await _localPath;
-    return File('$path/week.json');
-  }
+  // static Future<File> get _localFileWeek async {
+  //   final path = await _localPath;
+  //   return File('$path/week.json');
+  // }
 
   static Future<int> loadIngredients() async {
     // Load from the device
