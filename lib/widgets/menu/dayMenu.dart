@@ -1,6 +1,7 @@
 import 'package:bonap/repas.dart';
 import 'package:bonap/ingredients.dart';
 import 'package:bonap/homePage.dart';
+import 'package:bonap/widgets/dataStorage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,17 +25,35 @@ class Day {
 
   // Sauvegarde et chargement
   Day.fromJson(Map<String, dynamic> json)
-      : listMeal = json['listMeal'],
-        ing1 = json['ing1'],
-        ing2 = json['ing2'],
-        ing3 = json['ing3'];
+      : listMeal = createList(json['listMeal']),
+        ing1 = createIng(json['ing1']),
+        ing2 = createIng(json['ing1']),
+        ing3 = createIng(json['ing1']),
+        index = json['index'];
 
   Map<String, dynamic> toJson() => {
         'listMeal': listMeal,
         'ing1': ing1,
         'ing2': ing2,
         'ing3': ing3,
+        'index': index,
       };
+
+  static List<Meal> createList(List<dynamic> s) {
+    List<Meal> L = new List<Meal>();
+    for (int i = 0; i < s.length; i++) {
+      Meal m = new Meal(s[i]['name'], Meal.createList(s[i]['ingredients']));
+      m.fav = s[i]['fav'];
+
+      L.add(m);
+    }
+    return L;
+  }
+
+  static Ingredient createIng(dynamic s) {
+    Ingredient i = new Ingredient(s['name'], s['cat']);
+    return i;
+  }
 }
 
 class DayMenu extends StatefulWidget {
@@ -57,6 +76,7 @@ class DayMenuState extends State<DayMenu> {
 
   @override
   Widget build(BuildContext context) {
+    
     final bleu = Color.fromRGBO(0, 191, 255, 1);
     // Bold the current day
     var now = DateTime.now();
@@ -122,7 +142,6 @@ class DayMenuState extends State<DayMenu> {
 }
 
 class DayButton extends StatefulWidget {
-  // final List<Meal> listMeal = new List<Meal>();
   final int index;
 
   DayButton(this.index);
@@ -141,14 +160,16 @@ class DayButtonState extends State<DayButton> {
 
   @override
   void initState() {
+    
     loaded = true;
     super.initState();
+    
+
   }
 
   @override
   Widget build(BuildContext context) {
-    print(Day.listDay.toString());
-
+   
     // Update the ingrdients icons
     if (Day.listDay[widget.index] != null) {
       if (Day.listDay[widget.index].listMeal[0].listIngredient.length > 0)
@@ -163,6 +184,7 @@ class DayButtonState extends State<DayButton> {
     }
     // Size padding
     var size = 9;
+
     // Settings mode
     if (settingsMode == null) settingsMode = false;
     if (Day.listDay[widget.index] == null) settingsMode = false;
@@ -457,6 +479,7 @@ class ChangeIngredientDialogState extends State<ChangeIngredientDialog> {
                             if (widget.ing == 3) widget.dbs.ing3 = data;
 
                             widget.dbs.setState(() => true);
+                            DataStorage.saveWeek();
 
                             Navigator.of(context).pop();
                           },
@@ -508,6 +531,7 @@ class DelMealDialogState extends State<DelMealDialog> {
             Day.listDay[widget.index].ing3 = null;
             Day.listDay[widget.index] = null;
             widget.dbs.setState(() => true);
+            DataStorage.saveWeek();
             Navigator.of(context).pop();
           },
         )
@@ -587,7 +611,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                   }
                 }
               }
-              print(Day.listDay.toString());
+
+              DataStorage.saveWeek();
 
               widget.dbs.setState(() => true);
               Navigator.of(context).pop();

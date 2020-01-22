@@ -54,6 +54,8 @@ MenuSemaine m = new MenuSemaine(49);
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
+
+  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -62,10 +64,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    DataStorage.loadIngredients();
-    DataStorage.loadRepas();
     super.initState();
+    loading().whenComplete(() {
+      setState((){});
+    });
+    
   }
+
+  Future<void> loading() async {
+    await DataStorage.loadIngredients();
+    await DataStorage.loadRepas();
+    await DataStorage.loadWeek();
+  }
+
+  
 
   Future<bool> onBackPressed() {
     return showDialog(

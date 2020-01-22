@@ -288,17 +288,19 @@ class _LoginPageState extends State<LoginPage> {
               setState(() {
                 isLoading = true;
               });
-              if (res == 0){
-              Timer(Duration(seconds: 3), (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      DataStorage.loadIngredients();
-                      return HomePage();
-                    },
-                  ),
-                );
-              });
+              if (res == 0) {
+                Timer(Duration(seconds: 3), () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        DataStorage.loadIngredients();
+                        DataStorage.loadWeek();
+                        DataStorage.loadRepas();
+                        return HomePage();
+                      },
+                    ),
+                  );
+                });
               } else if (res == 1) {
                 // isLoading = false;
                 vibration();
@@ -349,13 +351,16 @@ class _LoginPageState extends State<LoginPage> {
                   isGoogleSignIn = true;
                   successMessage = 'Logged in successfully';
                   DataStorage.loadIngredients();
+                  DataStorage.loadWeek();
+                  DataStorage.loadRepas();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => HomePage()));
                 });
               }
-            } else print('Login Canceled');
+            } else
+              print('Login Canceled');
           });
         },
         borderSide: BorderSide(
@@ -400,6 +405,8 @@ class _LoginPageState extends State<LoginPage> {
             if (user != null) {
               print('Logged in successfully.');
               DataStorage.loadIngredients();
+              DataStorage.loadWeek();
+              DataStorage.loadRepas();
               if (this.mounted)
                 setState(() {
                   isFacebookSignIn = true;

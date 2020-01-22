@@ -5,6 +5,7 @@ import 'dart:io';
 
 import '../ingredients.dart';
 import '../repas.dart';
+import '../widgets/menu/dayMenu.dart';
 
 class DataStorage {
   DataStorage();
@@ -25,10 +26,10 @@ class DataStorage {
     return File('$path/repas.json');
   }
 
-  // static Future<File> get _localFileWeek async {
-  //   final path = await _localPath;
-  //   return File('$path/week.json');
-  // }
+  static Future<File> get _localFileWeek async {
+    final path = await _localPath;
+    return File('$path/week.json');
+  }
 
   static Future<int> loadIngredients() async {
     // Load from the device
@@ -81,6 +82,32 @@ class DataStorage {
     final file = await _localFileRepas;
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
+
+    return file.writeAsString(json);
+  }
+
+  static Future<int> loadWeek() async {
+    try {
+      final file = await _localFileWeek;
+
+      // Read the file
+      String content = await file.readAsString();
+      List collection = json.decode(content);
+      Day.listDay = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
+      if (debug) print("LOADING WEEK : " + collection.toString());
+
+      return 1;
+    } catch (e) {
+      // If there is an error
+      if (debug) print(e.toString());
+      return 0;
+    }
+  }
+
+  static Future<File> saveWeek() async {
+    final file = await _localFileWeek;
+    String json = jsonEncode(Day.listDay);
+    if (debug) print("SAVING WEEK : " + json);
 
     return file.writeAsString(json);
   }

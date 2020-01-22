@@ -191,7 +191,7 @@ class _RepasPageState extends State<RepasPage> {
                         onPressed: () {
                           setState(() {
                             data.fav = data.fav ? false : true;
-                            DataStorage.saveIngredients();
+                            DataStorage.saveRepas();
                           });
                         }),
                     IconButton(
