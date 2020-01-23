@@ -55,6 +55,12 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 
+  static Future<void> loading() async {
+    await DataStorage.loadIngredients();
+    await DataStorage.loadRepas();
+    await DataStorage.loadWeek();
+  }
+
   
 }
 
@@ -65,17 +71,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    loading().whenComplete(() {
+    HomePage.loading().whenComplete(() {
       setState((){});
     });
     
   }
 
-  Future<void> loading() async {
-    await DataStorage.loadIngredients();
-    await DataStorage.loadRepas();
-    await DataStorage.loadWeek();
-  }
+  
 
   
 

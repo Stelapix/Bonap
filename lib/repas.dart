@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'homePage.dart';
 import 'ingredients.dart';
 import 'widgets/dataStorage.dart';
 
@@ -482,6 +483,9 @@ class _MyDialogState extends State<_MyDialog> {
                   widget.rps.setState(
                       () => widget.rps.disMeal = widget.rps.displayMeal());
                   DataStorage.saveRepas();
+                  HomePage.loading().whenComplete(() {
+                    setState(() {});
+                  });
                   Navigator.pop(context);
                 },
                 child: Text('Ok'),
