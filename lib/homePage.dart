@@ -1,4 +1,4 @@
-import 'package:bonap/widgets/account/login.dart';
+import 'package:bonap/widgets/account/mainMenu.dart';
 import 'package:flutter/material.dart';
 
 // Widgets
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              LoginPage(loggout: true))),
+                              MainMenu(loggout: true))),
                 ),
               ],
             ));
@@ -161,6 +161,6 @@ class _HomePageState extends State<HomePage> {
 
   Future navigateToSubPage(context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => MainMenu()));
   }
 }

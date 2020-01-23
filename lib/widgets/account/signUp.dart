@@ -1,4 +1,4 @@
-import 'package:bonap/widgets/account/login.dart';
+import 'package:bonap/widgets/account/mainMenu.dart';
 import 'package:bonap/widgets/loader.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<bool> onBackPressed() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
+        MaterialPageRoute(builder: (BuildContext context) => MainMenu()));
     return null;
   }
 
@@ -120,7 +120,6 @@ class _SignUpPageState extends State<SignUpPage> {
   //Les 2 champs de saisies pour l'adresse Mail et le mot de passe
   Widget inputText(String hintText) {
     return TextFormField(
-      enableInteractiveSelection: true,
       validator: (value) {
         if (value.isEmpty && hintText == 'Adresse Email') {
           print("Email required");
@@ -232,7 +231,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       context,
                       //TODO mettre à jour la redirection
                       MaterialPageRoute(
-                          builder: (BuildContext context) => LoginPage()));
+                          builder: (BuildContext context) => MainMenu()));
                 });
               } catch (e) {
                 print(e.message);

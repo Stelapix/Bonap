@@ -35,15 +35,15 @@ class MyClipper extends CustomClipper<Path> {
   }
 }
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.loggout}) : super(key: key);
+class MainMenu extends StatefulWidget {
+  MainMenu({Key key, this.loggout}) : super(key: key);
 
   final loggout;
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _MainMenuState createState() => new _MainMenuState();
 }
 
-class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   //Clé du formulaire
   final formKey = GlobalKey<FormState>();
 
@@ -86,20 +86,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/splash/splash2.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               ClipPath(
                 clipper: MyClipper(),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.60),
+                    image: DecorationImage(
+                        image: AssetImage('assets/splash/splashLogin.jpg'),
+                        fit: BoxFit.fill),
                   ),
                   child: Column(
                     children: <Widget>[
@@ -107,7 +102,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(height: size.height / 14),
+                            SizedBox(height: size.height / 16),
                             Image.asset(
                               'assets/logo_bonap.png',
                             ),
@@ -118,10 +113,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              SizedBox(height: size.height / 4),
-              buttonFirstScreen("Connexion"),
-              SizedBox(height: size.height / 20),
-              buttonFirstScreen("S'inscrire"),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: size.height / 4),
+                    buttonFirstScreen("Connexion", Icon(Icons.arrow_back_ios)),
+                    SizedBox(height: size.height / 20),
+                    buttonFirstScreen(
+                        "S'inscrire", Icon(Icons.arrow_forward_ios)),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -683,9 +686,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   //Bouton 'Connectez-vous'
-  Widget buttonFirstScreen(String buttonName) {
+  Widget buttonFirstScreen(String buttonName, Icon icon) {
+    Size size = MediaQuery.of(context).size;
     return Material(
-      animationDuration: Duration(seconds: 10),
       borderRadius: BorderRadius.circular(50.0),
       child: Ink(
         decoration: BoxDecoration(
@@ -697,9 +700,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               end: Alignment.centerLeft),
         ),
         child: InkWell(
+          highlightColor: Colors.transparent,
+          splashColor: Color.fromRGBO(246, 199, 0, 1),
           borderRadius: BorderRadius.circular(50.0),
           onTap: () async {
-            goto(buttonName == "Connexion" ? 1 : 3);
             // if (validateAndSave() == 0) {
 
             //   int res = await signInWithEmail(
@@ -738,14 +742,59 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             // }
           },
           child: Container(
-            height: MediaQuery.of(context).size.height / 12,
-            width: MediaQuery.of(context).size.width / 1.2,
-            child: Center(
-              child: Text(
-                buttonName,
-                style: TextStyle(color: Colors.white, fontSize: 26.0),
-              ),
-            ),
+            height: size.height / 12,
+            width: size.width,
+            child: buttonName == "Connexion"
+                ? Row(
+                    children: <Widget>[
+                      SizedBox(width: size.width / 12),
+                      Container(
+                        child: FlatButton(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50.0)),
+                          color: Colors.white,
+                          child: Icon(
+                            icon.icon,
+                            color: Color(0xFFFB415B),
+                          ),
+                          onPressed: () =>
+                              goto(buttonName == "Connexion" ? 1 : 3),
+                        ),
+                      ),
+                      SizedBox(width: size.width / 10),
+                      Center(
+                        child: Text(
+                          buttonName,
+                          style: TextStyle(color: Colors.white, fontSize: 26.0),
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: <Widget>[
+                      SizedBox(width: size.width / 6),
+                      Center(
+                        child: Text(
+                          buttonName,
+                          style: TextStyle(color: Colors.white, fontSize: 26.0),
+                        ),
+                      ),
+                      SizedBox(width: size.width / 10),
+                      Container(
+                        child: FlatButton(
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(50.0)),
+                          color: Colors.white,
+                          child: Icon(
+                            icon.icon,
+                            color: Color(0xFFFB415B),
+                          ),
+                          onPressed: () =>
+                              goto(buttonName == "Connexion" ? 1 : 3),
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),
@@ -793,7 +842,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     await googleSignIn.signOut();
     await facebookSignIn.logOut();
     print("User Sign Out");
-    MainScreen();
+    MainMenu();
     return true;
   }
 

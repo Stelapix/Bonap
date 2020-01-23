@@ -1,4 +1,4 @@
-import 'package:bonap/widgets/account/login.dart';
+import 'package:bonap/widgets/account/mainMenu.dart';
 import 'package:bonap/widgets/loader.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
 import 'package:bonap/widgets/dataStorage.dart';
+import 'package:bonap/widgets/ui/button/button.dart';
 import 'dart:async';
 
 // import 'package:bonap/widgets/dataStorage.dart';
@@ -73,18 +74,18 @@ class _SignInPageState extends State<SignInPage> {
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                    colorFilter: new ColorFilter.mode(
-                        Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                    image: AssetImage('assets/splash/splash2.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   color: Colors.white,
+                //   image: DecorationImage(
+                //     colorFilter: new ColorFilter.mode(
+                //         Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                //     image: AssetImage('assets/splash/splash2.jpg'),
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
                 child: Column(
                   children: <Widget>[
-                    Loader(isLoading: isLoading),
+                    Loader(isLoading: true),
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.all(15),
@@ -93,25 +94,23 @@ class _SignInPageState extends State<SignInPage> {
                             Form(
                               key: formKey,
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  SizedBox(height: 10.0),
                                   Text(
                                     "Adresse Email",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFFEE5623),
+                                      // color: Color(0xFFEE5623),
                                       fontSize: 15.0,
                                     ),
                                   ),
                                   inputText("Adresse Email"),
-                                  SizedBox(height: 10.0),
+                                  SizedBox(height: 20.0),
                                   Text(
                                     "Mot de passe",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFFEE5623),
+                                      // color: Color(0xFFEE5623),
                                       fontSize: 15.0,
                                     ),
                                   ),
@@ -128,7 +127,7 @@ class _SignInPageState extends State<SignInPage> {
                                     "Mot de passe oublié ?",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFFEE5623),
+                                      // color: Color(0xFFEE5623),
                                       fontSize: 15.0,
                                     ),
                                   ),
@@ -136,7 +135,15 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                             SizedBox(height: 20.0),
-                            buttonConnexion(),
+                            Button(
+                              buttonName: Text("Connexion",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 26.0)),
+                              icon: Icon(
+                                Icons.arrow_right,
+                                color: Color(0xFFFB415B),
+                              ),
+                            ),
                             SizedBox(height: 20.0),
                             Container(
                               child: Row(
@@ -179,11 +186,10 @@ class _SignInPageState extends State<SignInPage> {
   //Vérifier qu'une fois le formulaire bien remplit, l'utilisateur existe dans la bdd
   int validateAndSave() {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate())
       return 0;
-    } else {
+    else
       return 1;
-    }
   }
 
   //Les 2 champs de saisies pour l'adresse Mail et le mot de passe
@@ -203,9 +209,8 @@ class _SignInPageState extends State<SignInPage> {
           return "Format d'adresse email invalide.";
         } else if (input == 'Mot de passe' && value.length < 6) {
           return "Votre mot de passe doit comporter\nau moins 6 caractères.";
-        } else {
+        } else
           return null;
-        }
       },
       cursorColor: Colors.black,
       style: TextStyle(
@@ -214,12 +219,10 @@ class _SignInPageState extends State<SignInPage> {
       ),
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-          color: Colors.green,
-        )),
+            borderSide: BorderSide(color: Color.fromRGBO(205, 225, 0, 1))),
         focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-          color: Colors.red,
+          color: Color.fromRGBO(0, 191, 255, 1),
         )),
         // disabledBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(
@@ -230,15 +233,12 @@ class _SignInPageState extends State<SignInPage> {
         hintText: input == "Mot de passe" ? "********" : "",
         hintStyle: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.black,
           fontSize: 15.0,
         ),
-        prefixIcon: input == "Adresse Email"
-            ? Icon(Icons.email, color: Colors.black)
-            : Icon(Icons.lock, color: Colors.black),
+        prefixIcon:
+            input == "Adresse Email" ? Icon(Icons.email) : Icon(Icons.lock),
         suffixIcon: input == "Mot de passe"
             ? IconButton(
-                color: Colors.black,
                 onPressed: toggleVisibility,
                 icon: isHidden
                     ? Icon(Icons.visibility_off)
@@ -278,6 +278,7 @@ class _SignInPageState extends State<SignInPage> {
       Vibration.vibrate(duration: 200, amplitude: 20);
     }
   }
+
 
   //Bouton 'Connectez-vous'
   Widget buttonConnexion() {

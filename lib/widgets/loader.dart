@@ -16,7 +16,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   Animation<double> animationRadiusIn;
   Animation<double> animationRadiusOut;
 
-  final double initialRadius = 100.0;
+  final double initialRadius = 90.0;
   double radius = 0.0;
 
   @override
