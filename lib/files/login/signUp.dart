@@ -56,7 +56,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: onBackPressed,
       child: Scaffold(
@@ -68,8 +67,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    colorFilter: new ColorFilter.mode(
-                        Colors.black.withOpacity(0.05), BlendMode.dstATop),
                     image: AssetImage('assets/splash/splash2.jpg'),
                     fit: BoxFit.cover,
                   ),

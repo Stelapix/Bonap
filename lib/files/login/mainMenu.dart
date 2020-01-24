@@ -83,73 +83,74 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
       onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              ClipPath(
-                clipper: MyClipper(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/splash/splashLogin.jpg'),
-                        fit: BoxFit.fill),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      SizedBox(
-                        height: size.height / 20,
-                      ),
-                      Image.asset(
-                        'assets/logo_bonap.png',
-                      ),
-                    ],
-                  ),
+        body: Column(
+          children: <Widget>[
+            ClipPath(
+              clipper: MyClipper(),
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/splash/splashLogin.jpg'),
+                      fit: BoxFit.fill),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(
+                      height: size.height / 20,
+                    ),
+                    Image.asset(
+                      'assets/logo_bonap.png',
+                    ),
+                  ],
                 ),
               ),
-              Container(
+            ),
+            SizedBox(
+              height: size.height/1.8,
+              child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: size.height / 4),
                     buttonFirstScreen("Connexion", Icon(Icons.arrow_back_ios)),
-                    SizedBox(height: size.height / 20),
+                    SizedBox(height: size.height / 16),
                     buttonFirstScreen(
-                        "S'inscrire", Icon(Icons.arrow_forward_ios)),
+                        "Inscription", Icon(Icons.arrow_forward_ios)),
                   ],
                 ),
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10, left: 10),
-                                          child: Text(
-                        "Stelapix",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10, left: 10),
+                    child: Text(
+                      "Stelapix",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10, right: 10),
-                                          child: Text(
-                        "v"+ Constant.version,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                        ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10, right: 10),
+                    child: Text(
+                      "v" + Constant.version,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
