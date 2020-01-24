@@ -1,20 +1,12 @@
-import 'package:bonap/widgets/account/mainMenu.dart';
-import 'package:bonap/widgets/loader.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
+
+import 'package:bonap/files/ui/button/button.dart';
+import 'package:bonap/files/widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bonap/homePage.dart';
-import 'package:bonap/widgets/account/signUp.dart';
-import 'package:bonap/widgets/loader.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:vibration/vibration.dart';
-import 'package:bonap/widgets/dataStorage.dart';
-import 'package:bonap/widgets/ui/button/button.dart';
-import 'dart:async';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // import 'package:bonap/widgets/dataStorage.dart';
 
@@ -28,11 +20,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  //Clé du formulaire
-  final formKey = GlobalKey<FormState>();
-
-  //Authentification à Firebase
-  final FirebaseAuth auth = FirebaseAuth.instance;
 
   //Paramètres Google
   final GoogleSignIn googleSignIn = new GoogleSignIn();
@@ -135,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                             SizedBox(height: 20.0),
-                            Button(
+                            OwnButton(
                               buttonName: Text("Connexion",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 26.0)),
@@ -143,6 +130,7 @@ class _SignInPageState extends State<SignInPage> {
                                 Icons.arrow_right,
                                 color: Color(0xFFFB415B),
                               ),
+                              buttonType: ButtonType.Connecter,
                             ),
                             SizedBox(height: 20.0),
                             Container(
@@ -183,14 +171,6 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
-  //Vérifier qu'une fois le formulaire bien remplit, l'utilisateur existe dans la bdd
-  int validateAndSave() {
-    final form = formKey.currentState;
-    if (form.validate())
-      return 0;
-    else
-      return 1;
-  }
 
   //Les 2 champs de saisies pour l'adresse Mail et le mot de passe
   Widget inputText(String input) {
@@ -254,31 +234,9 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  //AlertDialogue qui relance la page Login
-  Future<bool> alertDialog(String texte, BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                texte,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              backgroundColor: Colors.white.withOpacity(0.9),
-            ));
-  }
+  
 
-  //Vibrer en cas d'identifiants incorrects
-  void vibration() {
-    if (Vibration.hasVibrator() != null &&
-        Vibration.hasAmplitudeControl() != null) {
-      Vibration.vibrate(duration: 200, amplitude: 20);
-    }
-  }
-
+ 
 
   //Bouton 'Connectez-vous'
   Widget buttonConnexion() {
@@ -294,43 +252,7 @@ class _SignInPageState extends State<SignInPage> {
           ], begin: Alignment.centerRight, end: Alignment.centerLeft),
         ),
         child: InkWell(
-          onTap: () async {
-            if (validateAndSave() == 0) {
-              int res = await signInWithEmail(
-                  emailController.text, passwordController.text, context);
-              setState(() {
-                isLoading = true;
-              });
-              if (res == 0) {
-                Timer(Duration(seconds: 3), () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        DataStorage.loadIngredients();
-                        return HomePage();
-                      },
-                    ),
-                  );
-                });
-              } else if (res == 1) {
-                // isLoading = false;
-                vibration();
-                await alertDialog(
-                    "Veuillez d'abord vérifier votre e-mail.", context);
-                emailController.text = "";
-                passwordController.text = "";
-              } else if (res == 2) {
-                // isLoading = false;
-                vibration();
-                await alertDialog(
-                    "Vos identifiants sont incorrects.\nMerci de réessayer.",
-                    context);
-                emailController.text = "";
-                passwordController.text = "";
-              } else
-                print("error");
-            }
-          },
+          onTap: () async {},
           child: Container(
             height: 50.0,
             child: new Center(
@@ -456,33 +378,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
     );
-  }
-
-  //Se connecter sur Bonap
-  Future<int> signInWithEmail(String email, String password, context) async {
-    if (email.contains(" ")) {
-      email = email.substring(0, email.indexOf(" "));
-    }
-    try {
-      AuthResult result = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      if (user != null) {
-        if (user.isEmailVerified) {
-          print(user);
-          return 0;
-        } else {
-          print("email is not verified");
-          return 1;
-        }
-      } else {
-        print("user is null");
-        return -1;
-      }
-    } catch (e) {
-      print(e);
-      return 2;
-    }
   }
 
   //Se connecter via Facebook

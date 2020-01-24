@@ -1,25 +1,25 @@
-import 'package:bonap/widgets/account/mainMenu.dart';
-import 'package:bonap/widgets/constant.dart';
+import 'package:bonap/files/constant.dart';
+import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'widgets/account/mainMenu.dart';
-import 'widgets/theme.dart';
-import 'ingredients.dart';
 import 'package:provider/provider.dart';
-import 'repas.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'widgets/dataStorage.dart';
+import 'ingredients.dart';
 
-class SettingsPage extends StatefulWidget {
+
+class Settings extends StatefulWidget {
   @override
-  _SettingsPage createState() => _SettingsPage();
+  _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsPage extends State<SettingsPage> {
+class _SettingsState extends State<Settings> {
   //Pour cacher/afficher le mot de passe
   bool isSwitchedNight = true;
   bool isSwitchedVegetarian = false;

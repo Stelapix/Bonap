@@ -1,11 +1,10 @@
+import 'package:bonap/custom/custom_icons.dart';
+import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/ui/dropDownButtons/dropDownButtonIngredients.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'custom/custom_icons.dart';
-import 'widgets/dropDownButtons/dropDownButtonIngredients.dart';
-import 'widgets/dataStorage.dart';
 
 enum Category { meal, fish, vegetable, fruit, starchy, milk, other }
-//Starchy is feculent
 enum popUpSort { alpha, category, favorite }
 
 class Ingredient {

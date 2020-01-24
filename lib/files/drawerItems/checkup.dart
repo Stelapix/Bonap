@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BilanPage extends StatefulWidget {
+class Checkup extends StatefulWidget {
   @override
-  _BilanPageState createState() => new _BilanPageState();
+  _CheckupState createState() => new _CheckupState();
 }
 
-class _BilanPageState extends State<BilanPage> {
+class _CheckupState extends State<Checkup> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

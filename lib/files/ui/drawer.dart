@@ -1,19 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:bonap/custom/custom_icons.dart';
-
-//Pages
-
-import '../repas.dart';
-import '../ingredients.dart';
-import '../listeCourse.dart';
-import '../bilan.dart';
-import '../feedback.dart';
-import '../settings.dart';
+import 'package:bonap/files/drawerItems/checkup.dart';
+import 'package:bonap/files/drawerItems/feedback.dart';
+import 'package:bonap/files/drawerItems/ingredients.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/drawerItems/settings.dart';
+import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Drawer(
+    return Drawer(
       child: Column(
         children: <Widget>[
           DrawerHeader(
@@ -75,7 +72,7 @@ class AppDrawer extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => BilanPage()));
+                          builder: (BuildContext context) => Checkup()));
                 },
               ),
             ],
@@ -95,7 +92,7 @@ class AppDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => FeedbackPage()));
+                            builder: (BuildContext context) => Feedback()));
                   },
                 ),
                 ListTile(
@@ -106,7 +103,7 @@ class AppDrawer extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => SettingsPage()));
+                            builder: (BuildContext context) => Settings()));
                   },
                 ),
               ],

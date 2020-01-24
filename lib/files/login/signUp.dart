@@ -1,8 +1,10 @@
-import 'package:bonap/widgets/account/mainMenu.dart';
-import 'package:bonap/widgets/loader.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
+
+import 'package:bonap/files/drawerItems/menu.dart';
+import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
   final Function functionValidateAndSave;
@@ -226,9 +228,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       context);
                   Navigator.push(
                       context,
-                      //TODO mettre à jour la redirection
                       MaterialPageRoute(
-                          builder: (BuildContext context) => MainMenu()));
+                          builder: (BuildContext context) => Menu()));
                 });
               } catch (e) {
                 print(e.message);

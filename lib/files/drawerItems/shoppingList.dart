@@ -1,22 +1,22 @@
-import 'package:bonap/ingredients.dart';
+import 'package:bonap/files/drawerItems/ingredients.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:flutter/material.dart';
-import 'repas.dart';
 
-class ListeCourse {
+class ShoppingList {
   static List<IngredientListeCourse> liste = new List<IngredientListeCourse>();
 
   static void addRepasToListe(Meal r) {
     bool weCanAddIt = true;
     for (int i = 0; i < r.listIngredient.length; i++) {
-      for (int j = 0; j < ListeCourse.liste.length; j++) {
-        if (ListeCourse.liste[j].i.name == r.listIngredient[i].name) {
+      for (int j = 0; j < ShoppingList.liste.length; j++) {
+        if (ShoppingList.liste[j].i.name == r.listIngredient[i].name) {
           weCanAddIt = false;
-          if (!ListeCourse.liste[j].repas.contains(r))
-            ListeCourse.liste[j].repas.add(r);
+          if (!ShoppingList.liste[j].repas.contains(r))
+            ShoppingList.liste[j].repas.add(r);
         }
       }
       if (weCanAddIt) {
-        ListeCourse.liste
+        ShoppingList.liste
             .add(new IngredientListeCourse(r.listIngredient[i], r));
       }
 
@@ -25,13 +25,13 @@ class ListeCourse {
   }
 
   static void resetListe() {
-    ListeCourse.liste.removeRange(0, ListeCourse.liste.length);
+    ShoppingList.liste.removeRange(0, ShoppingList.liste.length);
   }
 
   static String afficher() {
     String a = '';
-    for (int i = 0; i < ListeCourse.liste.length; i++) {
-      a += ListeCourse.liste[i].i.name;
+    for (int i = 0; i < ShoppingList.liste.length; i++) {
+      a += ShoppingList.liste[i].i.name;
     }
     return a;
   }
@@ -80,7 +80,7 @@ class _ListeCoursePageState extends State<ListeCoursePage> {
   ListView displayIngr() {
     return ListView(
       shrinkWrap: true,
-      children: ListeCourse.liste
+      children: ShoppingList.liste
           .map(
             (data) => new Container(
               child: ExpansionTile(

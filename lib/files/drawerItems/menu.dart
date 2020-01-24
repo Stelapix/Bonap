@@ -1,13 +1,12 @@
-import 'package:bonap/widgets/account/mainMenu.dart';
+import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/ui/drawer.dart';
+import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
-// Widgets
-import 'widgets/drawer.dart';
-import 'repas.dart';
 import 'ingredients.dart';
-import 'listeCourse.dart';
-import 'widgets/dataStorage.dart';
-import 'widgets/menu/dayMenu.dart';
 
 class MenuSemaine {
   int numSemaine;
@@ -37,11 +36,11 @@ class MenuSemaine {
 
 class FunctionUpdate {
   static void updateListeCourse(List<List<Meal>> repasSemaine) {
-    ListeCourse.resetListe();
+    ShoppingList.resetListe();
     for (int i = 0; i < repasSemaine.length; i++) {
       for (int j = 0; j < repasSemaine[i].length; j++) {
         if (repasSemaine[i][j] != null) {
-          ListeCourse.addRepasToListe(repasSemaine[i][j]);
+          ShoppingList.addRepasToListe(repasSemaine[i][j]);
         }
       }
     }
@@ -51,12 +50,12 @@ class FunctionUpdate {
 // Cette ligne va disparaitre quand on loadera le menu depuis la firebase
 MenuSemaine m = new MenuSemaine(49);
 
-class HomePage extends StatefulWidget {
+class Menu extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _MenuState createState() => _MenuState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MenuState extends State<Menu> {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ListeCourse.resetListe();
+    ShoppingList.resetListe();
     FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
         onWillPop: onBackPressed,

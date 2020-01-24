@@ -1,17 +1,15 @@
-import 'package:bonap/homePage.dart';
-import 'package:bonap/main.dart';
-import 'package:bonap/widgets/account/signUp.dart';
-import 'package:bonap/widgets/account/signIn.dart';
-import 'package:bonap/widgets/loader.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:vibration/vibration.dart';
-import 'package:bonap/widgets/constant.dart';
 import 'dart:async';
+
+import 'package:bonap/files/constant.dart';
+import 'package:bonap/files/login/signIn.dart';
+import 'package:bonap/files/login/signUp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:vibration/vibration.dart';
+
 
 class MyClipper extends CustomClipper<Path> {
   @override

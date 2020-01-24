@@ -1,7 +1,6 @@
-import 'package:bonap/repas.dart';
-import 'package:bonap/ingredients.dart';
-import 'package:bonap/homePage.dart';
-
+import 'package:bonap/files/drawerItems/ingredients.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 

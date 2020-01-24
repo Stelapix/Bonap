@@ -1,6 +1,7 @@
+import 'package:bonap/files/data/dataStorage.dart';
 import 'package:flutter/material.dart';
+
 import 'ingredients.dart';
-import 'widgets/dataStorage.dart';
 
 class Meal {
   String name = '';

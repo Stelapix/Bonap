@@ -1,6 +1,5 @@
+import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:flutter/material.dart';
-
-import 'package:bonap/ingredients.dart';
 
 class DropDownButtonIngredients extends StatefulWidget {
   final State s;
@@ -11,7 +10,6 @@ class DropDownButtonIngredients extends StatefulWidget {
 }
 
 class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
-
 
   String _value;
   List<String> _categories = new List<String>();

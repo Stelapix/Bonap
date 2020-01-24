@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class FeedbackPage extends StatefulWidget {
+class Feedback extends StatefulWidget {
   @override
-  _FeedbackPageState createState() => new _FeedbackPageState();
+  _FeedbackState createState() => new _FeedbackState();
 }
 
-class _FeedbackPageState extends State<FeedbackPage> {
+class _FeedbackState extends State<Feedback> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Feedback'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Feedback'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
