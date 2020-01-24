@@ -85,7 +85,7 @@ class _SignInPageState extends State<SignInPage> {
                 // ),
                 child: Column(
                   children: <Widget>[
-                    Loader(isLoading: true),
+                    Loader(isLoading: isLoading),
                     Container(
                       child: Padding(
                         padding: const EdgeInsets.all(15),

@@ -1,4 +1,5 @@
 import 'package:bonap/widgets/account/mainMenu.dart';
+import 'package:bonap/widgets/constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -300,7 +301,7 @@ class _SettingsPage extends State<SettingsPage> {
                   fontSize: 20.0,
                 ),
               ),
-              subtitle: Text("Version : 0.1"),
+              subtitle: Text("Version : " + Constant.version),
               onTap: () {},
             ),
           ],

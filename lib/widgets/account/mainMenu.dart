@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
-
+import 'package:bonap/widgets/constant.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -22,9 +22,7 @@ class MyClipper extends CustomClipper<Path> {
     p.arcToPoint(
       Offset(0.0, size.height * 0.85),
       radius: const Radius.elliptical(50.0, 10.0),
-      rotation: 0.0,
     );
-    p.lineTo(0.0, 0.0);
     p.close();
     return p;
   }
@@ -97,17 +95,14 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                         fit: BoxFit.fill),
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(height: size.height / 16),
-                            Image.asset(
-                              'assets/logo_bonap.png',
-                            ),
-                          ],
-                        ),
+                      SizedBox(
+                        height: size.height / 20,
+                      ),
+                      Image.asset(
+                        'assets/logo_bonap.png',
                       ),
                     ],
                   ),
@@ -122,6 +117,34 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     SizedBox(height: size.height / 20),
                     buttonFirstScreen(
                         "S'inscrire", Icon(Icons.arrow_forward_ios)),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10, left: 10),
+                                          child: Text(
+                        "Stelapix",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10, right: 10),
+                                          child: Text(
+                        "v"+ Constant.version,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -747,40 +770,44 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
             child: buttonName == "Connexion"
                 ? Row(
                     children: <Widget>[
-                      SizedBox(width: size.width / 12),
                       Container(
+                        padding: EdgeInsets.only(left: 11),
                         child: FlatButton(
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50.0)),
                           color: Colors.white,
                           child: Icon(
                             icon.icon,
-                            color: Color(0xFFFB415B),
+                            color: Color(0xFFEE5623),
                           ),
                           onPressed: () =>
                               goto(buttonName == "Connexion" ? 1 : 3),
                         ),
                       ),
-                      SizedBox(width: size.width / 10),
-                      Center(
-                        child: Text(
-                          buttonName,
-                          style: TextStyle(color: Colors.white, fontSize: 26.0),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            buttonName,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 26.0),
+                          ),
                         ),
                       ),
                     ],
                   )
                 : Row(
                     children: <Widget>[
-                      SizedBox(width: size.width / 6),
-                      Center(
-                        child: Text(
-                          buttonName,
-                          style: TextStyle(color: Colors.white, fontSize: 26.0),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            buttonName,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 26.0),
+                          ),
                         ),
                       ),
-                      SizedBox(width: size.width / 10),
                       Container(
+                        padding: EdgeInsets.only(right: 11),
                         child: FlatButton(
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(50.0)),

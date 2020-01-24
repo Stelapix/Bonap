@@ -9,10 +9,10 @@ import 'homePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown
-  // ]); // Désactiver l'orientation horizontale
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]); // Désactiver l'orientation horizontale
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
