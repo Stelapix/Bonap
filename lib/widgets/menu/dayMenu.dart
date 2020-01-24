@@ -76,7 +76,6 @@ class DayMenuState extends State<DayMenu> {
 
   @override
   Widget build(BuildContext context) {
-    
     final bleu = Color.fromRGBO(0, 191, 255, 1);
     // Bold the current day
     var now = DateTime.now();
@@ -160,16 +159,12 @@ class DayButtonState extends State<DayButton> {
 
   @override
   void initState() {
-    
     loaded = true;
     super.initState();
-    
-
   }
 
   @override
   Widget build(BuildContext context) {
-   
     // Update the ingrdients icons
     if (Day.listDay[widget.index] != null) {
       if (Day.listDay[widget.index].listMeal[0].listIngredient.length > 0)
@@ -607,7 +602,6 @@ class AddMealDialogState extends State<AddMealDialog> {
                         ? d.listMeal[0].listIngredient[2]
                         : null;
                     Day.listDay[widget.index] = d;
-                    print("ajout de " + d.toString());
                   }
                 }
               }
