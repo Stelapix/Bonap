@@ -88,12 +88,12 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Custom.feedback),
                   title: Text('Feedback'),
                   onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Feedback()));
-                  },
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => FeedbackReport()));
+                },
                 ),
                 ListTile(
                   leading: Icon(Custom.settings),

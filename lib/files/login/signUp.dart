@@ -77,7 +77,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.all(25.0),
                   child: Column(
                     children: <Widget>[
-                      Loader(isLoading: isLoading),
+                      Loader(),
                       SizedBox(height: 30.0),
                       Form(
                         key: formKey,
@@ -191,7 +191,6 @@ class _SignUpPageState extends State<SignUpPage> {
       borderRadius: BorderRadius.circular(50.0),
       child: Ink(
         decoration: BoxDecoration(
-          // border: Border.all(color: Colors.white, width: 1.5),
           borderRadius: BorderRadius.circular(50.0),
           gradient: LinearGradient(
               colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
@@ -215,7 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             email: emailController.text,
                             password: passwordController.text))
                     .user;
-                Timer(Duration(seconds: 5), () async {
+                Timer(Duration(seconds: 0), () async {
                   setState(() {
                     isLoading = false;
                   });

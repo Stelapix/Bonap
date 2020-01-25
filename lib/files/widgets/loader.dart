@@ -1,11 +1,8 @@
+import 'package:bonap/files/constant.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 class Loader extends StatefulWidget {
-  Loader({Key key, this.isLoading}) : super(key: key);
-
-  final isLoading;
-
   @override
   _LoaderState createState() => _LoaderState();
 }
@@ -16,7 +13,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   Animation<double> animationRadiusIn;
   Animation<double> animationRadiusOut;
 
-  final double initialRadius = 90.0;
+  final double initialRadius = 75.0;
   double radius = 0.0;
 
   @override
@@ -67,7 +64,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height/3,
+      height: size.height / 3,
       child: Stack(
         children: <Widget>[
           Center(
@@ -77,7 +74,7 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
               height: size.height / 3,
             ),
           ),
-          widget.isLoading == true
+          Anim.isLoading == true
               ? Center(
                   child: RotationTransition(
                     turns: animationRotation,
@@ -88,16 +85,16 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                               radius * sin(2 * pi / 3)),
                           child: Image.asset(
                             'assets/loader/banane.png',
-                            width: MediaQuery.of(context).size.width / 8,
-                            height: MediaQuery.of(context).size.height / 8,
+                            width: MediaQuery.of(context).size.width / 12,
+                            height: MediaQuery.of(context).size.height / 12,
                           ),
                         ),
                         Transform.translate(
                           offset: Offset(radius * cos(pi), radius * sin(pi)),
                           child: Image.asset(
                             'assets/loader/pomme.png',
-                            width: MediaQuery.of(context).size.width / 10,
-                            height: MediaQuery.of(context).size.height / 10,
+                            width: MediaQuery.of(context).size.width / 14,
+                            height: MediaQuery.of(context).size.height / 14,
                           ),
                         ),
                         Transform.translate(
@@ -105,8 +102,8 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                               radius * sin(4 * pi / 3)),
                           child: Image.asset(
                             'assets/loader/glace.png',
-                            width: MediaQuery.of(context).size.width / 10,
-                            height: MediaQuery.of(context).size.height / 10,
+                            width: MediaQuery.of(context).size.width / 14,
+                            height: MediaQuery.of(context).size.height / 14,
                           ),
                         ),
                         Transform.translate(
@@ -114,8 +111,8 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                               radius * sin(5 * pi / 3)),
                           child: Image.asset(
                             'assets/loader/carotte.png',
-                            width: MediaQuery.of(context).size.width / 8,
-                            height: MediaQuery.of(context).size.height / 8,
+                            width: MediaQuery.of(context).size.width / 12,
+                            height: MediaQuery.of(context).size.height / 12,
                           ),
                         ),
                         Transform.translate(
@@ -123,8 +120,8 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                               radius * sin(6 * pi / 3)),
                           child: Image.asset(
                             'assets/loader/cookie.png',
-                            width: MediaQuery.of(context).size.width / 8,
-                            height: MediaQuery.of(context).size.height / 8,
+                            width: MediaQuery.of(context).size.width / 12,
+                            height: MediaQuery.of(context).size.height / 12,
                           ),
                         ),
                         Transform.translate(
@@ -132,8 +129,8 @@ class _LoaderState extends State<Loader> with SingleTickerProviderStateMixin {
                               radius * sin(7 * pi / 3)),
                           child: Image.asset(
                             'assets/loader/salade.png',
-                            width: MediaQuery.of(context).size.width / 8,
-                            height: MediaQuery.of(context).size.height / 8,
+                            width: MediaQuery.of(context).size.width / 12,
+                            height: MediaQuery.of(context).size.height / 12,
                           ),
                         ),
                       ],

@@ -154,7 +154,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     );
   }
 
-  Widget LoginPage() {
+  Widget aba() {
     return new Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -456,7 +456,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     );
   }
 
-  Widget SignupPage() {
+  Widget ofr() {
     return new Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -675,10 +675,10 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
           height: MediaQuery.of(context).size.height,
           child: PageView(
             controller: _controller,
-            physics: new AlwaysScrollableScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             children: <Widget>[
-              LoginPage(),
-              SignInPage(),
+              aba(),
+              SignIn(),
               menu(context),
               SignUpPage(
                   validateAndSave, signInWithEmail, vibration, alertDialog),
