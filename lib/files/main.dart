@@ -1,3 +1,4 @@
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/widgets/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThemeChanger>(
-      builder: (_) => ThemeChanger(ThemeData.dark()),
+      builder: (_) => ThemeChanger(ThemeData.light()),
       child: MaterialAppWithTheme(),
     );
   }

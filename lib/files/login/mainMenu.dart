@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bonap/files/constant.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/signIn.dart';
 import 'package:bonap/files/login/signUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';

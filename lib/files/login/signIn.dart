@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bonap/files/constant.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:bonap/files/widgets/loader.dart';
@@ -63,7 +62,7 @@ class _SignInState extends State<SignIn> {
                     Loader(),
                     Container(
                       child: Padding(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Column(
                           children: <Widget>[
                             Forms(),
@@ -83,12 +82,12 @@ class _SignInState extends State<SignIn> {
                             ),
                             SizedBox(height: 20.0),
                             OwnButton(
-                              buttonName: Text("Connexion",
+                              buttonName: Text("Se connecter",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 26.0)),
                               icon: Icon(
-                                Icons.arrow_right,
-                                color: Color(0xFFFB415B),
+                                Icons.reply_all,
+                                color: Color(0xFFEE5623),
                               ),
                               buttonType: ButtonType.Connecter,
                               // enableLoader: () => enableLoader(),

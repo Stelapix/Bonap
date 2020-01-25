@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:bonap/files/data/dataStorage.dart';
-import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/login/connectedWays.dart';
 import 'package:bonap/files/login/mainMenu.dart';
-import 'package:bonap/files/login/signIn.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
-import 'package:bonap/files/constant.dart';
 
 class Forms extends StatefulWidget {
   @override
@@ -40,6 +38,7 @@ class FormsState extends State<Forms> {
           Text(
             "Adresse Email",
             style: TextStyle(
+              color: Color(0xFFFB415B),
               fontWeight: FontWeight.bold,
               fontSize: 15.0,
             ),
@@ -51,6 +50,7 @@ class FormsState extends State<Forms> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15.0,
+              color: Color(0xFFFB415B),
             ),
           ),
           formSignIn("Mot de passe"),
@@ -104,7 +104,13 @@ class FormsState extends State<Forms> {
   //Les 2 champs de saisies pour l'adresse mail et le mot de passe de SignIn
   Widget formSignIn(String input) {
     return TextFormField(
-      enableInteractiveSelection: false,
+      enableInteractiveSelection: true,
+      toolbarOptions: ToolbarOptions(
+        selectAll: false,
+        cut: false,
+        copy: true,
+        paste: true,
+      ),
       validator: (value) {
         if (value.isEmpty && input == 'Adresse Email') {
           print("Email required");
@@ -121,56 +127,47 @@ class FormsState extends State<Forms> {
         } else
           return null;
       },
-      // enabled: Anim.isLoading ? false : true,
-      cursorColor: Colors.black,
       style: TextStyle(
-        color: Colors.black,
         fontSize: 20.0,
       ),
       decoration: InputDecoration(
-        enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Color.fromRGBO(205, 225, 0, 1))),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-          color: Color.fromRGBO(0, 191, 255, 1),
-        )),
-        contentPadding: const EdgeInsets.only(top: 15),
-        hintText: input == "Mot de passe" ? "********" : "",
+        enabledBorder:
+            UnderlineInputBorder(borderSide: BorderSide(color: OwnColor().getEnabledColorBorder(context))),
+        focusedBorder:
+            UnderlineInputBorder(borderSide: BorderSide(color: OwnColor().getFocusedColorBorder(context))),
+        contentPadding: const EdgeInsets.only(top: 12),
+        hintText:
+            input == "Mot de passe" ? "********" : "stelapix.bonap@gmail.com",
         hintStyle: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 15.0,
+          fontSize: 20.0,
         ),
-        prefixIcon:
-            input == "Adresse Email" ? Icon(Icons.email) : Icon(Icons.lock),
+        prefixIcon: input == "Adresse Email"
+            ? Icon(Icons.email, color: OwnColor.colorIconLogin)
+            : Icon(Icons.lock, color: OwnColor.colorIconLogin),
         suffixIcon: input == "Mot de passe"
             ? IconButton(
                 onPressed: toggleVisibility,
                 icon: isHidden
-                    ? Icon(Icons.visibility_off)
-                    : Icon(Icons.visibility),
+                    ? Icon(Icons.visibility_off, color: OwnColor.colorIconLogin)
+                    : Icon(Icons.visibility, color: OwnColor.colorIconLogin),
               )
             : null,
       ),
       obscureText: input == "Mot de passe"
           ? isHidden
           : input == "Adresse Email" ? false : isHidden,
-      controller: input == "Adresse Email"
-          ? emailController
-          : passwordController,
+      controller:
+          input == "Adresse Email" ? emailController : passwordController,
     );
   }
 
   void whichButton(ButtonType buttonType, BuildContext context) async {
     if (validateAndSave() == 0) {
       if (ButtonType.Connecter == buttonType) {
-        print("C'est bien parti");
         int res = await ConnectedWays().signInWithEmail(
-            emailController.text,
-            passwordController.text,
-            context);
-        print("ça chauffe");
+            emailController.text, passwordController.text, context);
         if (res == 0) {
-          print("presssque");
           Timer(Duration(seconds: 0), () {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(

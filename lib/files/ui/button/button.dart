@@ -1,4 +1,4 @@
-import 'package:bonap/files/constant.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:flutter/material.dart';
 
@@ -34,10 +34,10 @@ class _OwnButtonState extends State<OwnButton> {
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50.0),
-          gradient: LinearGradient(colors: [
-            Color.fromRGBO(205, 225, 0, 1),
-            Color.fromRGBO(0, 191, 255, 1),
-          ], begin: Alignment.centerRight, end: Alignment.centerLeft),
+          gradient: LinearGradient(
+              colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
+              begin: Alignment.centerRight,
+              end: Alignment.centerLeft),
         ),
         child: InkWell(
           highlightColor: Colors.transparent,
