@@ -10,7 +10,6 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vibration/vibration.dart';
 
-
 class MyClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -40,39 +39,15 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
-  //Clé du formulaire
-  final formKey = GlobalKey<FormState>();
-
   //Authentification à Firebase
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  //Paramètres Google
-  final GoogleSignIn googleSignIn = new GoogleSignIn();
-  bool isGoogleSignIn = false;
-
-  //Paramètres Facebook
-  final FacebookLogin facebookSignIn = new FacebookLogin();
-  bool isFacebookSignIn = false;
-
-  //Les variables contenant l'Email et le mot de passe
-  TextEditingController emailController;
-  TextEditingController passwordController;
-
-  // Initialisation des messages d'erreurs
-  String errorMessage = '';
-  String successMessage = '';
-
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    isLoading = false;
-    emailController = TextEditingController(text: "");
-    passwordController = TextEditingController(text: "");
-    if (widget.loggout == true) {
-      signOut();
-    }
+    print(Constant.heightScreen);
+    print(Constant.widthScreen);
+    if (widget.loggout) signOut();
   }
 
   Widget menu(BuildContext context) {
@@ -106,7 +81,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
               ),
             ),
             SizedBox(
-              height: size.height/1.8,
+              height: size.height / 1.8,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
@@ -681,7 +656,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
               SignIn(),
               menu(context),
               SignUpPage(
-                  validateAndSave, signInWithEmail, vibration, alertDialog),
+                  null, signInWithEmail, vibration, alertDialog),
             ],
             scrollDirection: Axis.horizontal,
           )),
@@ -695,16 +670,6 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     setState(() {
       isHidden = !isHidden;
     });
-  }
-
-  //Vérifier qu'une fois le formulaire bien remplit, l'utilisateur existe dans la bdd
-  int validateAndSave() {
-    final form = formKey.currentState;
-    if (form.validate()) {
-      return 0;
-    } else {
-      return 1;
-    }
   }
 
   //Bouton 'Connectez-vous'
@@ -865,8 +830,8 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   //Se déconnecter de Facebook et Google
   Future<bool> signOut() async {
     await auth.signOut();
-    await googleSignIn.signOut();
-    await facebookSignIn.logOut();
+    // await googleSignIn.signOut();
+    // await facebookSignIn.logOut();
     print("User Sign Out");
     MainMenu();
     return true;
