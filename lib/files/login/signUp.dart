@@ -84,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(height: 10.0),
+                            SizedBox(height: 50.0),
                             inputText("Adresse Email"),
                             SizedBox(height: 10.0),
                             inputText("Mot de passe"),

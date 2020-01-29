@@ -10,7 +10,7 @@ class ThemeChanger with ChangeNotifier {
   }
 
   getTheme() => _themeData.copyWith(
-        cursorColor: Colors.pink, //Curseur
+        cursorColor: Color(0xFFEE5623), //Curseur
         errorColor: Colors.red, //Error form
         canvasColor: _themeData == ThemeData.dark()
             ? Colors.white.withOpacity(0.3)
@@ -21,7 +21,7 @@ class ThemeChanger with ChangeNotifier {
         textSelectionHandleColor: _themeData == ThemeData.dark()
             ? Colors.white.withOpacity(0.3)
             : Colors.black.withOpacity(0.3),
-        // scaffoldBackgroundColor: Colors.pink, //Fond
+        scaffoldBackgroundColor: Color.fromRGBO(50, 50, 50, 1), //Fond
         // hintColor: Colors.yellow, //Hint
       );
 

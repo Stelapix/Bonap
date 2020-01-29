@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class Constant {
   static String version = "0.1"; //Version de Bonap
-  static double widthScreen;
-  static double heightScreen;
+  static double width;
+  static double height;
   getSizeOfCurrentScreen(BuildContext context) {
-    widthScreen = MediaQuery.of(context).size.width;
-    heightScreen = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
   }
 }
 
@@ -21,7 +21,7 @@ class KeyForm {
 }
 
 class OwnColor {
-  static Color colorIconLogin = Color(0xFFFB415B);
+  static Color orange = Color(0xFFEE5623);
   static bool blackTheme = true;
 
   Color getEnabledColorBorder(BuildContext context) {

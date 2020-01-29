@@ -38,11 +38,12 @@ class FormsState extends State<Forms> {
           Text(
             "Adresse Email",
             style: TextStyle(
-              color: Color(0xFFFB415B),
+              color: Color(0xFFEE5623),
               fontWeight: FontWeight.bold,
               fontSize: 15.0,
             ),
           ),
+          SizedBox(height: 10),
           formSignIn("Adresse Email"),
           SizedBox(height: 20.0),
           Text(
@@ -50,11 +51,11 @@ class FormsState extends State<Forms> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15.0,
-              color: Color(0xFFFB415B),
+              color: Color(0xFFEE5623),
             ),
           ),
+          SizedBox(height: 10),
           formSignIn("Mot de passe"),
-          SizedBox(height: 15.0),
         ],
       ),
     );
@@ -131,26 +132,28 @@ class FormsState extends State<Forms> {
         fontSize: 20.0,
       ),
       decoration: InputDecoration(
-        enabledBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: OwnColor().getEnabledColorBorder(context))),
-        focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: OwnColor().getFocusedColorBorder(context))),
+        filled: true,
+        enabledBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: OwnColor().getEnabledColorBorder(context))),
+        focusedBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: OwnColor().getFocusedColorBorder(context))),
         contentPadding: const EdgeInsets.only(top: 12),
         hintText:
             input == "Mot de passe" ? "********" : "stelapix.bonap@gmail.com",
         hintStyle: TextStyle(
-          fontWeight: FontWeight.bold,
           fontSize: 20.0,
         ),
         prefixIcon: input == "Adresse Email"
-            ? Icon(Icons.email, color: OwnColor.colorIconLogin)
-            : Icon(Icons.lock, color: OwnColor.colorIconLogin),
+            ? Icon(Icons.email, color: Colors.white)
+            : Icon(Icons.lock, color: Colors.white),
         suffixIcon: input == "Mot de passe"
             ? IconButton(
                 onPressed: toggleVisibility,
                 icon: isHidden
-                    ? Icon(Icons.visibility_off, color: OwnColor.colorIconLogin)
-                    : Icon(Icons.visibility, color: OwnColor.colorIconLogin),
+                    ? Icon(Icons.visibility_off, color: Colors.white)
+                    : Icon(Icons.visibility, color: OwnColor.orange),
               )
             : null,
       ),

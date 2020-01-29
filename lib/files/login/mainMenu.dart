@@ -40,22 +40,20 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   //Authentification à Firebase
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  // final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    print(Constant.heightScreen);
-    print(Constant.widthScreen);
-    if (widget.loggout) signOut();
+    // if (widget.loggout) signOut();
   }
 
   Widget menu(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: onBackPressed,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
+      child: Scaffold(       
+        resizeToAvoidBottomInset: true,
         body: Column(
           children: <Widget>[
             ClipPath(
@@ -288,7 +286,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
-                new Expanded(
+                Expanded(
                   child: new Container(
                     margin: EdgeInsets.all(8.0),
                     decoration: BoxDecoration(border: Border.all(width: 0.25)),
@@ -655,8 +653,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
               aba(),
               SignIn(),
               menu(context),
-              SignUpPage(
-                  null, signInWithEmail, vibration, alertDialog),
+              SignUpPage(null, null, vibration, alertDialog),
             ],
             scrollDirection: Axis.horizontal,
           )),
@@ -800,36 +797,9 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     );
   }
 
-  //Se connecter sur Bonap
-  Future<int> signInWithEmail(String email, String password, context) async {
-    if (email.contains(" ")) {
-      email = email.substring(0, email.indexOf(" "));
-    }
-    try {
-      AuthResult result = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      if (user != null) {
-        if (user.isEmailVerified) {
-          print(user);
-          return 0;
-        } else {
-          print("email is not verified");
-          return 1;
-        }
-      } else {
-        print("user is null");
-        return -1;
-      }
-    } catch (e) {
-      print(e);
-      return 2;
-    }
-  }
-
   //Se déconnecter de Facebook et Google
   Future<bool> signOut() async {
-    await auth.signOut();
+    // await auth.signOut();
     // await googleSignIn.signOut();
     // await facebookSignIn.logOut();
     print("User Sign Out");
