@@ -6,10 +6,8 @@ class ConnectedWays {
 
   //Se connecter sur Bonap
   Future<int> signInWithEmail(String email, String password, context) async {
-    print("la");
-    if (email.contains(" ")) {
-      email = email.substring(0, email.indexOf(" "));
-    }
+    if (email.contains(" ")) email = email.substring(0, email.indexOf(" "));
+
     try {
       AuthResult result = await auth.signInWithEmailAndPassword(
           email: email, password: password);

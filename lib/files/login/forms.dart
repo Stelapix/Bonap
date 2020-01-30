@@ -190,6 +190,8 @@ class FormsState extends State<Forms> {
           await alertDialog(
               "Vos identifiants sont incorrects.\nMerci de réessayer.",
               context);
+          emailController.text = "";
+          passwordController.text = "";
           print("wrong details");
         } else {
           print("error");
@@ -198,7 +200,5 @@ class FormsState extends State<Forms> {
         print("button problem");
     } else
       print("form problem");
-    // KeyForm.emailController.text = "";
-    // KeyForm.passwordController.text = "";
   }
 }
