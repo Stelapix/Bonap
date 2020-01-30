@@ -56,12 +56,8 @@ class _OwnButtonState extends State<OwnButton> {
                         borderRadius: BorderRadius.circular(50.0)),
                     color: Colors.white,
                     child: widget.icon,
-                    onPressed: () => {
-                      setState(() {
-                        Anim.isLoading = true;
-                      }),
-                      FormsState().whichButton(widget.buttonType, context),
-                    },
+                    onPressed: () =>
+                        FormsState().whichButton(widget.buttonType, context),
                   ),
                 ),
                 SizedBox(width: size.width / 10),
@@ -79,58 +75,60 @@ class GoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Constant.width ,
-      child: DecoratedBox(
-      decoration: ShapeDecoration(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-          color: Colors.white),
-      child: OutlineButton(
-        onPressed: () {
-          // _googleSignIn(context).then((user) {
-          //   if (user != null) {
+        width: Constant.width / 1.5,
+        child: DecoratedBox(
+          decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              color: Colors.white),
+          child: OutlineButton(
+            onPressed: () {
+              // _googleSignIn(context).then((user) {
+              //   if (user != null) {
 
-          //     print('Logged in successfully.');
-          // if (this.mounted) {
-          //   setState(() {
-          //     isGoogleSignIn = true;
-          //     successMessage = 'Logged in successfully';
-          //     DataStorage.loadIngredients();
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (BuildContext context) => HomePage()));
-          //   });
-          // }
-          //   } else
-          //     print('Login Canceled');
-          // });
-        },
-        borderSide: BorderSide(
-          color: Colors.white.withOpacity(0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
-              Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: Text(
-                  'Google',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              )
-            ],
+              //     print('Logged in successfully.');
+              // if (this.mounted) {
+              //   setState(() {
+              //     isGoogleSignIn = true;
+              //     successMessage = 'Logged in successfully';
+              //     DataStorage.loadIngredients();
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (BuildContext context) => HomePage()));
+              //   });
+              // }
+              //   } else
+              //     print('Login Canceled');
+              // });
+            },
+            borderSide: BorderSide(
+              color: Colors.white.withOpacity(0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image(
+                      image: AssetImage("assets/google_logo.png"),
+                      height: 35.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      'Google',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }

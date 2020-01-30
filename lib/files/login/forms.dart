@@ -129,7 +129,7 @@ class FormsState extends State<Forms> {
           return null;
       },
       style: TextStyle(
-        fontSize: 20.0,
+        fontSize: 18.0,
       ),
       decoration: InputDecoration(
         filled: true,
@@ -171,11 +171,11 @@ class FormsState extends State<Forms> {
         int res = await ConnectedWays().signInWithEmail(
             emailController.text, passwordController.text, context);
         if (res == 0) {
+          //TODO Pour une future animation ?
           Timer(Duration(seconds: 0), () {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) {
-                  Anim.isLoading = false;
                   KeyForm().newKey();
                   DataStorage.loadIngredients();
                   return MainMenu();
@@ -200,6 +200,5 @@ class FormsState extends State<Forms> {
       print("form problem");
     // KeyForm.emailController.text = "";
     // KeyForm.passwordController.text = "";
-    Anim.isLoading = false;
   }
 }
