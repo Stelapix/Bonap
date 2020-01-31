@@ -44,8 +44,6 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     if (Constant.loggout) signOut();
   }
 
-  
-
   void goto(int numPage) {
     Constant.whichPage.animateToPage(
       numPage,
@@ -94,7 +92,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                       buttonType: ButtonType.Connexion,
                       icon: Icon(
                         Icons.arrow_back_ios,
-                        color: OwnColor.orangeDarker,
+                        color: OwnColor.orange,
                       ),
                     ),
                     SizedBox(height: Constant.height / 16),
@@ -103,7 +101,16 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                       buttonType: ButtonType.Inscription,
                       icon: Icon(
                         Icons.arrow_forward_ios,
-                        color: OwnColor.orangeDarker,
+                        color: OwnColor.orange,
+                      ),
+                    ),
+                    SizedBox(height: Constant.height / 16),
+                    OwnButton(
+                      buttonName: "Mode invité",
+                      buttonType: ButtonType.Connexion,
+                      icon: Icon(
+                        Icons.person,
+                        color: OwnColor.orange,
                       ),
                     ),
                   ],

@@ -5,7 +5,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:flutter/material.dart';
 
-enum ButtonType { Inscription, Connexion, Inscrire, Connecter }
+enum ButtonType { Inscription, Connexion, Inscrire, Connecter, Guest }
 
 class OwnButton extends StatefulWidget {
   OwnButton(
@@ -41,6 +41,53 @@ class _OwnButtonState extends State<OwnButton> {
       MainMenuState().goto(2);
   }
 
+  Widget whereIsFlatButton() {
+    if (widget.buttonType != ButtonType.Inscription)
+      return Row(
+        children: <Widget>[
+          SizedBox(width: Constant.width / 12),
+          Container(
+            child: FlatButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0)),
+              color: Colors.white,
+              child: widget.icon,
+              onPressed: () => whichResult(),
+            ),
+          ),
+          SizedBox(width: Constant.width / 10),
+          Center(
+            child: Text(widget.buttonName,
+                style: TextStyle(color: Colors.white, fontSize: 26.0)),
+          ),
+        ],
+      );
+    else
+      return Row(
+        children: <Widget>[
+          SizedBox(width: Constant.width / 12),
+          Expanded(
+            child: Center(
+              child: Text(
+                widget.buttonName,
+                style: TextStyle(color: Colors.white, fontSize: 26.0),
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 11),
+            child: FlatButton(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(50.0)),
+              color: Colors.white,
+              child: widget.icon,
+              onPressed: () => whichResult(),
+            ),
+          ),
+        ],
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -64,25 +111,7 @@ class _OwnButtonState extends State<OwnButton> {
           child: Container(
             height: Constant.height / 12,
             width: Constant.width,
-            child: Row(
-              children: <Widget>[
-                SizedBox(width: Constant.width / 12),
-                Container(
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0)),
-                    color: Colors.white,
-                    child: widget.icon,
-                    onPressed: () => whichResult(),
-                  ),
-                ),
-                SizedBox(width: Constant.width / 10),
-                Center(
-                  child: Text(widget.buttonName,
-                      style: TextStyle(color: Colors.white, fontSize: 26.0)),
-                ),
-              ],
-            ),
+            child: whereIsFlatButton(),
           ),
         ),
       ),
