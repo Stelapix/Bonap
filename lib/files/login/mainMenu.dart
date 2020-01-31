@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:bonap/files/login/connectedWays.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/signIn.dart';
 import 'package:bonap/files/login/signUp.dart';
+import 'package:bonap/files/ui/button/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,29 +33,31 @@ class MyClipper extends CustomClipper<Path> {
 }
 
 class MainMenu extends StatefulWidget {
-  MainMenu({Key key, this.loggout}) : super(key: key);
-
-  final loggout;
   @override
-  _MainMenuState createState() => new _MainMenuState();
+  MainMenuState createState() => new MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
-  //Authentification à Firebase
-  // final FirebaseAuth auth = FirebaseAuth.instance;
-
+class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // if (widget.loggout) signOut();
+    if (Constant.loggout) signOut();
+  }
+
+  
+
+  void goto(int numPage) {
+    Constant.whichPage.animateToPage(
+      numPage,
+      duration: Duration(milliseconds: 1150),
+      curve: Curves.bounceOut,
+    );
   }
 
   Widget menu(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: onBackPressed,
-      child: Scaffold(       
-        resizeToAvoidBottomInset: true,
+      child: Scaffold(
         body: Column(
           children: <Widget>[
             ClipPath(
@@ -69,7 +73,7 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(
-                      height: size.height / 20,
+                      height: Constant.height / 20,
                     ),
                     Image.asset(
                       'assets/logo_bonap.png',
@@ -79,16 +83,29 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
               ),
             ),
             SizedBox(
-              height: size.height / 1.8,
+              height: Constant.height / 1.8,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    buttonFirstScreen("Connexion", Icon(Icons.arrow_back_ios)),
-                    SizedBox(height: size.height / 16),
-                    buttonFirstScreen(
-                        "Inscription", Icon(Icons.arrow_forward_ios)),
+                    OwnButton(
+                      buttonName: "Connexion",
+                      buttonType: ButtonType.Connexion,
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: OwnColor.orangeDarker,
+                      ),
+                    ),
+                    SizedBox(height: Constant.height / 16),
+                    OwnButton(
+                      buttonName: "Inscription",
+                      buttonType: ButtonType.Inscription,
+                      icon: Icon(
+                        Icons.arrow_forward_ios,
+                        color: OwnColor.orangeDarker,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -127,406 +144,32 @@ class _MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     );
   }
 
-  Widget ofr() {
-    return new Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        image: DecorationImage(
-          colorFilter: new ColorFilter.mode(
-              Colors.black.withOpacity(0.05), BlendMode.dstATop),
-          image: AssetImage('assets/images/mountains.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: new Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(100.0),
-            child: Center(
-              child: Icon(
-                Icons.headset_mic,
-                color: Colors.redAccent,
-                size: 50.0,
-              ),
-            ),
-          ),
-          new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: new Text(
-                    "EMAIL",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Divider(
-            height: 24.0,
-          ),
-          new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: new Text(
-                    "PASSWORD",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          new Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                    color: Colors.redAccent,
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                new Expanded(
-                  child: TextField(
-                    obscureText: true,
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '*********',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 24.0,
-          ),
-          new Row(
-            children: <Widget>[
-              new Expanded(
-                child: new Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: new Text(
-                    "CONFIRM PASSWORD",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          new Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                    color: Colors.redAccent,
-                    width: 0.5,
-                    style: BorderStyle.solid),
-              ),
-            ),
-            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-            child: new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                new Expanded(
-                  child: TextField(
-                    obscureText: true,
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '*********',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 24.0,
-          ),
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: new FlatButton(
-                  child: new Text(
-                    "Already have an account?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                      fontSize: 15.0,
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                  onPressed: () => {},
-                ),
-              ),
-            ],
-          ),
-          new Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 50.0),
-            alignment: Alignment.center,
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new FlatButton(
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                    ),
-                    color: Colors.redAccent,
-                    onPressed: () => {},
-                    child: new Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
-                      ),
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Expanded(
-                            child: Text(
-                              "SIGN UP",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  PageController _controller =
-      new PageController(initialPage: 1, viewportFraction: 1.0);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          height: MediaQuery.of(context).size.height,
+          height: Constant.height,
           child: PageView(
-            controller: _controller,
+            controller: Constant.whichPage,
             physics: AlwaysScrollableScrollPhysics(),
             children: <Widget>[
               SignIn(),
               menu(context),
-              SignUpPage(null, null, vibration, alertDialog),
+              SignUpPage(null, null, null, null),
             ],
             scrollDirection: Axis.horizontal,
           )),
     );
   }
 
-  //Pour cacher/afficher le mot de passe
-  bool isHidden = true;
-
-  void toggleVisibility() {
-    setState(() {
-      isHidden = !isHidden;
-    });
-  }
-
-  //Bouton 'Connectez-vous'
-  Widget buttonFirstScreen(String buttonName, Icon icon) {
-    Size size = MediaQuery.of(context).size;
-    return Material(
-      borderRadius: BorderRadius.circular(50.0),
-      child: Ink(
-        decoration: BoxDecoration(
-          // border: Border.all(color: Colors.white, width: 1.5),
-          borderRadius: BorderRadius.circular(50.0),
-          gradient: LinearGradient(
-              colors: [OwnColor.orangeDarker, OwnColor.orange],
-              begin: Alignment.centerRight,
-              end: Alignment.centerLeft),
-        ),
-        child: InkWell(
-          highlightColor: Colors.transparent,
-          splashColor: OwnColor.yellow,
-          borderRadius: BorderRadius.circular(50.0),
-          onTap: () async {
-            // if (validateAndSave() == 0) {
-
-            //   int res = await signInWithEmail(
-            //       emailController.text, passwordController.text, context);
-            //   setState(() {
-            //     isLoading = true;
-            //   });
-            //   if (res == 0) {
-            //     Timer(Duration(seconds: 5), () {
-            //       Navigator.of(context).push(
-            //         MaterialPageRoute(
-            //           builder: (context) {
-            //             DataStorage.loadIngredients();
-            //             return HomePage();
-            //           },
-            //         ),
-            //       );
-            //     });
-            //   } else if (res == 1) {
-            //     // isLoading = false;
-            //     vibration();
-            //     await alertDialog(
-            //         "Veuillez d'abord vérifier votre e-mail.", context);
-            //     emailController.text = "";
-            //     passwordController.text = "";
-            //   } else if (res == 2) {
-            //     // isLoading = false;
-            //     vibration();
-            //     await alertDialog(
-            //         "Vos identifiants sont incorrects.\nMerci de réessayer.",
-            //         context);
-            //     emailController.text = "";
-            //     passwordController.text = "";
-            //   } else
-            //     print("error");
-            // }
-          },
-          child: Container(
-            height: size.height / 12,
-            width: size.width,
-            child: buttonName == "Connexion"
-                ? Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(left: 11),
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(50.0)),
-                          color: Colors.white,
-                          child: Icon(
-                            icon.icon,
-                            color: Color(0xFFEE5623),
-                          ),
-                          onPressed: () =>
-                              goto(buttonName == "Connexion" ? 1 : 3),
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            buttonName,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 26.0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            buttonName,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 26.0),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(right: 11),
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(50.0)),
-                          color: Colors.white,
-                          child: Icon(
-                            icon.icon,
-                            color: Color(0xFFFB415B),
-                          ),
-                          onPressed: () =>
-                              goto(buttonName == "Connexion" ? 1 : 3),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  goto(int numPage) {
-    _controller.animateToPage(
-      numPage,
-      duration: Duration(milliseconds: 1150),
-      curve: Curves.bounceOut,
-    );
-  }
-
   //Se déconnecter de Facebook et Google
   Future<bool> signOut() async {
-    // await auth.signOut();
-    // await googleSignIn.signOut();
-    // await facebookSignIn.logOut();
+    await Constant.auth.signOut();
+    await GoogleWay().googleSignIn.signOut();
     print("User Sign Out");
     MainMenu();
+    Constant.loggout = false;
     return true;
-  }
-
-  //AlertDialogue qui relance la page Login
-  Future<bool> alertDialog(String texte, BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                texte,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              backgroundColor: Colors.white.withOpacity(0.9),
-            ));
-  }
-
-  //Vibrer en cas d'identifiants incorrects
-  void vibration() {
-    if (Vibration.hasVibrator() != null &&
-        Vibration.hasAmplitudeControl() != null) {
-      Vibration.vibrate(duration: 200, amplitude: 20);
-    }
   }
 
   //Gérer le retour en arrière sur la page Login

@@ -13,7 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'ingredients.dart';
 
-
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -135,7 +134,7 @@ class _SettingsState extends State<Settings> {
                   fontSize: 20.0,
                 ),
               ),
-              onTap: () {              
+              onTap: () {
                 setState(() {
                   if (isSwitchedVegan)
                     isSwitchedVegan = false;
@@ -198,11 +197,11 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            MainMenu(loggout: true)));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                      Constant.loggout = true;
+                  return MainMenu();
+                }));
               },
             ),
             SizedBox(height: 20.0),
@@ -232,7 +231,10 @@ class _SettingsState extends State<Settings> {
                         height: MediaQuery.of(context).size.height / 2,
                         child: Column(
                           children: <Widget>[
-                            Text("Codeurs", style: TextStyle(color: Colors.amber),),
+                            Text(
+                              "Codeurs",
+                              style: TextStyle(color: Colors.amber),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.min,
@@ -268,14 +270,18 @@ class _SettingsState extends State<Settings> {
                               ],
                             ),
                             SizedBox(height: 20),
-                            Text("Réseaux Sociaux", style: TextStyle(color: Colors.red),),
+                            Text(
+                              "Réseaux Sociaux",
+                              style: TextStyle(color: Colors.red),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text("Louise     "),
                                 InkWell(
-                                  child: Image.asset("assets/instagram_logo.png",
+                                  child: Image.asset(
+                                      "assets/instagram_logo.png",
                                       width: MediaQuery.of(context).size.width /
                                           10,
                                       height:

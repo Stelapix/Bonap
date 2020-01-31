@@ -1,3 +1,6 @@
+import 'package:bonap/files/drawerItems/menu.dart';
+import 'package:bonap/files/login/connectedWays.dart';
+import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,18 @@ class OwnButton extends StatefulWidget {
 }
 
 class _OwnButtonState extends State<OwnButton> {
+  PageController controller =
+      new PageController(initialPage: 1, viewportFraction: 1.0);
+
+  void whichResult() {
+    if (widget.buttonType == ButtonType.Connecter)
+      FormsState().whichButton(widget.buttonType, context);
+    else if (widget.buttonType == ButtonType.Connexion)
+      MainMenuState().goto(0);
+    else if (widget.buttonType == ButtonType.Inscription)
+      MainMenuState().goto(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -34,7 +49,10 @@ class _OwnButtonState extends State<OwnButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50.0),
           gradient: LinearGradient(
-              colors: [OwnColor.orangeDarker, OwnColor.orange],
+              colors: widget.buttonType == ButtonType.Connecter ||
+                      widget.buttonType == ButtonType.Inscription
+                  ? [OwnColor.orange, OwnColor.orangeDarker]
+                  : [OwnColor.orangeDarker, OwnColor.orange],
               begin: Alignment.centerRight,
               end: Alignment.centerLeft),
         ),
@@ -55,12 +73,14 @@ class _OwnButtonState extends State<OwnButton> {
                         borderRadius: BorderRadius.circular(50.0)),
                     color: Colors.white,
                     child: widget.icon,
-                    onPressed: () =>
-                        FormsState().whichButton(widget.buttonType, context),
+                    onPressed: () => whichResult(),
                   ),
                 ),
                 SizedBox(width: Constant.width / 10),
-                Center(child: widget.buttonName),
+                Center(
+                  child: Text(widget.buttonName,
+                      style: TextStyle(color: Colors.white, fontSize: 26.0)),
+                ),
               ],
             ),
           ),
@@ -70,7 +90,12 @@ class _OwnButtonState extends State<OwnButton> {
   }
 }
 
-class GoogleButton extends StatelessWidget {
+class GoogleButton extends StatefulWidget {
+  @override
+  GoogleButtonState createState() => GoogleButtonState();
+}
+
+class GoogleButtonState extends State<GoogleButton> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -84,7 +109,19 @@ class GoogleButton extends StatelessWidget {
           highlightColor: Colors.transparent,
           splashColor: Colors.grey[200],
           borderRadius: BorderRadius.circular(50.0),
-          onTap: () {},
+          onTap: () => GoogleWay().signInWithGoogle(context).then((user) {
+            if (user != null) {
+              if (this.mounted)
+                setState(() {
+                  print('Logged in successfully');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Menu()));
+                });
+            } else
+              print('Login Canceled');
+          }),
           child: Container(
             height: Constant.height / 12,
             width: Constant.width / 1.5,
@@ -113,58 +150,4 @@ class GoogleButton extends StatelessWidget {
       ),
     );
   }
-  // return Container(
-  //     width: Constant.width / 1.5,
-  //     child: DecoratedBox(
-  //       decoration: ShapeDecoration(
-  //           shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(50)),
-  //           color: Colors.white),
-  //       child: OutlineButton(
-  //         onPressed: () {
-  // _googleSignIn(context).then((user) {
-  //   if (user != null) {
-
-  //     print('Logged in successfully.');
-  // if (this.mounted) {
-  //   setState(() {
-  //     isGoogleSignIn = true;
-  //     successMessage = 'Logged in successfully';
-  //     DataStorage.loadIngredients();
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (BuildContext context) => HomePage()));
-  //   });
-  // }
-  //   } else
-  //     print('Login Canceled');
-  // });
-  //     },
-  //     borderSide: BorderSide(
-  //       color: Colors.white.withOpacity(0),
-  //     ),
-  //     child: Container(
-  //       height: Constant.height / 12,
-  //       child: Row(
-  //         children: <Widget>[
-  //           Image(
-  //               image: AssetImage("assets/google_logo.png"),
-  //               height: 35.0),
-  //           Center(
-  //             child: Text(
-  //               'Google',
-  //               style: TextStyle(
-  //                 fontSize: 20,
-  //                 color: Colors.black,
-  //                 fontWeight: FontWeight.normal,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   ),
-  // ));
-
 }

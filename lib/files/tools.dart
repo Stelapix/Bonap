@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Constant {
+  static PageController whichPage =
+      new PageController(initialPage: 1, viewportFraction: 1.0);
+  static final FirebaseAuth auth = FirebaseAuth.instance; //Authentification à Firebase
+  static bool loggout = false;
   static String version = "0.1"; //Version de Bonap
   static double width;
   static double height;

@@ -1,16 +1,18 @@
+import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/drawerItems/menu.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:bonap/files/login/forms.dart';
 
-class ConnectedWays {
-  //Authentification à Firebase
-  final FirebaseAuth auth = FirebaseAuth.instance;
-
+class BonapWay {
   //Se connecter sur Bonap
   Future<int> signInWithEmail(String email, String password, context) async {
     if (email.contains(" ")) email = email.substring(0, email.indexOf(" "));
-
     try {
-      AuthResult result = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      AuthResult result = await Constant.auth
+          .signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
       if (user != null) {
         if (user.isEmailVerified) {
@@ -28,5 +30,37 @@ class ConnectedWays {
       print(e);
       return 2;
     }
+  }
+}
+
+class GoogleWay {
+  //Paramètres Google
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  //Se connecter via Google
+  Future<FirebaseUser> signInWithGoogle(BuildContext context) async {
+    FirebaseUser currentUser;
+    try {
+      final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final FirebaseUser user =
+          (await Constant.auth.signInWithCredential(credential)).user;
+      assert(user.displayName != null);
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
+      currentUser = await Constant.auth.currentUser();
+      assert(user.uid == currentUser.uid);
+      print(currentUser);
+      print("User Name  : ${currentUser.displayName}");
+    } catch (e) {
+      print("error");
+      print(e);
+    }
+    return currentUser;
   }
 }

@@ -2,6 +2,7 @@ import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
@@ -78,11 +79,11 @@ class _MenuState extends State<Menu> {
                 ),
                 FlatButton(
                   child: Text("OK"),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              MainMenu(loggout: true))),
+                  onPressed: () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    Constant.loggout = true;
+                    return MainMenu();
+                  })),
                 ),
               ],
             ));

@@ -68,10 +68,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  image: DecorationImage(
-                    image: AssetImage('assets/splash/splash2.jpg'),
-                    fit: BoxFit.cover,
-                  ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(25.0),

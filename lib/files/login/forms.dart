@@ -168,7 +168,7 @@ class FormsState extends State<Forms> {
   void whichButton(ButtonType buttonType, BuildContext context) async {
     if (validateAndSave() == 0) {
       if (ButtonType.Connecter == buttonType) {
-        int res = await ConnectedWays().signInWithEmail(
+        int res = await BonapWay().signInWithEmail(
             emailController.text, passwordController.text, context);
         if (res == 0) {
           //TODO Pour une future animation ?

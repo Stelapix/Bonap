@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonap/files/login/forms.dart';
+import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:bonap/files/widgets/loader.dart';
@@ -11,34 +12,11 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class SignIn extends StatefulWidget {
-  SignIn({Key key, this.loggout}) : super(key: key);
-
-  final loggout;
-
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
-  //Paramètres Google
-  final GoogleSignIn googleSignIn = new GoogleSignIn();
-  bool isGoogleSignIn = false;
-
-  //Paramètres Facebook
-  final FacebookLogin facebookSignIn = new FacebookLogin();
-  bool isFacebookSignIn = false;
-
-  // bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // isLoading = false;
-    if (widget.loggout == true) {
-      signOut();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -67,12 +45,10 @@ class _SignInState extends State<SignIn> {
                           ),
                           SizedBox(height: 30.0),
                           OwnButton(
-                            buttonName: Text("Se connecter",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 26.0)),
+                            buttonName: "Se connecter",
                             icon: Icon(
                               Icons.reply_all,
-                              color: OwnColor.orange,
+                              color: OwnColor.orangeDarker,
                             ),
                             buttonType: ButtonType.Connecter,
                           ),
@@ -128,43 +104,6 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  //Se connecter via Google
-  Future<FirebaseUser> _googleSignIn(BuildContext context) async {
-    FirebaseUser currentUser;
-    try {
-      final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // final FirebaseUser user =
-      //     (await auth.signInWithCredential(credential)).user;
-      // assert(user.displayName != null);
-      // assert(!user.isAnonymous);
-      // assert(await user.getIdToken() != null);
-
-      // currentUser = await auth.currentUser();
-      // assert(user.uid == currentUser.uid);
-      // print(currentUser);
-      // print("User Name  : ${currentUser.displayName}");
-    } catch (e) {
-      print(e);
-    }
-    return currentUser;
-  }
-
-  //Se déconnecter de Facebook et Google
-  Future<bool> signOut() async {
-    // await auth.signOut();
-    // await googleSignIn.signOut();
-    // await facebookSignIn.logOut();
-    print("User Sign Out");
-    return true;
-  }
-
 //Gérer le retour en arrière sur la page Login
   Future<bool> onBackPressed() {
     return showDialog(
@@ -193,7 +132,6 @@ class _SignInState extends State<SignIn> {
                 style: TextStyle(color: Colors.black),
               ),
               onPressed: () {
-                signOut();
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               }),
         ],
