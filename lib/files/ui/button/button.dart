@@ -39,10 +39,17 @@ class _OwnButtonState extends State<OwnButton> {
       MainMenuState().goto(0);
     else if (widget.buttonType == ButtonType.Inscription)
       MainMenuState().goto(2);
+    else if (widget.buttonType == ButtonType.Guest) {
+      LoginTools.guestMode = true;
+      print("Guest Mode activated");
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => Menu()));
+    }
   }
 
   Widget whereIsFlatButton() {
-    if (widget.buttonType != ButtonType.Inscription)
+    if (widget.buttonType != ButtonType.Inscription &&
+        widget.buttonType != ButtonType.Inscrire)
       return Row(
         children: <Widget>[
           SizedBox(width: Constant.width / 12),
@@ -77,8 +84,8 @@ class _OwnButtonState extends State<OwnButton> {
           Container(
             padding: EdgeInsets.only(right: 11),
             child: FlatButton(
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(50.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0)),
               color: Colors.white,
               child: widget.icon,
               onPressed: () => whichResult(),
@@ -98,8 +105,10 @@ class _OwnButtonState extends State<OwnButton> {
           gradient: LinearGradient(
               colors: widget.buttonType == ButtonType.Connecter ||
                       widget.buttonType == ButtonType.Inscription
-                  ? [OwnColor.orange, OwnColor.orangeDarker]
-                  : [OwnColor.orangeDarker, OwnColor.orange],
+                  ? [Colors.yellow, OwnColor.orangeDarker]
+                  : widget.buttonType != ButtonType.Guest
+                      ? [OwnColor.orangeDarker, OwnColor.yellow]
+                      : [Colors.purple, Colors.green],
               begin: Alignment.centerRight,
               end: Alignment.centerLeft),
         ),

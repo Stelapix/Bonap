@@ -1,14 +1,17 @@
 import 'dart:async';
 
 import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/login/connectedWays.dart';
-import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:vibration/vibration.dart';
 
 class Forms extends StatefulWidget {
+  const Forms({Key key, this.whichForms}) : super(key: key);
+  final whichForms;
+
   @override
   FormsState createState() => FormsState();
 }
@@ -16,16 +19,14 @@ class Forms extends StatefulWidget {
 class FormsState extends State<Forms> {
   static TextEditingController emailController;
   static TextEditingController passwordController;
-
-  // Initialisation des messages d'erreurs
-  String errorMessage = '';
-  String successMessage = '';
+  static TextEditingController passwordCheckController;
 
   @override
   void initState() {
     super.initState();
     emailController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
+    passwordCheckController = TextEditingController(text: "");
   }
 
   @override
@@ -56,6 +57,25 @@ class FormsState extends State<Forms> {
           ),
           SizedBox(height: 10),
           formSignIn("Mot de passe"),
+          widget.whichForms == "signUpForm"
+              ? SizedBox(height: 20.0)
+              : Container(),
+          widget.whichForms == "signUpForm"
+              ? Text(
+                  "Confirmer le mot de passe",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                    color: Color(0xFFEE5623),
+                  ),
+                )
+              : Container(),
+          widget.whichForms == "signUpForm"
+              ? SizedBox(height: 10.0)
+              : Container(),
+          widget.whichForms == "signUpForm"
+              ? formSignIn("Confirmez le mot de passe")
+              : Container(),
         ],
       ),
     );
@@ -119,12 +139,18 @@ class FormsState extends State<Forms> {
         } else if (value.isEmpty && input == 'Mot de passe') {
           print("Password required");
           return 'Vous devez saisir un mot de passe.';
+        } else if (value.isEmpty && input == 'Confirmer le mot de passe') {
+          print("PasswordCheck required");
+          return 'Vous devez saisir le\nmot de passe de confirmation.';
         } else if (input == 'Adresse Email' &&
             !RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                 .hasMatch(value)) {
           return "Format d'adresse email invalide.";
         } else if (input == 'Mot de passe' && value.length < 6) {
           return "Votre mot de passe doit comporter au moins 6 caractères.";
+        } else if (passwordController.text != passwordCheckController.text) {
+          print("Passwords are not the same");
+          return 'Les mots de passes sont différents.';
         } else
           return null;
       },
@@ -141,13 +167,15 @@ class FormsState extends State<Forms> {
                 BorderSide(color: OwnColor().getFocusedColorBorder(context))),
         contentPadding: const EdgeInsets.only(top: 12),
         hintText:
-            input == "Mot de passe" ? "********" : "stelapix.bonap@gmail.com",
+            input == "Mot de passe" ? "********" : input == "Adresse Email" ? "stelapix.bonap@gmail.com" : "xXx_BonapPGM_xXx",
         hintStyle: TextStyle(
           fontSize: 20.0,
         ),
         prefixIcon: input == "Adresse Email"
             ? Icon(Icons.email, color: Colors.white)
-            : Icon(Icons.lock, color: Colors.white),
+            : input == "Mot de passe"
+                ? Icon(Icons.lock, color: Colors.white)
+                : Icon(Icons.check, color: Colors.white),
         suffixIcon: input == "Mot de passe"
             ? IconButton(
                 onPressed: toggleVisibility,
@@ -160,8 +188,11 @@ class FormsState extends State<Forms> {
       obscureText: input == "Mot de passe"
           ? isHidden
           : input == "Adresse Email" ? false : isHidden,
-      controller:
-          input == "Adresse Email" ? emailController : passwordController,
+      controller: input == "Adresse Email"
+          ? emailController
+          : input == "Mot de passe"
+              ? passwordController
+              : passwordCheckController,
     );
   }
 
@@ -178,7 +209,7 @@ class FormsState extends State<Forms> {
                 builder: (context) {
                   KeyForm().newKey();
                   DataStorage.loadIngredients();
-                  return MainMenu();
+                  return Menu();
                 },
               ),
             );

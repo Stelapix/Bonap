@@ -197,9 +197,9 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
-                      Constant.loggout = true;
+                      LoginTools.loggout = true;
                   return MainMenu();
                 }));
               },

@@ -41,15 +41,24 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    if (Constant.loggout) signOut();
+    if (LoginTools.loggout) signOut();
   }
 
+  static PageController whichPage =
+      new PageController(initialPage: 1, viewportFraction: 1.0);
+
   void goto(int numPage) {
-    Constant.whichPage.animateToPage(
+    whichPage.animateToPage(
       numPage,
       duration: Duration(milliseconds: 1150),
       curve: Curves.bounceOut,
     );
+  }
+
+  bool backToMainMenu() {
+    MainMenuState.whichPage.animateToPage(1,
+        curve: Curves.easeOutCubic, duration: Duration(milliseconds: 1150));
+    return false;
   }
 
   Widget menu(BuildContext context) {
@@ -107,7 +116,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                     SizedBox(height: Constant.height / 16),
                     OwnButton(
                       buttonName: "Mode invité",
-                      buttonType: ButtonType.Connexion,
+                      buttonType: ButtonType.Guest,
                       icon: Icon(
                         Icons.person,
                         color: OwnColor.orange,
@@ -157,12 +166,12 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
       body: Container(
           height: Constant.height,
           child: PageView(
-            controller: Constant.whichPage,
+            controller: whichPage,
             physics: AlwaysScrollableScrollPhysics(),
             children: <Widget>[
               SignIn(),
               menu(context),
-              SignUpPage(null, null, null, null),
+              SignUp(),
             ],
             scrollDirection: Axis.horizontal,
           )),
@@ -171,11 +180,11 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
 
   //Se déconnecter de Facebook et Google
   Future<bool> signOut() async {
-    await Constant.auth.signOut();
+    await LoginTools.auth.signOut();
     await GoogleWay().googleSignIn.signOut();
     print("User Sign Out");
     MainMenu();
-    Constant.loggout = false;
+    LoginTools.loggout = false;
     return true;
   }
 

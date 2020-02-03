@@ -81,7 +81,7 @@ class _MenuState extends State<Menu> {
                   child: Text("OK"),
                   onPressed: () => Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                    Constant.loggout = true;
+                    LoginTools.loggout = true;
                     return MainMenu();
                   })),
                 ),

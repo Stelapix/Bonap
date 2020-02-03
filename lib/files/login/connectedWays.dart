@@ -1,17 +1,14 @@
-import 'package:bonap/files/data/dataStorage.dart';
-import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:bonap/files/login/forms.dart';
 
 class BonapWay {
   //Se connecter sur Bonap
   Future<int> signInWithEmail(String email, String password, context) async {
     if (email.contains(" ")) email = email.substring(0, email.indexOf(" "));
     try {
-      AuthResult result = await Constant.auth
+      AuthResult result = await LoginTools.auth
           .signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
       if (user != null) {
@@ -49,11 +46,11 @@ class GoogleWay {
         idToken: googleAuth.idToken,
       );
       final FirebaseUser user =
-          (await Constant.auth.signInWithCredential(credential)).user;
+          (await LoginTools.auth.signInWithCredential(credential)).user;
       assert(user.displayName != null);
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
-      currentUser = await Constant.auth.currentUser();
+      currentUser = await LoginTools.auth.currentUser();
       assert(user.uid == currentUser.uid);
       print(currentUser);
       print("User Name  : ${currentUser.displayName}");

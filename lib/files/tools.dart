@@ -1,11 +1,9 @@
+import 'package:bonap/files/login/mainMenu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Constant {
-  static PageController whichPage =
-      new PageController(initialPage: 1, viewportFraction: 1.0);
-  static final FirebaseAuth auth = FirebaseAuth.instance; //Authentification à Firebase
-  static bool loggout = false;
   static String version = "0.1"; //Version de Bonap
   static double width;
   static double height;
@@ -13,6 +11,13 @@ class Constant {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
   }
+}
+
+class LoginTools {
+  static bool loggout = false;
+  static bool guestMode = false;
+  static final FirebaseAuth auth =
+      FirebaseAuth.instance; //Authentification à Firebase
 }
 
 class Anim {
@@ -38,4 +43,49 @@ class OwnColor {
   Color getFocusedColorBorder(BuildContext context) {
     return blackTheme ? Colors.white : Colors.black;
   }
+}
+
+class FunctionTools {
+  Future<bool> onBackPressed(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context) => MainMenu()));
+    return null;
+  }
+
+  //Gérer le retour en arrière sur la page Login
+  // static Future<bool> toExit() {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       title: Text(
+  //         "Voulez-vous vraiment quitter l'application ?",
+  //         style: TextStyle(
+  //           color: Colors.black,
+  //           fontWeight: FontWeight.normal,
+  //         ),
+  //         textAlign: TextAlign.left,
+  //       ),
+  //       backgroundColor: Colors.white.withOpacity(0.9),
+  //       actions: <Widget>[
+  //         FlatButton(
+  //           child: Text(
+  //             "ANNULER",
+  //             style: TextStyle(color: Colors.black),
+  //           ),
+  //           onPressed: () => Navigator.pop(context, false),
+  //         ),
+  //         FlatButton(
+  //             child: Text(
+  //               "OK",
+  //               style: TextStyle(color: Colors.black),
+  //             ),
+  //             onPressed: () {
+  //               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  //             }),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  
 }

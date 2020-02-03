@@ -1,26 +1,14 @@
-import 'dart:async';
-
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:bonap/files/widgets/loader.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
-class SignIn extends StatefulWidget {
-  @override
-  _SignInState createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
-  @override
+class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onBackPressed,
+      onWillPop: () => Future.sync(MainMenuState().backToMainMenu),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Stack(
@@ -35,7 +23,9 @@ class _SignInState extends State<SignIn> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Forms(),
+                          Forms(
+                            whichForms: "signInForm",
+                          ),
                           SizedBox(height: 30),
                           Text(
                             "Mot de passe oublié ?",
@@ -100,41 +90,6 @@ class _SignInState extends State<SignIn> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-//Gérer le retour en arrière sur la page Login
-  Future<bool> onBackPressed() {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          "Voulez-vous vraiment quitter l'application ?",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.normal,
-          ),
-          textAlign: TextAlign.left,
-        ),
-        backgroundColor: Colors.white.withOpacity(0.9),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "ANNULER",
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          FlatButton(
-              child: Text(
-                "OK",
-                style: TextStyle(color: Colors.black),
-              ),
-              onPressed: () {
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              }),
-        ],
       ),
     );
   }
