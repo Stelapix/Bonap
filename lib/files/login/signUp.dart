@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
 import 'package:bonap/files/widgets/loader.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatelessWidget {
@@ -19,7 +17,7 @@ class SignUp extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Container(
-                height: Constant.height,
+                height: Constant.height + 50,
                 child: Column(
                   children: <Widget>[
                     Loader(),
@@ -36,7 +34,7 @@ class SignUp extends StatelessWidget {
                             buttonName: "S'inscrire",
                             icon: Icon(
                               Icons.mode_edit,
-                              color: OwnColor.orangeDarker,
+                              color: OwnColor.orange,
                             ),
                             buttonType: ButtonType.Inscrire,
                           ),
@@ -71,9 +69,10 @@ class SignUp extends StatelessWidget {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.only(left: 15, right: 15, top: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             GoogleButton(),
                           ],
@@ -89,74 +88,4 @@ class SignUp extends StatelessWidget {
       ),
     );
   }
-
-  // //Bouton 'Inscrivez-vous'
-  // Widget buttonSignUp() {
-  //   return Material(
-  //     animationDuration: Duration(seconds: 10),
-  //     borderRadius: BorderRadius.circular(50.0),
-  //     child: Ink(
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(50.0),
-  //         gradient: LinearGradient(
-  //             colors: [Color(0xFFFB415B), Color(0xFFEE5623)],
-  //             begin: Alignment.centerRight,
-  //             end: Alignment.centerLeft),
-  //       ),
-  //       child: InkWell(
-  //         borderRadius: BorderRadius.circular(50.0),
-  //         onTap: () async {
-  //           if (validateAndSave() == 0) {
-  //             if (emailController.text.contains(" ")) {
-  //               emailController.text = emailController.text
-  //                   .substring(0, emailController.text.indexOf(" "));
-  //             }
-  //             try {
-  //               setState(() {
-  //                 isLoading = true;
-  //               });
-  //               FirebaseUser user = (await FirebaseAuth.instance
-  //                       .createUserWithEmailAndPassword(
-  //                           email: emailController.text,
-  //                           password: passwordController.text))
-  //                   .user;
-  //               Timer(Duration(seconds: 0), () async {
-  //                 setState(() {
-  //                   isLoading = false;
-  //                 });
-  //                 user.sendEmailVerification();
-  //                 print("Sign Up");
-  //                 await widget.functionAlertDialog(
-  //                     "Votre compte a été créé.\n\nVeuillez vérifier l'adresse e-mail : " +
-  //                         user.email +
-  //                         "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
-  //                     context);
-  //                 Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                         builder: (BuildContext context) => Menu()));
-  //               });
-  //             } catch (e) {
-  //               print(e.message);
-  //               await widget.functionAlertDialog(
-  //                   "Adresse déjà utilisée.\nMerci de réessayer.", context);
-  //               emailController.text = "";
-  //               passwordController.text = "";
-  //               passwordCheckController.text = "";
-  //             }
-  //           }
-  //         },
-  //         child: Container(
-  //           height: MediaQuery.of(context).size.height / 12,
-  //           child: Center(
-  //             child: Text(
-  //               "S'inscrire",
-  //               style: TextStyle(color: Colors.white, fontSize: 26.0),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  // );
-  // }
 }

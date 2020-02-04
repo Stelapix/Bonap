@@ -32,8 +32,8 @@ class _OwnButtonState extends State<OwnButton> {
   PageController controller =
       new PageController(initialPage: 1, viewportFraction: 1.0);
 
-  void whichResult() {
-    if (widget.buttonType == ButtonType.Connecter)
+  void result() {
+    if (widget.buttonType == ButtonType.Connecter || widget.buttonType == ButtonType.Inscrire) 
       FormsState().whichButton(widget.buttonType, context);
     else if (widget.buttonType == ButtonType.Connexion)
       MainMenuState().goto(0);
@@ -59,7 +59,7 @@ class _OwnButtonState extends State<OwnButton> {
                   borderRadius: BorderRadius.circular(50.0)),
               color: Colors.white,
               child: widget.icon,
-              onPressed: () => whichResult(),
+              onPressed: () => result(),
             ),
           ),
           SizedBox(width: Constant.width / 10),
@@ -88,7 +88,7 @@ class _OwnButtonState extends State<OwnButton> {
                   borderRadius: BorderRadius.circular(50.0)),
               color: Colors.white,
               child: widget.icon,
-              onPressed: () => whichResult(),
+              onPressed: () => result(),
             ),
           ),
         ],

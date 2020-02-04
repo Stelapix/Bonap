@@ -41,6 +41,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    LoginTools.guestMode = false;
     if (LoginTools.loggout) signOut();
   }
 
@@ -50,7 +51,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   void goto(int numPage) {
     whichPage.animateToPage(
       numPage,
-      duration: Duration(milliseconds: 1150),
+      duration: Duration(milliseconds: 1300),
       curve: Curves.bounceOut,
     );
   }
@@ -59,6 +60,11 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     MainMenuState.whichPage.animateToPage(1,
         curve: Curves.easeOutCubic, duration: Duration(milliseconds: 1150));
     return false;
+  }
+
+  void backToSignIn() {
+    MainMenuState.whichPage.animateToPage(0,
+        curve: Curves.slowMiddle, duration: Duration(milliseconds: 1700));
   }
 
   Widget menu(BuildContext context) {

@@ -161,19 +161,22 @@ class _SettingsState extends State<Settings> {
             SizedBox(height: 10.0),
             Text("     Paramètres généraux"),
             SizedBox(height: 10.0),
-            ListTile(
-              title: Text(
-                "Changer de mot de passe",
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              onTap: () {
-                resetPassword();
-                alertDialog("Un email de réinitialisation va vous être envoyé",
-                    context);
-              },
-            ),
+            LoginTools.guestMode
+                ? Container()
+                : ListTile(
+                    title: Text(
+                      "Changer de mot de passe",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    onTap: () {
+                      resetPassword();
+                      alertDialog(
+                          "Un email de réinitialisation va vous être envoyé",
+                          context);
+                    },
+                  ),
             ListTile(
               title: Text(
                 "Supprimer les données",
@@ -191,7 +194,7 @@ class _SettingsState extends State<Settings> {
             ),
             ListTile(
               title: Text(
-                "Déconnexion",
+                LoginTools.guestMode ? "Quitter" : "Déconnexion",
                 style: TextStyle(
                   fontSize: 20.0,
                 ),
@@ -199,7 +202,7 @@ class _SettingsState extends State<Settings> {
               onTap: () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
-                      LoginTools.loggout = true;
+                  LoginTools.loggout = true;
                   return MainMenu();
                 }));
               },

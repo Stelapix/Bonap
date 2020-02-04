@@ -51,41 +51,4 @@ class FunctionTools {
         MaterialPageRoute(builder: (BuildContext context) => MainMenu()));
     return null;
   }
-
-  //Gérer le retour en arrière sur la page Login
-  // static Future<bool> toExit() {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       title: Text(
-  //         "Voulez-vous vraiment quitter l'application ?",
-  //         style: TextStyle(
-  //           color: Colors.black,
-  //           fontWeight: FontWeight.normal,
-  //         ),
-  //         textAlign: TextAlign.left,
-  //       ),
-  //       backgroundColor: Colors.white.withOpacity(0.9),
-  //       actions: <Widget>[
-  //         FlatButton(
-  //           child: Text(
-  //             "ANNULER",
-  //             style: TextStyle(color: Colors.black),
-  //           ),
-  //           onPressed: () => Navigator.pop(context, false),
-  //         ),
-  //         FlatButton(
-  //             child: Text(
-  //               "OK",
-  //               style: TextStyle(color: Colors.black),
-  //             ),
-  //             onPressed: () {
-  //               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-  //             }),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  
 }
