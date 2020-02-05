@@ -33,7 +33,8 @@
  0.0.1 - 13/09/2019 - Création du projet  
 
  ## Nous suivre
- [Instagram](https://www.instagram.com/itsbonap/?hl=fr) Bonap  
+ Bonap 
+ [Instagram](https://www.instagram.com/itsbonap/?hl=fr)  
  Aymeric LE FEYER  
  [Twitter](https://twitter.com/Aymeric_Zepix)  
  [LinkedIn](https://www.linkedin.com/in/aymericlefeyer/)  
