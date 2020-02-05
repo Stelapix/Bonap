@@ -144,7 +144,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                           Padding(
                             padding: EdgeInsets.only(bottom: 10, left: 10),
                             child: Text(
-                              "Stelapix",
+                              Constant.company,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey,
