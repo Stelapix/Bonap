@@ -4,6 +4,7 @@ import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:bonap/files/tools.dart';
 
 class Day {
   static List<Day> listDay = new List<Day>(14);
@@ -190,7 +191,7 @@ class DayButtonState extends State<DayButton> {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, bottom: 5),
       child: Container(
-        width: MediaQuery.of(context).size.width / 2.5,
+        width: Constant.width / 2.5,
         child: OutlineButton(
           padding: EdgeInsets.all(8.0),
           onPressed: () {
@@ -223,7 +224,7 @@ class DayButtonState extends State<DayButton> {
             });
           },
           child: Container(
-            width: MediaQuery.of(context).size.width / 2.5,
+            width: Constant.width / 2.5,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -286,7 +287,7 @@ class DayButtonState extends State<DayButton> {
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
                                         width:
-                                            MediaQuery.of(context).size.width /
+                                            Constant.width /
                                                 size,
                                         child: IconButton(
                                           icon: Day
@@ -316,7 +317,7 @@ class DayButtonState extends State<DayButton> {
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
                                         width:
-                                            MediaQuery.of(context).size.width /
+                                            Constant.width /
                                                 size,
                                         child: IconButton(
                                           icon: Day
@@ -346,7 +347,7 @@ class DayButtonState extends State<DayButton> {
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
                                         width:
-                                            MediaQuery.of(context).size.width /
+                                            Constant.width /
                                                 size,
                                         child: IconButton(
                                           icon: Day
@@ -380,7 +381,7 @@ class DayButtonState extends State<DayButton> {
   }
 
   String nameWithoutTheEnd(String s) {
-    double max = MediaQuery.of(context).size.width / 3;
+    double max = Constant.width / 3;
     if (getLenghtOfText(s) < max)
       return s;
     else {
@@ -445,8 +446,8 @@ class ChangeIngredientDialogState extends State<ChangeIngredientDialog> {
         )
       ],
       content: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.4,
+        width: Constant.width * 0.8,
+        height: Constant.height * 0.4,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -613,8 +614,8 @@ class AddMealDialogState extends State<AddMealDialog> {
           )
         ],
         content: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.4,
+          width: Constant.width * 0.8,
+          height: Constant.height * 0.4,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -698,8 +699,8 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
         )
       ],
       content: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.4,
+        width: Constant.width * 0.8,
+        height: Constant.height * 0.4,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
