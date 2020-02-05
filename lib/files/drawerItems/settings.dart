@@ -235,7 +235,7 @@ class _SettingsState extends State<Settings> {
                         child: Column(
                           children: <Widget>[
                             Text(
-                              "Codeurs",
+                              "Développeurs",
                               style: TextStyle(color: Colors.amber),
                             ),
                             Row(
