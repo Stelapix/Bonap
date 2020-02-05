@@ -31,7 +31,7 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
       case "Viande":
         _value = _categories.elementAt(0);
         break;
-      case "Légume":
+      case "Charcuterie":
         _value = _categories.elementAt(1);
         break;
       case "Poisson":
@@ -40,13 +40,13 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
       case "Féculent":
         _value = _categories.elementAt(3);
         break;
-      case "Produit Laitier":
+      case "Légume":
         _value = _categories.elementAt(4);
         break;
-      case "Liquide":
+      case "Produit Laitier":
         _value = _categories.elementAt(5);
         break;
-        case "Charcuterie":
+        case "Liquide":
         _value = _categories.elementAt(6);
         break;
       case "Autre":
