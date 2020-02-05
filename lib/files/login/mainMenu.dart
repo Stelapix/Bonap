@@ -98,7 +98,8 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
             SizedBox(
               height: Constant.height / 1.8,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                color: Colors.blue,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -188,7 +189,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   Future<bool> signOut() async {
     await LoginTools.auth.signOut();
     await GoogleWay().googleSignIn.signOut();
-    print("User Sign Out");
+    print(LoginTools.guestMode ? "Guest Sign Out" : "User Sign Out");
     MainMenu();
     LoginTools.loggout = false;
     return true;
