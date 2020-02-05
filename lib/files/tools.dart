@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Constant {
-  static String version = "0.1"; //Version de Bonap
+  static String version = "0.2b"; //Version de Bonap
   static double width;
   static double height;
   getSizeOfCurrentScreen(BuildContext context) {
