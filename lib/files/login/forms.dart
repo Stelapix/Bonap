@@ -20,13 +20,16 @@ class Forms extends StatefulWidget {
 
 class FormsState extends State<Forms> {
   static TextEditingController emailController;
+  static TextEditingController passwordForgotController;
   static TextEditingController passwordController;
   static TextEditingController passwordCheckController;
 
   @override
   void initState() {
     super.initState();
+    KeyForm().newKey();
     emailController = TextEditingController(text: "");
+    passwordForgotController = TextEditingController(text: "");
     passwordController = TextEditingController(text: "");
     passwordCheckController = TextEditingController(text: "");
   }
@@ -104,31 +107,88 @@ class FormsState extends State<Forms> {
     }
   }
 
-  //Vérifier qu'une fois le formulaire bien remplit, l'utilisateur existe dans la bdd
-  int validateAndSave() {
+  bool validateFormLogin() {
     final form = KeyForm.formKey.currentState;
-    return form.validate() ? 0 : 1;
+    return form.validate();
   }
 
-  //AlertDialogue qui relance la page Login
-  Future<bool> alertDialog(String texte, BuildContext context) {
-    vibration();
+  bool validateFormPasswordReset() {
+    final form = KeyForm.passwordResetKey.currentState;
+    return form.validate();
+  }
+
+  Future<void> resetPassword(String mail) async {
+    await LoginTools.auth.sendPasswordResetEmail(email: mail);
+  }
+
+  Future<bool> alertPasswordReset(
+      String title, String text, BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => AlertDialog(
+              title: Text(title,
+                  style: TextStyle(color: OwnColor.orange, fontSize: 22),
+                  textAlign: TextAlign.left),
+              content: Container(
+                height: Constant.height / 3.2,
+                child: Form(
+                  key: KeyForm.passwordResetKey,
+                  child: Column(
+                    children: <Widget>[
+                      Divider(color: Colors.white),
+                      SizedBox(height: 20),
+                      Text(text,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17)),
+                      SizedBox(height: 10),
+                      formPasswordForgot("PasswordReset"),
+                      SizedBox(height: 20),
+                      FlatButton(
+                          color: OwnColor.orange,
+                          child: Text('Réinitialiser'),
+                          onPressed: () {
+                            if (validateFormPasswordReset()) {
+                              if (passwordForgotController.text.contains(" ")) {
+                                passwordForgotController.text =
+                                    passwordForgotController.text.substring(
+                                        0,
+                                        passwordForgotController.text
+                                            .indexOf(" "));
+                              }
+                              resetPassword(passwordForgotController.text);
+                              Navigator.of(context).pop();
+                              alertDialog(
+                                  "Ne l'oubliez plus !",
+                                  "Un email de réinitialisation va vous être envoyé",
+                                  context);
+                            }
+                          }),
+                    ],
+                  ),
+                ),
+              ),
+              backgroundColor: OwnColor.darkBackground,
+            ));
+  }
+
+  Future<bool> alertDialog(String title, String text, BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text(
-                texte,
+                title,
                 style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
+                  color: OwnColor.orange,
                 ),
                 textAlign: TextAlign.left,
               ),
-              backgroundColor: Colors.white.withOpacity(0.9),
+              content: Text(text, style: TextStyle(color: Colors.white)),
+              backgroundColor: OwnColor.darkBackground,
             ));
   }
 
-  //Les 2 champs de saisies pour l'adresse mail et le mot de passe de SignIn
+  //Les 2 champs de saisies pour l'adresse mail et le mot de passe de SignUn
   Widget formSignUp(String input) {
     return TextFormField(
       enableInteractiveSelection: true,
@@ -206,7 +266,7 @@ class FormsState extends State<Forms> {
     );
   }
 
-  //Les 2 champs de saisies pour l'adresse mail et le mot de passe de SignIn
+  //Les 3 champs de saisies pour l'adresse mail, le mot de passe et la confirmation du mot de passe de SignIn
   Widget formSignIn(String input) {
     return TextFormField(
       enableInteractiveSelection: true,
@@ -267,8 +327,46 @@ class FormsState extends State<Forms> {
     );
   }
 
+  Widget formPasswordForgot(String input) {
+    return TextFormField(
+        enableInteractiveSelection: true,
+        toolbarOptions: ToolbarOptions(
+          selectAll: false,
+          cut: true,
+          copy: true,
+          paste: true,
+        ),
+        validator: (value) {
+          if (value.isEmpty && input == "PasswordReset") {
+            print("Email required");
+            return 'Vous devez saisir une adresse email.';
+          } else if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              .hasMatch(value)) {
+            return "Format d'adresse email invalide.";
+          } else
+            return null;
+        },
+        style: TextStyle(
+          fontSize: 18.0,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: OwnColor().getEnabledColorBorder(context))),
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: OwnColor().getFocusedColorBorder(context))),
+          hintText: "stelapix.bonap@gmail.com",
+          hintStyle: TextStyle(
+            fontSize: 20.0,
+          ),
+        ),
+        controller: passwordForgotController);
+  }
+
   void whichButton(ButtonType buttonType, BuildContext context) async {
-    if (validateAndSave() == 0) {
+    if (validateFormLogin()) {
       if (buttonType == ButtonType.Connecter) {
         int res = await BonapWay().signInWithEmail(
             emailController.text, passwordController.text, context);
@@ -286,10 +384,12 @@ class FormsState extends State<Forms> {
             );
           });
         } else if (res == 1) {
-          await alertDialog("Veuillez d'abord vérifier votre e-mail.", context);
+          await alertDialog(
+              "Patience...", "Veuillez d'abord vérifier votre e-mail.", context);
           print("email not verified");
         } else if (res == 2) {
           await alertDialog(
+              "Oups !",
               "Vos identifiants sont incorrects.\nMerci de réessayer.",
               context);
           emailController.text = "";
@@ -314,7 +414,8 @@ class FormsState extends State<Forms> {
             print("Sign Up");
             KeyForm().newKey();
             await alertDialog(
-                "Votre compte a été créé.\n\nVeuillez vérifier l'adresse e-mail : " +
+                "Compte a été créé.",
+                "Veuillez vérifier l'adresse e-mail : " +
                     user.email +
                     "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
                 context);
@@ -322,8 +423,8 @@ class FormsState extends State<Forms> {
           });
         } catch (e) {
           print(e.message);
-          await alertDialog(
-              "Adresse déjà utilisée.\nMerci de réessayer.", context);
+          await alertPasswordReset(
+              "Adresse déjà utilisée.\nMerci de réessayer.", "", context);
           emailController.text = "";
           passwordController.text = "";
           passwordCheckController.text = "";

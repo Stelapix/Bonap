@@ -210,24 +210,24 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
         title: Text(
           "Voulez-vous vraiment quitter l'application ?",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.normal,
           ),
           textAlign: TextAlign.left,
         ),
-        backgroundColor: Colors.white.withOpacity(0.9),
+        backgroundColor: OwnColor.darkBackground,
         actions: <Widget>[
           FlatButton(
             child: Text(
               "ANNULER",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
             onPressed: () => Navigator.pop(context, false),
           ),
           FlatButton(
               child: Text(
                 "OK",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
                 signOut();
