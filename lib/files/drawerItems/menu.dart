@@ -87,35 +87,33 @@ class _MenuState extends State<Menu> {
                     color: Colors.black),
               ),
               actions: <Widget>[
-                // IconButton(
-                //   icon: Icon(Icons.help_outline),
-                //   onPressed: () {
-                //     showDialog(
-                //         context: context,
-                //         builder: (context) {
-                //           return AlertDialog(
-                //             title: Text('T\'es perdu ?'),
-                //             content: Column(
-                //               mainAxisSize: MainAxisSize.min,
-                //               children: <Widget>[
-                //                 Text('Créer des ingrédients'),
-                //                 Text('Fabrique d\'incroyables repas'),
-                //                 Text('Ajoute les à ton menu'),
-                //                 Text('Et régale toi ! Bonap hein !'),
-                //               ],
-                //             ),
-                //             actions: <Widget>[
-                //               FlatButton(
-                //                 child: Text('J\'ai tout compris !'),
-                //                 onPressed: () {
-                //                   Navigator.of(context).pop();
-                //                 },
-                //               )
-                //             ],
-                //           );
-                //         });
-                //   },
-                // ),
+                IconButton(
+                  icon: Icon(Icons.help_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('T\'es perdu ?'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                    'Créer des ingrédients\n\nFabrique d\'incroyables repas\n\nAjoute les à ton menu\n\nEt régale toi !\n\nBonap hein !'),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('J\'ai tout compris !'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        });
+                  },
+                ),
                 IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () {
