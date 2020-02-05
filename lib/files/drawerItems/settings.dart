@@ -231,11 +231,11 @@ class _SettingsState extends State<Settings> {
                         style: TextStyle(fontSize: 20.0),
                       ),
                       content: SizedBox(
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: Constant.height / 2,
                         child: Column(
                           children: <Widget>[
                             Text(
-                              "Codeurs",
+                              "Développeurs",
                               style: TextStyle(color: Colors.amber),
                             ),
                             Row(
@@ -245,10 +245,10 @@ class _SettingsState extends State<Settings> {
                                 Text("Aymeric    "),
                                 InkWell(
                                   child: Image.asset("assets/linkedin_logo.png",
-                                      width: MediaQuery.of(context).size.width /
+                                      width: Constant.width /
                                           10,
                                       height:
-                                          MediaQuery.of(context).size.height /
+                                          Constant.height /
                                               10),
                                   onTap: () => launch(
                                       'https://www.linkedin.com/in/aymericlefeyer/'),
@@ -262,10 +262,10 @@ class _SettingsState extends State<Settings> {
                                 Text("Quentin     "),
                                 InkWell(
                                   child: Image.asset("assets/linkedin_logo.png",
-                                      width: MediaQuery.of(context).size.width /
+                                      width: Constant.width /
                                           10,
                                       height:
-                                          MediaQuery.of(context).size.height /
+                                          Constant.height /
                                               10),
                                   onTap: () => launch(
                                       'https://www.linkedin.com/in/quentincarry/'),
@@ -285,10 +285,10 @@ class _SettingsState extends State<Settings> {
                                 InkWell(
                                   child: Image.asset(
                                       "assets/instagram_logo.png",
-                                      width: MediaQuery.of(context).size.width /
+                                      width: Constant.width /
                                           10,
                                       height:
-                                          MediaQuery.of(context).size.height /
+                                          Constant.height /
                                               10),
                                   onTap: () => launch(
                                       'https://www.instagram.com/louisehennecart_/?hl=fr'),

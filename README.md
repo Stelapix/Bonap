@@ -4,8 +4,11 @@
  Confectionné avec amour par CARRY Quentin et LE FEYER Aymeric  
 
 ## Mises à jour
- 0.1.0 - 22/01/2020 - Mise en place Play Store  
- ...  
+ 0.2 - ? - Nouvelle version sur le play store  
+ 0.1.3 - ? - Login terminé  
+ 0.1.2 - 05/02/2020 - Améliorations graphiques sur les pages Repas et Menu  
+ 0.1.1 - 30/01/2020 - Refonte graphique du login  
+ 0.1 - 22/01/2020 - Mise en place sur le Play Store    
  0.0.22 - 16/01/2020 - Animation de chargement  
  0.0.21 - 16/01/2020 - Email de vérification  
  0.0.20 - 14/01/2020 - Menu options amélioré  
@@ -30,9 +33,16 @@
  0.0.1 - 13/09/2019 - Création du projet  
 
  ## Nous suivre
- [Instagram](https://www.instagram.com/itsbonap/?hl=fr) Bonap  
- [Twitter](https://twitter.com/Aymeric_Zepix) Aymeric LE FEYER  
- [Twitter](https://twitter.com/quentin_carry) Quentin CARRY  
+ Bonap  
+ [Instagram](https://www.instagram.com/itsbonap/?hl=fr)  
+
+ Aymeric LE FEYER  
+ [Twitter](https://twitter.com/Aymeric_Zepix)  
+ [LinkedIn](https://www.linkedin.com/in/aymericlefeyer/)  
+ 
+ Quentin CARRY  
+ [Twitter](https://twitter.com/quentin_carry)   
+ [LinkedIn](https://www.linkedin.com/in/quentincarry/)  
  
  
 

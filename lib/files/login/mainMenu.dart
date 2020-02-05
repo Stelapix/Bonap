@@ -89,7 +89,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             SizedBox(
-                              height: Constant.height / 20,
+                              height: MediaQuery.of(context).size.height / 20,
                             ),
                             Image.asset(
                               'assets/logo_bonap.png',
@@ -99,7 +99,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                       ),
                     ),
                     SizedBox(
-                      height: Constant.height / 1.8,
+                      height: MediaQuery.of(context).size.height / 1.8,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20.0, vertical: 20.0),
@@ -114,7 +114,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                                 color: OwnColor.orange,
                               ),
                             ),
-                            SizedBox(height: Constant.height / 16),
+                            SizedBox(height: MediaQuery.of(context).size.height / 16),
                             OwnButton(
                               buttonName: "Inscription",
                               buttonType: ButtonType.Inscription,
@@ -123,7 +123,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                                 color: OwnColor.orange,
                               ),
                             ),
-                            SizedBox(height: Constant.height / 16),
+                            SizedBox(height: MediaQuery.of(context).size.height / 16),
                             OwnButton(
                               buttonName: "Mode invité",
                               buttonType: ButtonType.Guest,
@@ -144,7 +144,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
                           Padding(
                             padding: EdgeInsets.only(bottom: 10, left: 10),
                             child: Text(
-                              "Stelapix",
+                              Constant.company,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey,

@@ -4,7 +4,17 @@ import 'package:bonap/files/ui/dropDownButtons/dropDownButtonIngredients.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-enum Category { meal, fish, vegetable, fruit, starchy, milk, other }
+enum Category {
+  meal,
+  fish,
+  vegetable,
+  fruit,
+  starchy,
+  milk,
+  liquid,
+  salami,
+  other
+}
 enum popUpSort { alpha, category, favorite }
 
 class Ingredient {
@@ -43,7 +53,7 @@ class Ingredient {
         return Icon(Custom.cereals);
         break;
       case (Category.starchy):
-        return Icon(Custom.baguette);
+        return Icon(Custom.potato);
         break;
       case (Category.meal):
         return Icon(Custom.meat);
@@ -59,6 +69,12 @@ class Ingredient {
         break;
       case (Category.milk):
         return Icon(Custom.cheese);
+        break;
+      case (Category.liquid):
+        return Icon(Custom.drop);
+        break;
+      case (Category.salami):
+        return Icon(Custom.salami);
         break;
       default:
         return Icon(Icons.cake);
@@ -86,6 +102,12 @@ class Ingredient {
       case (Category.milk):
         return "Produit Laitier";
         break;
+      case (Category.liquid):
+        return "Liquide";
+        break;
+      case (Category.salami):
+        return "Charcuterie";
+        break;
       default:
         return "Autre";
         break;
@@ -111,6 +133,12 @@ class Ingredient {
         break;
       case "Produit Laitier":
         return Category.milk;
+        break;
+      case "Liquide":
+        return Category.liquid;
+        break;
+      case "Charcuterie":
+        return Category.salami;
         break;
       default:
         return Category.other;
@@ -147,7 +175,6 @@ class _IngredientsPageState extends State<IngredientsPage> {
     Ingredient.filter = "";
     Ingredient.searching = false;
     super.initState();
-    
   }
 
   @override
@@ -218,7 +245,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return _AddDialog(this);
+                    return AddDialog(this);
                   });
             }));
   }
@@ -247,8 +274,8 @@ class _IngredientsPageState extends State<IngredientsPage> {
           newList.add(i);
         }
       }
-    }
-    else newList = Ingredient.listIngredients;
+    } else
+      newList = Ingredient.listIngredients;
 
     return ListView(
       shrinkWrap: true,
@@ -328,16 +355,16 @@ class _IngredientsPageState extends State<IngredientsPage> {
   }
 }
 
-class _AddDialog extends StatefulWidget {
+class AddDialog extends StatefulWidget {
   final _IngredientsPageState ips;
 
-  _AddDialog(this.ips);
+  AddDialog(this.ips);
 
   @override
-  _AddDialogState createState() => _AddDialogState();
+  AddDialogState createState() => AddDialogState();
 }
 
-class _AddDialogState extends State<_AddDialog> {
+class AddDialogState extends State<AddDialog> {
   String newIngr = '';
   Icon newIcon;
 

@@ -5,6 +5,7 @@ import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/settings.dart';
 import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -39,7 +40,7 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                leading: Icon(Custom.harvest),
+                leading: Icon(Custom.apple_black_silhouette_with_a_leaf),
                 title: Text('Ingrédients'),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -66,7 +67,7 @@ class AppDrawer extends StatelessWidget {
               ListTile(
                 leading: Icon(Custom.chart_line),
                 enabled: false,
-                title: Text('Bilan diététique'),             
+                title: Text('Bilan diététique'),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.push(
@@ -85,16 +86,20 @@ class AppDrawer extends StatelessWidget {
                   thickness: 1.0,
                 ),
                 ListTile(
-                  leading: Icon(Custom.feedback),
+                  leading: FeedbackTools.hasFeedback
+                      ? Icon(Custom.emo_laugh)
+                      : Icon(Custom.emo_shoot),
                   title: Text('Feedback'),
-                  enabled: false,
+                  enabled: true,
                   onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => FeedbackReport()));
-                },
+                    FeedbackTools.hasFeedback = true;
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                FeedbackReport()));
+                  },
                 ),
                 ListTile(
                   leading: Icon(Custom.settings),

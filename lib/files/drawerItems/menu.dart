@@ -7,27 +7,7 @@ import 'package:bonap/files/ui/drawer.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
-import 'ingredients.dart';
-
 class MenuSemaine {
-  int numSemaine;
-  List<List<Meal>> repasSemaine = new List<List<Meal>>();
-
-  // indexs de 0 a 13, de lundi midi a dimanche soir
-
-  MenuSemaine(int numSemaine) {
-    this.numSemaine = numSemaine;
-
-    for (var i = 0; i < 14; i++) {
-      repasSemaine.add(new List<Meal>());
-      repasSemaine[i].add(new Meal('', new List<Ingredient>()));
-    }
-  }
-
-  void choisirRepas(int a, List<Meal> r) {
-    repasSemaine[a] = r;
-  }
-
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
     DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
@@ -48,9 +28,6 @@ class FunctionUpdate {
   }
 }
 
-// Cette ligne va disparaitre quand on loadera le menu depuis la firebase
-MenuSemaine m = new MenuSemaine(49);
-
 class Menu extends StatefulWidget {
   @override
   _MenuState createState() => _MenuState();
@@ -64,9 +41,8 @@ class _MenuState extends State<Menu> {
   void initState() {
     super.initState();
     loading().whenComplete(() {
-      setState((){});
+      setState(() {});
     });
-    
   }
 
   Future<void> loading() async {
@@ -74,8 +50,6 @@ class _MenuState extends State<Menu> {
     await DataStorage.loadRepas();
     await DataStorage.loadWeek();
   }
-
-  
 
   Future<bool> onBackPressed() {
     return showDialog(
@@ -101,8 +75,6 @@ class _MenuState extends State<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    ShoppingList.resetListe();
-    FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(
@@ -114,6 +86,64 @@ class _MenuState extends State<Menu> {
                     fontSize: 23.0,
                     color: Colors.black),
               ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.help_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('T\'es perdu ?'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                    'Créer des ingrédients\n\nFabrique d\'incroyables repas\n\nAjoute les à ton menu\n\nEt régale toi !\n\nBonap hein !'),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('J\'ai tout compris !'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Tout supprimer ?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Oulà, non !'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Ouaip'),
+                                onPressed: () {
+                                  setState(() {
+                                    Day.listDay = new List<Day>(14);
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                )
+              ],
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
