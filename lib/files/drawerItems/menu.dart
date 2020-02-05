@@ -1,33 +1,13 @@
-import 'package:bonap/widgets/account/login.dart';
+import 'package:bonap/files/data/dataStorage.dart';
+import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/tools.dart';
+import 'package:bonap/files/ui/drawer.dart';
+import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
-// Widgets
-import 'widgets/drawer.dart';
-import 'repas.dart';
-import 'ingredients.dart';
-import 'listeCourse.dart';
-import 'widgets/dataStorage.dart';
-import 'widgets/menu/dayMenu.dart';
-
 class MenuSemaine {
-  int numSemaine;
-  List<List<Meal>> repasSemaine = new List<List<Meal>>();
-
-  // indexs de 0 a 13, de lundi midi a dimanche soir
-
-  MenuSemaine(int numSemaine) {
-    this.numSemaine = numSemaine;
-
-    for (var i = 0; i < 14; i++) {
-      repasSemaine.add(new List<Meal>());
-      repasSemaine[i].add(new Meal('', new List<Ingredient>()));
-    }
-  }
-
-  void choisirRepas(int a, List<Meal> r) {
-    repasSemaine[a] = r;
-  }
-
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
     DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
@@ -37,47 +17,33 @@ class MenuSemaine {
 
 class FunctionUpdate {
   static void updateListeCourse(List<List<Meal>> repasSemaine) {
-    ListeCourse.resetListe();
+    ShoppingList.resetListe();
     for (int i = 0; i < repasSemaine.length; i++) {
       for (int j = 0; j < repasSemaine[i].length; j++) {
         if (repasSemaine[i][j] != null) {
-          ListeCourse.addRepasToListe(repasSemaine[i][j]);
+          ShoppingList.addRepasToListe(repasSemaine[i][j]);
         }
       }
     }
   }
 }
 
-// Cette ligne va disparaitre quand on loadera le menu depuis la firebase
-MenuSemaine m = new MenuSemaine(49);
-
-class HomePage extends StatefulWidget {
+class Menu extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
-
-  static Future<void> loading() async {
-    await DataStorage.loadIngredients();
-    await DataStorage.loadRepas();
-    await DataStorage.loadWeek();
-  }
-
-  
+  _MenuState createState() => _MenuState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MenuState extends State<Menu> {
   final bleu = Color.fromRGBO(0, 191, 255, 1);
   final jaune = Color.fromRGBO(205, 225, 0, 1);
 
   @override
   void initState() {
     super.initState();
-    HomePage.loading().whenComplete(() {
-      setState((){});
+    loading().whenComplete(() {
+      setState(() {});
     });
-    
   }
-
-  
 
   
 
@@ -93,11 +59,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 FlatButton(
                   child: Text("OK"),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              LoginPage(loggout: true))),
+                  onPressed: () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    LoginTools.loggout = true;
+                    return MainMenu();
+                  })),
                 ),
               ],
             ));
@@ -105,8 +71,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ListeCourse.resetListe();
-    FunctionUpdate.updateListeCourse(m.repasSemaine);
     return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(
@@ -118,6 +82,64 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 23.0,
                     color: Colors.black),
               ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.help_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('T\'es perdu ?'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                    'Créer des ingrédients\n\nFabrique d\'incroyables repas\n\nAjoute les à ton menu\n\nEt régale toi !\n\nBonap hein !'),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('J\'ai tout compris !'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Tout supprimer ?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Oulà, non !'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Ouaip'),
+                                onPressed: () {
+                                  setState(() {
+                                    Day.listDay = new List<Day>(14);
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                )
+              ],
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
@@ -175,6 +197,6 @@ class _HomePageState extends State<HomePage> {
 
   Future navigateToSubPage(context) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => MainMenu()));
   }
 }

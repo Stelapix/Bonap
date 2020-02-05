@@ -1,7 +1,8 @@
+import 'package:bonap/files/data/dataStorage.dart';
 import 'package:flutter/material.dart';
-import 'homePage.dart';
+import 'package:bonap/files/tools.dart';
+
 import 'ingredients.dart';
-import 'widgets/dataStorage.dart';
 
 class Meal {
   String name = '';
@@ -280,6 +281,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
   String newMealName = '';
   bool customName = true;
   bool weCanEditIt = true;
+  bool typing = false;
 
   @override
   void initState() {
@@ -292,123 +294,111 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Column(
+    typing = MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+    return AlertDialog(
+      title: Text(
+        'Modifier ' + widget.r.name,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Modifier ' + widget.r.name,
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+          Container(
+              child: TextField(
+            autofocus: false,
+            decoration: new InputDecoration(
+                labelText: 'Nom du repas', hintText: newMealName),
+            onChanged: (value) {
+              customName = true;
+              newMealName = value;
+              if (newMealName == '') customName = false;
+            },
+          )),
+          Container(
+            width: Constant.width * 0.8,
+            height: typing ? Constant.width * 0.1 : Constant.height * 0.4,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: widget.ingr.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final ingrName = Ingredient.listIngredients[index];
+
+                        return Container(
+                          child: CheckboxListTile(
+                              title: Row(
+                                children: <Widget>[
+                                  Ingredient.catIcon(ingrName.cat),
+                                  Text('    '),
+                                  Text(ingrName.nameWithoutTheEnd()),
+                                ],
+                              ),
+                              value: isIn(_tempSelectedIngr, ingrName),
+                              onChanged: (bool value) {
+                                if (value) {
+                                  if (!isIn(_tempSelectedIngr, ingrName)) {
+                                    setState(() {
+                                      _tempSelectedIngr.add(ingrName);
+                                    });
+                                  }
+                                } else {
+                                  if (isIn(_tempSelectedIngr, ingrName)) {
+                                    setState(() {
+                                      _tempSelectedIngr.removeWhere(
+                                          (Ingredient ingr) =>
+                                              ingr.name == ingrName.name);
+                                    });
+                                  }
+                                }
+
+                                widget.onSelectedIngrChanged(_tempSelectedIngr);
+
+                                if (!customName)
+                                  newMealName = _tempSelectedIngr.toString();
+                              }),
+                        );
+                      }),
                 ),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  if (newMealName != '') {
-                    for (int i = 0; i < Meal.listMeal.length; i++) {
-                      if (weCanEditIt) {
-                        if (Meal.listMeal[i].name == newMealName) {
-                          weCanEditIt = false;
-                        }
-                      }
-                    }
-                    if (weCanEditIt) widget.r.name = newMealName;
-                  }
-
-                  widget.r.listIngredient = _tempSelectedIngr;
-                  //print(_tempSelectedIngr);
-
-                  widget.rps.setState(
-                      () => widget.rps.disMeal = widget.rps.displayMeal());
-                  DataStorage.saveRepas();
-                  Navigator.pop(context);
-                },
-                child: Text('Ok'),
-              ),
-            ],
+              ],
+            ),
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                  width: 230,
-                  constraints: BoxConstraints(minWidth: 230, minHeight: 0),
-                  child: TextField(
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                        labelText: 'Nom du repas', hintText: newMealName),
-                    onChanged: (value) {
-                      customName = true;
-                      newMealName = value;
-                      if (newMealName == '') customName = false;
-                    },
-                  ))
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: widget.ingr.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final ingrName = Ingredient.listIngredients[index];
-
-                  return Container(
-                    child: CheckboxListTile(
-                        title: Row(
-                          children: <Widget>[
-                            Ingredient.catIcon(ingrName.cat),
-                            Text('    '),
-                            Text(ingrName.nameWithoutTheEnd()),
-                          ],
-                        ),
-                        value: isIn(_tempSelectedIngr, ingrName),
-                        onChanged: (bool value) {
-                          if (value) {
-                            if (!isIn(_tempSelectedIngr, ingrName)) {
-                              setState(() {
-                                _tempSelectedIngr.add(ingrName);
-                              });
-                            }
-                          } else {
-                            if (isIn(_tempSelectedIngr, ingrName)) {
-                              setState(() {
-                                _tempSelectedIngr.removeWhere(
-                                    (Ingredient ingr) =>
-                                        ingr.name == ingrName.name);
-                              });
-                            }
-                          }
-
-                          widget.onSelectedIngrChanged(_tempSelectedIngr);
-
-                          if (!customName)
-                            newMealName = _tempSelectedIngr.toString();
-                        }),
-                  );
-                }),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  if (!widget.r.fav) {
-                    Meal.listMeal.remove(widget.r);
-                    widget.rps.setState(() {});
-                    DataStorage.saveRepas();
-                    Navigator.pop(context);
-                  }
-                },
-              )
-            ],
-          )
         ],
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            if (!widget.r.fav) {
+              Meal.listMeal.remove(widget.r);
+              widget.rps.setState(() {});
+              DataStorage.saveRepas();
+              Navigator.pop(context);
+            }
+          },
+        ),
+        FlatButton(
+          onPressed: () {
+            if (newMealName != '') {
+              for (int i = 0; i < Meal.listMeal.length; i++) {
+                if (weCanEditIt) {
+                  if (Meal.listMeal[i].name == newMealName) {
+                    weCanEditIt = false;
+                  }
+                }
+              }
+              if (weCanEditIt) widget.r.name = newMealName;
+            }
+
+            widget.r.listIngredient = _tempSelectedIngr;
+
+            widget.rps
+                .setState(() => widget.rps.disMeal = widget.rps.displayMeal());
+            DataStorage.saveRepas();
+            Navigator.pop(context);
+          },
+          child: Text('Ok'),
+        ),
+      ],
     );
   }
 
@@ -444,6 +434,7 @@ class _MyDialogState extends State<_MyDialog> {
   String newRepasName = '';
   bool customName = false;
   bool weCanAddIt = true;
+  bool typing = false;
 
   @override
   void initState() {
@@ -453,103 +444,148 @@ class _MyDialogState extends State<_MyDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                '   Création Repas',
-                style: TextStyle(
-                    fontSize: 24.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              RaisedButton(
+    typing = MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+    return AlertDialog(
+      title: Ingredient.listIngredients.length == 0
+          ? Text('Vous allez trop vite !')
+          : Text('Ajouter un repas'),
+      content: Ingredient.listIngredients.length == 0
+          ? Text("Commencez par ajouter des ingrédients !")
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                    child: TextField(
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                      labelText: 'Nom du repas', hintText: newRepasName),
+                  onChanged: (value) {
+                    customName = true;
+                    newRepasName = value;
+                    if (newRepasName == '') customName = false;
+                  },
+                )),
+                Container(
+                  width: Constant.width * 0.8,
+                  height: typing
+                      ? Constant.width * 0.1
+                      : Ingredient.listIngredients.length <= 6
+                          ? (Constant.height *
+                              (Ingredient.listIngredients.length / 16))
+                          : Constant.height * 0.4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: widget.ingr.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final ingrName = widget.ingr[index];
+                              return Container(
+                                child: CheckboxListTile(
+                                    title: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 12),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Ingredient.catIcon(ingrName.cat),
+                                            ],
+                                          ),
+                                        ),
+                                        Text(ingrName.nameWithoutTheEnd()),
+                                      ],
+                                    ),
+                                    value: _tempSelectedIngr.contains(ingrName),
+                                    onChanged: (bool value) {
+                                      if (value) {
+                                        if (!_tempSelectedIngr
+                                            .contains(ingrName)) {
+                                          setState(() {
+                                            _tempSelectedIngr.add(ingrName);
+                                          });
+                                        }
+                                      } else {
+                                        if (_tempSelectedIngr
+                                            .contains(ingrName)) {
+                                          setState(() {
+                                            _tempSelectedIngr.removeWhere(
+                                                (Ingredient ingr) =>
+                                                    ingr == ingrName);
+                                          });
+                                        }
+                                      }
+
+                                      widget.onSelectedIngrChanged(
+                                          _tempSelectedIngr);
+
+                                      if (!customName)
+                                        newRepasName =
+                                            _tempSelectedIngr.toString();
+                                    }),
+                              );
+                            }),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+      actions: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Ingredient.listIngredients.length > 0 ?
+            Padding(
+              padding: const EdgeInsets.only(right: 20 ),
+              child: FlatButton(
+                child: Text('Modifier des ingrédients'),
                 onPressed: () {
-                  if (newRepasName != '') {
-                    for (int i = 0; i < Meal.listMeal.length; i++) {
-                      if (weCanAddIt) {
-                        if (Meal.listMeal[i].name == newRepasName) {
-                          weCanAddIt = false;
-                        }
-                      }
-                    }
-                  }
-                  if (weCanAddIt)
-                    Meal.listMeal.add(Meal(newRepasName, _tempSelectedIngr));
-                  widget.rps.setState(
-                      () => widget.rps.disMeal = widget.rps.displayMeal());
-                  DataStorage.saveRepas();
-                  HomePage.loading().whenComplete(() {
-                    setState(() {});
-                  });
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => IngredientsPage()));
                 },
-                child: Text('Ok'),
               ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Container(
-                  width: 230,
-                  constraints: BoxConstraints(minWidth: 230, minHeight: 0),
-                  child: TextField(
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                        labelText: 'Nom du repas', hintText: newRepasName),
-                    onChanged: (value) {
-                      customName = true;
-                      newRepasName = value;
-                      if (newRepasName == '') customName = false;
-                    },
-                  ))
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: widget.ingr.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final ingrName = widget.ingr[index];
-                  return Container(
-                    child: CheckboxListTile(
-                        title: Row(
-                          children: <Widget>[
-                            Ingredient.catIcon(ingrName.cat),
-                            Text('    '),
-                            Text(ingrName.nameWithoutTheEnd()),
-                          ],
-                        ),
-                        value: _tempSelectedIngr.contains(ingrName),
-                        onChanged: (bool value) {
-                          if (value) {
-                            if (!_tempSelectedIngr.contains(ingrName)) {
-                              setState(() {
-                                _tempSelectedIngr.add(ingrName);
-                              });
-                            }
-                          } else {
-                            if (_tempSelectedIngr.contains(ingrName)) {
-                              setState(() {
-                                _tempSelectedIngr.removeWhere(
-                                    (Ingredient ingr) => ingr == ingrName);
-                              });
+            ) : Container(),
+            FlatButton(
+              onPressed: Ingredient.listIngredients.length == 0
+                  ? () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  IngredientsPage()));
+                    }
+                  : () {
+                      if (newRepasName != '') {
+                        for (int i = 0; i < Meal.listMeal.length; i++) {
+                          if (weCanAddIt) {
+                            if (Meal.listMeal[i].name == newRepasName) {
+                              weCanAddIt = false;
                             }
                           }
-
-                          widget.onSelectedIngrChanged(_tempSelectedIngr);
-
-                          if (!customName)
-                            newRepasName = _tempSelectedIngr.toString();
-                        }),
-                  );
-                }),
-          ),
-        ],
-      ),
+                        }
+                      }
+                      if (newRepasName == '') weCanAddIt = false;
+                      if (weCanAddIt)
+                        Meal.listMeal
+                            .add(Meal(newRepasName, _tempSelectedIngr));
+                      widget.rps.setState(
+                          () => widget.rps.disMeal = widget.rps.displayMeal());
+                      DataStorage.saveRepas();
+                      Navigator.pop(context);
+                    },
+              child: Text('Ok'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
