@@ -34,10 +34,10 @@
 
  ## Nous suivre
  [Instagram](https://www.instagram.com/itsbonap/?hl=fr) Bonap  
- Aymeric LE FEYER 
+ Aymeric LE FEYER  
  [Twitter](https://twitter.com/Aymeric_Zepix)  
  [LinkedIn](https://www.linkedin.com/in/aymericlefeyer/)  
- Quentin CARRY
+ Quentin CARRY  
  [Twitter](https://twitter.com/quentin_carry)   
  [LinkedIn](https://www.linkedin.com/in/quentincarry/)
  
