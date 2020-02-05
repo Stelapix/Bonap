@@ -137,7 +137,7 @@ class Ingredient {
       case "Liquide":
         return Category.liquid;
         break;
-        case "Charcuterie":
+      case "Charcuterie":
         return Category.salami;
         break;
       default:
@@ -245,7 +245,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return _AddDialog(this);
+                    return AddDialog(this);
                   });
             }));
   }
@@ -355,16 +355,16 @@ class _IngredientsPageState extends State<IngredientsPage> {
   }
 }
 
-class _AddDialog extends StatefulWidget {
+class AddDialog extends StatefulWidget {
   final _IngredientsPageState ips;
 
-  _AddDialog(this.ips);
+  AddDialog(this.ips);
 
   @override
-  _AddDialogState createState() => _AddDialogState();
+  AddDialogState createState() => AddDialogState();
 }
 
-class _AddDialogState extends State<_AddDialog> {
+class AddDialogState extends State<AddDialog> {
   String newIngr = '';
   Icon newIcon;
 

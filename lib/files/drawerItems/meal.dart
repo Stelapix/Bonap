@@ -467,7 +467,12 @@ class _MyDialogState extends State<_MyDialog> {
                 )),
                 Container(
                   width: Constant.width * 0.8,
-                  height: typing ? Constant.width * 0.1 : Ingredient.listIngredients.length <= 6 ? (Constant.height * (Ingredient.listIngredients.length / 16)) : Constant.height * 0.4,
+                  height: typing
+                      ? Constant.width * 0.1
+                      : Ingredient.listIngredients.length <= 6
+                          ? (Constant.height *
+                              (Ingredient.listIngredients.length / 16))
+                          : Constant.height * 0.4,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
@@ -522,42 +527,62 @@ class _MyDialogState extends State<_MyDialog> {
                                     }),
                               );
                             }),
-                      )
+                      ),
                     ],
                   ),
                 )
               ],
             ),
       actions: <Widget>[
-        FlatButton(
-          onPressed: Ingredient.listIngredients.length == 0
-              ? () {
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 20 ),
+              child: FlatButton(
+                child: Text('Modifier des ingrédients'),
+                onPressed: () {
                   Navigator.of(context).pop();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              IngredientsPage()));
-                }
-              : () {
-                  if (newRepasName != '') {
-                    for (int i = 0; i < Meal.listMeal.length; i++) {
-                      if (weCanAddIt) {
-                        if (Meal.listMeal[i].name == newRepasName) {
-                          weCanAddIt = false;
+                          builder: (BuildContext context) => IngredientsPage()));
+                },
+              ),
+            ),
+            FlatButton(
+              onPressed: Ingredient.listIngredients.length == 0
+                  ? () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  IngredientsPage()));
+                    }
+                  : () {
+                      if (newRepasName != '') {
+                        for (int i = 0; i < Meal.listMeal.length; i++) {
+                          if (weCanAddIt) {
+                            if (Meal.listMeal[i].name == newRepasName) {
+                              weCanAddIt = false;
+                            }
+                          }
                         }
                       }
-                    }
-                  }
-                  if (newRepasName == '') weCanAddIt = false;
-                  if (weCanAddIt)
-                    Meal.listMeal.add(Meal(newRepasName, _tempSelectedIngr));
-                  widget.rps.setState(
-                      () => widget.rps.disMeal = widget.rps.displayMeal());
-                  DataStorage.saveRepas();
-                  Navigator.pop(context);
-                },
-          child: Text('Ok'),
+                      if (newRepasName == '') weCanAddIt = false;
+                      if (weCanAddIt)
+                        Meal.listMeal
+                            .add(Meal(newRepasName, _tempSelectedIngr));
+                      widget.rps.setState(
+                          () => widget.rps.disMeal = widget.rps.displayMeal());
+                      DataStorage.saveRepas();
+                      Navigator.pop(context);
+                    },
+              child: Text('Ok'),
+            ),
+          ],
         ),
       ],
     );
