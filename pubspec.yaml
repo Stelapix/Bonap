@@ -14,7 +14,7 @@ description: Gestionnaire de menu
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -36,6 +36,7 @@ dependencies:
   provider: ^2.0.1
   path_provider: any
   load: ^0.1.5+1
+  url_launcher: ^5.4.1
 
 dev_dependencies:
   flutter_launcher_icons:
@@ -46,8 +47,6 @@ flutter_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon6.png"
-
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,8 +65,6 @@ flutter:
     - assets/icon/
     - assets/splash/
     - assets/loader/
-
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
