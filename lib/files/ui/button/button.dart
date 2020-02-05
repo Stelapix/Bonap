@@ -33,7 +33,8 @@ class _OwnButtonState extends State<OwnButton> {
       new PageController(initialPage: 1, viewportFraction: 1.0);
 
   void result() {
-    if (widget.buttonType == ButtonType.Connecter || widget.buttonType == ButtonType.Inscrire) 
+    if (widget.buttonType == ButtonType.Connecter ||
+        widget.buttonType == ButtonType.Inscrire)
       FormsState().whichButton(widget.buttonType, context);
     else if (widget.buttonType == ButtonType.Connexion)
       MainMenuState().goto(0);
@@ -52,7 +53,7 @@ class _OwnButtonState extends State<OwnButton> {
         widget.buttonType != ButtonType.Inscrire)
       return Row(
         children: <Widget>[
-          SizedBox(width: Constant.width / 12),
+          SizedBox(width: Constant.width / 30),
           Container(
             child: FlatButton(
               shape: RoundedRectangleBorder(
@@ -105,18 +106,18 @@ class _OwnButtonState extends State<OwnButton> {
           gradient: LinearGradient(
               colors: widget.buttonType == ButtonType.Connecter ||
                       widget.buttonType == ButtonType.Inscription
-                  ? [Colors.yellow, OwnColor.orangeDarker]
+                  ? [OwnColor.yellow, OwnColor.orangeDarker]
                   : widget.buttonType != ButtonType.Guest
                       ? [OwnColor.orangeDarker, OwnColor.yellow]
-                      : [Colors.purple, Colors.green],
+                      : [Colors.green, Colors.blue],
               begin: Alignment.centerRight,
               end: Alignment.centerLeft),
         ),
         child: InkWell(
           highlightColor: Colors.transparent,
-          splashColor: OwnColor.yellow,
+          splashColor: widget.buttonType == ButtonType.Guest ? OwnColor.blueSplash : OwnColor.orangeSplash,
           borderRadius: BorderRadius.circular(50.0),
-          onTap: () {},
+          onTap: () => result(),
           child: Container(
             height: Constant.height / 12,
             width: Constant.width,

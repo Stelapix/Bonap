@@ -12,16 +12,13 @@ class ThemeChanger with ChangeNotifier {
   getTheme() => _themeData.copyWith(
         cursorColor: Color(0xFFEE5623), //Curseur
         errorColor: Colors.red, //Error form
-        canvasColor: _themeData == ThemeData.dark()
-            ? Colors.white.withOpacity(0.3)
-            : Colors.black.withOpacity(0.3), //Cut Copy Past
         textSelectionColor: _themeData == ThemeData.dark()
-            ? Colors.white.withOpacity(0.3)
-            : Colors.black.withOpacity(0.3),
+            ? Colors.white.withOpacity(0.5)
+            : Colors.black.withOpacity(0.5),
         textSelectionHandleColor: _themeData == ThemeData.dark()
-            ? Colors.white.withOpacity(0.3)
-            : Colors.black.withOpacity(0.3),
-        scaffoldBackgroundColor: Color.fromRGBO(50, 50, 50, 1), //Fond
+            ? Colors.white.withOpacity(0.5)
+            : Colors.black.withOpacity(0.5),
+        // scaffoldBackgroundColor: Color.fromRGBO(50, 50, 50, 1), //Fond
         // hintColor: Colors.yellow, //Hint
       );
 

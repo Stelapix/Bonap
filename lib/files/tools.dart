@@ -34,6 +34,10 @@ class OwnColor {
   static Color orange = Color(0xFFEE5623);
   static Color orangeDarker = Color(0xFFFB415B);
   static Color yellow = Color.fromRGBO(246, 199, 0, 1);
+  static Color yellowLogo = Color.fromRGBO(205, 225, 0, 1);
+  static Color blueLogo = Color.fromRGBO(0, 191, 255, 1);
+  static Color orangeSplash = Color.fromRGBO(248, 124, 50, 1);
+  static Color blueSplash = Color.fromRGBO(55, 162, 155, 1);
   static bool blackTheme = true;
 
   Color getEnabledColorBorder(BuildContext context) {

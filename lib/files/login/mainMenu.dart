@@ -1,16 +1,12 @@
 import 'dart:async';
 
 import 'package:bonap/files/login/connectedWays.dart';
-import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/signIn.dart';
 import 'package:bonap/files/login/signUp.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/button/button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:vibration/vibration.dart';
 
 class MyClipper extends CustomClipper<Path> {
   @override
@@ -41,6 +37,8 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
     LoginTools.guestMode = false;
     if (LoginTools.loggout) signOut();
   }
@@ -71,97 +69,107 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     return WillPopScope(
       onWillPop: onBackPressed,
       child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            ClipPath(
-              clipper: MyClipper(),
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/splash/splashLogin.jpg'),
-                      fit: BoxFit.fill),
-                ),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: Constant.height,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    ClipPath(
+                      clipper: MyClipper(),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/splash/splashLogin.jpg'),
+                              fit: BoxFit.fill),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            SizedBox(
+                              height: Constant.height / 20,
+                            ),
+                            Image.asset(
+                              'assets/logo_bonap.png',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     SizedBox(
-                      height: Constant.height / 20,
+                      height: Constant.height / 1.8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            OwnButton(
+                              buttonName: "Connexion",
+                              buttonType: ButtonType.Connexion,
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                color: OwnColor.orange,
+                              ),
+                            ),
+                            SizedBox(height: Constant.height / 16),
+                            OwnButton(
+                              buttonName: "Inscription",
+                              buttonType: ButtonType.Inscription,
+                              icon: Icon(
+                                Icons.arrow_forward_ios,
+                                color: OwnColor.orange,
+                              ),
+                            ),
+                            SizedBox(height: Constant.height / 16),
+                            OwnButton(
+                              buttonName: "Mode invité",
+                              buttonType: ButtonType.Guest,
+                              icon: Icon(
+                                Icons.person,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Image.asset(
-                      'assets/logo_bonap.png',
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10, left: 10),
+                            child: Text(
+                              "Stelapix",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10, right: 10),
+                            child: Text(
+                              "v" + Constant.version,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: Constant.height / 1.8,
-              child: Container(
-                color: Colors.blue,
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    OwnButton(
-                      buttonName: "Connexion",
-                      buttonType: ButtonType.Connexion,
-                      icon: Icon(
-                        Icons.arrow_back_ios,
-                        color: OwnColor.orange,
-                      ),
-                    ),
-                    SizedBox(height: Constant.height / 16),
-                    OwnButton(
-                      buttonName: "Inscription",
-                      buttonType: ButtonType.Inscription,
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        color: OwnColor.orange,
-                      ),
-                    ),
-                    SizedBox(height: Constant.height / 16),
-                    OwnButton(
-                      buttonName: "Mode invité",
-                      buttonType: ButtonType.Guest,
-                      icon: Icon(
-                        Icons.person,
-                        color: OwnColor.orange,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10, left: 10),
-                    child: Text(
-                      "Stelapix",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10, right: 10),
-                    child: Text(
-                      "v" + Constant.version,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

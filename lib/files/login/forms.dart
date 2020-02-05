@@ -134,7 +134,7 @@ class FormsState extends State<Forms> {
       enableInteractiveSelection: true,
       toolbarOptions: ToolbarOptions(
         selectAll: false,
-        cut: false,
+        cut: true,
         copy: true,
         paste: true,
       ),
@@ -212,7 +212,7 @@ class FormsState extends State<Forms> {
       enableInteractiveSelection: true,
       toolbarOptions: ToolbarOptions(
         selectAll: false,
-        cut: false,
+        cut: true,
         copy: true,
         paste: true,
       ),
