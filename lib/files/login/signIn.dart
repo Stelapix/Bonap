@@ -38,12 +38,16 @@ class _SignInState extends State<SignIn> {
                             whichForms: "signInForm",
                           ),
                           SizedBox(height: 30),
-                          Text(
-                            "Mot de passe oublié ?",
-                            style: TextStyle(
-                              fontSize: 17.0,
-                            ),
-                          ),
+                          GestureDetector(
+                              child: Text(
+                                "Mot de passe oublié ?",
+                                style: TextStyle(
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                              onTap: () {
+                                FormsState().alertDialog("", context);
+                              }),
                           SizedBox(height: 30.0),
                           OwnButton(
                             buttonName: "Se connecter",
