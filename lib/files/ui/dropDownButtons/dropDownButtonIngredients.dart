@@ -17,6 +17,7 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
   @override
   void initState() {
     super.initState();
+    _value = "Viande";
     _categories.addAll([
       "Viande",
       "Charcuterie",

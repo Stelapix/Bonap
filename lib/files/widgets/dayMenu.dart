@@ -286,9 +286,7 @@ class DayButtonState extends State<DayButton> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
-                                        width:
-                                            Constant.width /
-                                                size,
+                                        width: Constant.width / size,
                                         child: IconButton(
                                           icon: Day
                                               .listDay[widget.index].ing1.icon,
@@ -316,9 +314,7 @@ class DayButtonState extends State<DayButton> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
-                                        width:
-                                            Constant.width /
-                                                size,
+                                        width: Constant.width / size,
                                         child: IconButton(
                                           icon: Day
                                               .listDay[widget.index].ing2.icon,
@@ -346,9 +342,7 @@ class DayButtonState extends State<DayButton> {
                                   ? Padding(
                                       padding: const EdgeInsets.all(0),
                                       child: SizedBox(
-                                        width:
-                                            Constant.width /
-                                                size,
+                                        width: Constant.width / size,
                                         child: IconButton(
                                           icon: Day
                                               .listDay[widget.index].ing3.icon,
@@ -554,78 +548,93 @@ class AddMealDialogState extends State<AddMealDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        title: Text("Ajouter des repas"),
+        title: Meal.listMeal.length > 0
+            ? Text("Ajouter des repas")
+            : Text("Vous allez trop vite !"),
         actions: <Widget>[
           FlatButton(
             child: Text("Ok"),
-            onPressed: () {
-              if (Day.listDay[widget.index] != null &&
-                  Day.listDay[widget.index].listMeal.length != 0) {
-                if (Day.listDay[widget.index].listMeal[0].listIngredient
-                        .length >
-                    0)
-                  widget.dbs.ing1 =
-                      Day.listDay[widget.index].listMeal[0].listIngredient[0];
+            onPressed: Meal.listMeal.length > 0
+                ? () {
+                    if (Day.listDay[widget.index] != null &&
+                        Day.listDay[widget.index].listMeal.length != 0) {
+                      if (Day.listDay[widget.index].listMeal[0].listIngredient
+                              .length >
+                          0)
+                        widget.dbs.ing1 = Day.listDay[widget.index].listMeal[0]
+                            .listIngredient[0];
 
-                if (Day.listDay[widget.index].listMeal[0].listIngredient
-                        .length >
-                    1)
-                  widget.dbs.ing2 =
-                      Day.listDay[widget.index].listMeal[0].listIngredient[1];
+                      if (Day.listDay[widget.index].listMeal[0].listIngredient
+                              .length >
+                          1)
+                        widget.dbs.ing2 = Day.listDay[widget.index].listMeal[0]
+                            .listIngredient[1];
 
-                if (Day.listDay[widget.index].listMeal[0].listIngredient
-                        .length >
-                    2)
-                  widget.dbs.ing3 =
-                      Day.listDay[widget.index].listMeal[0].listIngredient[2];
+                      if (Day.listDay[widget.index].listMeal[0].listIngredient
+                              .length >
+                          2)
+                        widget.dbs.ing3 = Day.listDay[widget.index].listMeal[0]
+                            .listIngredient[2];
 
-                List<Day> copy = Day.listDay;
+                      List<Day> copy = Day.listDay;
 
-                for (int i = 0; i < copy.length; i++) {
-                  if (Day.listDay.contains(copy[i]) && copy[i] != null) {
-                    if (copy[i] != null) {
-                      if (copy[i].index == widget.index) {
-                        copy[i].listMeal = Day.listDay[widget.index].listMeal;
+                      for (int i = 0; i < copy.length; i++) {
+                        if (Day.listDay.contains(copy[i]) && copy[i] != null) {
+                          if (copy[i] != null) {
+                            if (copy[i].index == widget.index) {
+                              copy[i].listMeal =
+                                  Day.listDay[widget.index].listMeal;
+                            }
+                          }
+                        } else {
+                          Day d = new Day();
+                          d.index = widget.index;
+                          d.listMeal = Day.listDay[widget.index].listMeal;
+                          d.ing1 = d.listMeal[0].listIngredient.length > 0
+                              ? d.listMeal[0].listIngredient[0]
+                              : null;
+                          d.ing2 = d.listMeal[0].listIngredient.length > 1
+                              ? d.listMeal[0].listIngredient[1]
+                              : null;
+                          d.ing3 = d.listMeal[0].listIngredient.length > 2
+                              ? d.listMeal[0].listIngredient[2]
+                              : null;
+                          Day.listDay[widget.index] = d;
+                        }
                       }
                     }
-                  } else {
-                    Day d = new Day();
-                    d.index = widget.index;
-                    d.listMeal = Day.listDay[widget.index].listMeal;
-                    d.ing1 = d.listMeal[0].listIngredient.length > 0
-                        ? d.listMeal[0].listIngredient[0]
-                        : null;
-                    d.ing2 = d.listMeal[0].listIngredient.length > 1
-                        ? d.listMeal[0].listIngredient[1]
-                        : null;
-                    d.ing3 = d.listMeal[0].listIngredient.length > 2
-                        ? d.listMeal[0].listIngredient[2]
-                        : null;
-                    Day.listDay[widget.index] = d;
+
+                    DataStorage.saveWeek();
+
+                    widget.dbs.setState(() => true);
+                    Navigator.of(context).pop();
                   }
-                }
-              }
-
-              DataStorage.saveWeek();
-
-              widget.dbs.setState(() => true);
-              Navigator.of(context).pop();
-            },
+                : () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => RepasPage()));
+                  },
           )
         ],
-        content: Container(
-          width: Constant.width * 0.8,
-          height: Constant.height * 0.4,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Expanded(
-                child: displayMeal(),
+        content: Meal.listMeal.length > 0
+            ? Container(
+                width: Constant.width * 0.8,
+                height: Meal.listMeal.length > 5 ? Constant.height * 0.4 : Constant.height * (Meal.listMeal.length / 14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: displayMeal(),
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        ));
+            : Container(
+              child: Text('Commencez par ajouter des repas'),
+            ));
   }
 
   ListView displayMeal() {
@@ -689,6 +698,8 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var n = widget.listMeal.length;
+    for (Meal m in widget.listMeal) n += m.listIngredient.length;
     return AlertDialog(
       actions: <Widget>[
         FlatButton(
@@ -700,7 +711,7 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
       ],
       content: Container(
         width: Constant.width * 0.8,
-        height: Constant.height * 0.4,
+        height: n > 6 ? Constant.height * 0.4 : Constant.height * (n/15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,

@@ -538,6 +538,7 @@ class _MyDialogState extends State<_MyDialog> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
+            Ingredient.listIngredients.length > 0 ?
             Padding(
               padding: const EdgeInsets.only(right: 20 ),
               child: FlatButton(
@@ -550,7 +551,7 @@ class _MyDialogState extends State<_MyDialog> {
                           builder: (BuildContext context) => IngredientsPage()));
                 },
               ),
-            ),
+            ) : Container(),
             FlatButton(
               onPressed: Ingredient.listIngredients.length == 0
                   ? () {
