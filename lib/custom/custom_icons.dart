@@ -281,6 +281,12 @@ class Custom {
   static const IconData a001_bottles = const IconData(0xe8f3, fontFamily: _kFontFam);
   static const IconData a002_boiled = const IconData(0xe8f4, fontFamily: _kFontFam);
   static const IconData a003_pot = const IconData(0xe8f5, fontFamily: _kFontFam);
+  static const IconData emo_laugh = const IconData(0xe8f6, fontFamily: _kFontFam);
+  static const IconData emo_shoot = const IconData(0xe80f, fontFamily: _kFontFam);
+  static const IconData apple_black_silhouette_with_a_leaf = const IconData(0xe8f7, fontFamily: _kFontFam);
+  static const IconData drop = const IconData(0xe8f8, fontFamily: _kFontFam);
+  static const IconData potato = const IconData(0xe8f9, fontFamily: _kFontFam);
+  static const IconData salami = const IconData(0xe8fa, fontFamily: _kFontFam);
   static const IconData github_circled = const IconData(0xf09b, fontFamily: _kFontFam);
   static const IconData trello = const IconData(0xf181, fontFamily: _kFontFam);
 }

@@ -56,3 +56,7 @@ class FunctionTools {
     return null;
   }
 }
+
+class FeedbackTools {
+  static bool hasFeedback = false;
+}
