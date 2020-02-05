@@ -4,8 +4,8 @@
  Confectionné avec amour par CARRY Quentin et LE FEYER Aymeric  
 
 ## Mises à jour
- 0.2 - ? - Nouvelle version sur le play store  
- 0.1.3 - ? - Login terminé  
+ 0.2 - 05/02/2020 - Nouvelle version sur le play store  
+ 0.1.3 - 05/02/2020 - Login terminé  
  0.1.2 - 05/02/2020 - Améliorations graphiques sur les pages Repas et Menu  
  0.1.1 - 30/01/2020 - Refonte graphique du login  
  0.1 - 22/01/2020 - Mise en place sur le Play Store    
