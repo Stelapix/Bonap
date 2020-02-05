@@ -5,7 +5,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:flutter/material.dart';
 
-enum ButtonType { Inscription, Connexion, Inscrire, Connecter, Guest }
+enum ButtonType { Inscription, Connexion, Inscrire, Connecter, Guest, PasswordReset }
 
 class OwnButton extends StatefulWidget {
   OwnButton(

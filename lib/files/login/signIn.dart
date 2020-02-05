@@ -46,7 +46,7 @@ class _SignInState extends State<SignIn> {
                                 ),
                               ),
                               onTap: () {
-                                FormsState().alertDialog("", context);
+                                FormsState().alertPasswordReset("Nouveau mot de passe", "Saisissez votre adresse email", context);
                               }),
                           SizedBox(height: 30.0),
                           OwnButton(
