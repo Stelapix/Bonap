@@ -8,8 +8,8 @@ class Constant {
   static double width;
   static double height;
   getSizeOfCurrentScreen(BuildContext context) {
-    width = Constant.width;
-    height = Constant.height;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
   }
 }
 
