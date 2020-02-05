@@ -55,6 +55,7 @@ class _OwnButtonState extends State<OwnButton> {
         children: <Widget>[
           SizedBox(width: Constant.width / 30),
           Container(
+            height: Constant.height / 18,
             child: FlatButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0)),
@@ -83,6 +84,7 @@ class _OwnButtonState extends State<OwnButton> {
             ),
           ),
           Container(
+            height: Constant.height / 18,
             padding: EdgeInsets.only(right: 11),
             child: FlatButton(
               shape: RoundedRectangleBorder(
@@ -115,7 +117,9 @@ class _OwnButtonState extends State<OwnButton> {
         ),
         child: InkWell(
           highlightColor: Colors.transparent,
-          splashColor: widget.buttonType == ButtonType.Guest ? OwnColor.blueSplash : OwnColor.orangeSplash,
+          splashColor: widget.buttonType == ButtonType.Guest
+              ? OwnColor.blueSplash
+              : OwnColor.orangeSplash,
           borderRadius: BorderRadius.circular(50.0),
           onTap: () => result(),
           child: Container(

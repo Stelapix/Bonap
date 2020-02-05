@@ -5,7 +5,18 @@ import 'package:bonap/files/ui/button/button.dart';
 import 'package:bonap/files/widgets/loader.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  @override
+  void initState() {
+    KeyForm().newKey();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => Future.sync(MainMenuState().backToMainMenu),

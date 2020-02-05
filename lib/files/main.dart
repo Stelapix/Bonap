@@ -1,3 +1,4 @@
+import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/widgets/theme.dart';
 import 'package:flutter/material.dart';
@@ -43,10 +44,12 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Constant().getSizeOfCurrentScreen(context);
     return StreamBuilder(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
-      builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-        return MainMenu();
-      },
-    );
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+          if (snapshot.hasData && (!snapshot.data.isAnonymous))
+            return Menu();
+          else
+            return MainMenu();
+        });
   }
 }

@@ -37,8 +37,7 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
-
+    KeyForm().newKey();
     LoginTools.guestMode = false;
     if (LoginTools.loggout) signOut();
   }
