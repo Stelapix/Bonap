@@ -392,7 +392,6 @@ class FormsState extends State<Forms> {
               "Oups !",
               "Vos identifiants sont incorrects.\nMerci de réessayer.",
               context);
-          emailController.text = "";
           passwordController.text = "";
           print("wrong details");
         } else {
@@ -414,9 +413,9 @@ class FormsState extends State<Forms> {
             print("Sign Up");
             KeyForm().newKey();
             await alertDialog(
-                "Compte a été créé.",
+                "Votre compte a été créé.",
                 "Veuillez vérifier l'adresse e-mail : " +
-                    user.email +
+                    Text(user.email, style: TextStyle(color: Colors.blue)).toString() +
                     "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
                 context);
             Future.sync(MainMenuState().backToSignIn);
