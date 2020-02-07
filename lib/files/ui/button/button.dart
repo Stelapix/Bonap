@@ -99,7 +99,6 @@ class _OwnButtonState extends State<OwnButton> {
               color: Colors.white,
               child: widget.icon,
               onPressed: () => result(),
-              onLongPress: () => result(),
             ),
           ),
         ],
@@ -131,7 +130,6 @@ class _OwnButtonState extends State<OwnButton> {
           borderRadius: BorderRadius.circular(50.0),
           onTap: () => result(),
           onDoubleTap: () => result(),
-          onLongPress: () => result(),
           child: Container(
             height: Constant.height / 12,
             width: Constant.width,

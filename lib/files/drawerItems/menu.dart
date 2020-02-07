@@ -78,13 +78,20 @@ class _MenuState extends State<Menu> {
     return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(
-            appBar: new AppBar(
-              title: new Text(
+            appBar: AppBar(
+              title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 23.0,
                     color: Colors.black),
+              ),
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
               ),
               actions: <Widget>[
                 IconButton(
