@@ -1,9 +1,11 @@
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
+import 'package:bonap/files/ui/dropDownButtons/dropDownButtonMain.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,8 @@ class MenuSemaine {
     return newDate.day.toString() + '/' + newDate.month.toString();
   }
 }
+
+enum popUpMenu { lost, deleteAll }
 
 class FunctionUpdate {
   static void updateListeCourse(List<List<Meal>> repasSemaine) {
@@ -34,8 +38,7 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  final bleu = Color.fromRGBO(0, 191, 255, 1);
-  final jaune = Color.fromRGBO(205, 225, 0, 1);
+  popUpMenu _selectionPopUpMenu;
 
   @override
   void initState() {
@@ -91,65 +94,62 @@ class _MenuState extends State<Menu> {
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
+                        colors: <Color>[
+                      OwnColor.yellowLogo,
+                      OwnColor.blueLogo
+                    ])),
               ),
               actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.help_outline),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('T\'es perdu ?'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
+                PopupMenuButton<String>(
+                  onSelected: (String result) {
+                    result == "lost"
+                        ? FormsState().alertDialog(
+                            "Pour organiser tes petits plats il faut ...",
+                            "Ajouter tes ingrédients\n\nFabriquer d'incroyables repas\n\nPlannifier tes menus\n\nSavourer comme il se doit\n\nEt Bonap hein !",
+                            FlatButton(
+                              child: Text("J'ai tout compris !"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            context)
+                        : FormsState().alertDialog(
+                            "Tout supprimer ?",
+                            "",
+                            Row(
                               children: <Widget>[
-                                Text(
-                                    'Créer des ingrédients\n\nFabrique d\'incroyables repas\n\nAjoute les à ton menu\n\nEt régale toi !\n\nBonap hein !'),
+                                FlatButton(
+                                  child: Text('Oulà, non !'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('Ouaip'),
+                                  onPressed: () {
+                                    setState(() {
+                                      Day.listDay = new List<Day>(14);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
                               ],
                             ),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('J\'ai tout compris !'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          );
-                        });
+                            context);
                   },
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: "lost",
+                      child: Text("Besoin d'aide ?"),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: "deleteAll",
+                      child: Text('Tout effacer ?'),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Tout supprimer ?'),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Oulà, non !'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('Ouaip'),
-                                onPressed: () {
-                                  setState(() {
-                                    Day.listDay = new List<Day>(14);
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                  },
-                )
               ],
               leading: Builder(
                 builder: (BuildContext context) {
@@ -163,7 +163,7 @@ class _MenuState extends State<Menu> {
                 },
               ),
               iconTheme: IconThemeData(color: Colors.black),
-              backgroundColor: bleu,
+              backgroundColor: OwnColor.blueLogo,
             ),
             drawer: AppDrawer(),
             body: SingleChildScrollView(
@@ -185,7 +185,7 @@ class _MenuState extends State<Menu> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 26.0,
-                            color: bleu,
+                            color: OwnColor.blueLogo,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

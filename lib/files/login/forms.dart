@@ -161,7 +161,7 @@ class FormsState extends State<Forms> {
                               alertDialog(
                                   "Ne l'oubliez plus !",
                                   "Un email de réinitialisation va vous être envoyé",
-                                  context);
+                                  null,context);
                             }
                           }),
                     ],
@@ -172,7 +172,8 @@ class FormsState extends State<Forms> {
             ));
   }
 
-  Future<bool> alertDialog(String title, String text, BuildContext context) {
+  Future<bool> alertDialog(
+      String title, String text, Widget action, BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -185,6 +186,7 @@ class FormsState extends State<Forms> {
               ),
               content: Text(text, style: TextStyle(color: Colors.white)),
               backgroundColor: OwnColor.darkBackground,
+              actions: <Widget>[action],
             ));
   }
 
@@ -384,13 +386,13 @@ class FormsState extends State<Forms> {
             );
           });
         } else if (res == 1) {
-          await alertDialog(
-              "Patience...", "Veuillez d'abord vérifier votre e-mail.", context);
+          await alertDialog("Patience...",
+              "Veuillez d'abord vérifier votre e-mail.", null,context);
           print("email not verified");
         } else if (res == 2) {
           await alertDialog(
               "Oups !",
-              "Vos identifiants sont incorrects.\nMerci de réessayer.",
+              "Vos identifiants sont incorrects.\nMerci de réessayer.",null,
               context);
           passwordController.text = "";
           print("wrong details");
@@ -415,8 +417,9 @@ class FormsState extends State<Forms> {
             await alertDialog(
                 "Votre compte a été créé.",
                 "Veuillez vérifier l'adresse e-mail : " +
-                    Text(user.email, style: TextStyle(color: Colors.blue)).toString() +
-                    "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
+                    Text(user.email, style: TextStyle(color: Colors.blue))
+                        .toString() +
+                    "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",null,
                 context);
             Future.sync(MainMenuState().backToSignIn);
           });
