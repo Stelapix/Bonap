@@ -71,10 +71,11 @@ class _OwnButtonState extends State<OwnButton> {
               onPressed: () => result(),
             ),
           ),
-          SizedBox(width: Constant.width / 10),
-          Center(
-            child: Text(widget.buttonName,
-                style: TextStyle(color: Colors.white, fontSize: 26.0)),
+          Expanded(
+                      child: Center(
+              child: Text(widget.buttonName,
+                  style: TextStyle(color: Colors.white, fontSize: 26.0)),
+            ),
           ),
         ],
       );
