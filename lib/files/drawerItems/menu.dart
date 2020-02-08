@@ -5,7 +5,6 @@ import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
-import 'package:bonap/files/ui/dropDownButtons/dropDownButtonMain.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +15,6 @@ class MenuSemaine {
     return newDate.day.toString() + '/' + newDate.month.toString();
   }
 }
-
-enum popUpMenu { lost, deleteAll }
 
 class FunctionUpdate {
   static void updateListeCourse(List<List<Meal>> repasSemaine) {
@@ -38,8 +35,6 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  popUpMenu _selectionPopUpMenu;
-
   @override
   void initState() {
     super.initState();
@@ -85,8 +80,9 @@ class _MenuState extends State<Menu> {
               title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
+                    fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
-                    fontSize: 23.0,
+                    fontSize: 17.0,
                     color: Colors.black),
               ),
               flexibleSpace: Container(
@@ -119,13 +115,19 @@ class _MenuState extends State<Menu> {
                             Row(
                               children: <Widget>[
                                 FlatButton(
-                                  child: Text('Oulà, non !'),
+                                  child: Text('Oulà, non !',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                 ),
                                 FlatButton(
-                                  child: Text('Ouaip'),
+                                  child: Text('Ouaip',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
                                   onPressed: () {
                                     setState(() {
                                       Day.listDay = new List<Day>(14);
@@ -142,11 +144,17 @@ class _MenuState extends State<Menu> {
                       <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
                       value: "lost",
-                      child: Text("Besoin d'aide ?"),
+                      child: Text("Besoin d'aide ?",
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
                     ),
                     const PopupMenuItem<String>(
                       value: "deleteAll",
-                      child: Text('Tout effacer ?'),
+                      child: Text('Tout effacer ?',
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
                     ),
                   ],
                 ),
@@ -184,9 +192,9 @@ class _MenuState extends State<Menu> {
                               MenuSemaine.getTheNDayOfTheWeek(7).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 26.0,
+                            fontFamily: "Lemonada",
+                            fontSize: 17.0,
                             color: OwnColor.blueLogo,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

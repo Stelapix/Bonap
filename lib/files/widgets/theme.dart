@@ -2,7 +2,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:flutter/material.dart';
 
 class ThemeChanger with ChangeNotifier {
-  ThemeData _themeData;
+  ThemeData _themeData = ThemeData(fontFamily: "Lemonada");
 
   ThemeChanger(ThemeData themeData) {
     _themeData = themeData;
@@ -10,6 +10,12 @@ class ThemeChanger with ChangeNotifier {
   }
 
   getTheme() => _themeData.copyWith(
+        textTheme: _themeData.textTheme.copyWith(
+          title: TextStyle(fontFamily: "Lemonada"),
+          body1: TextStyle(fontFamily: "Lemonada"),
+          body2: TextStyle(fontFamily: "Lemonada"),
+          button: TextStyle(fontFamily: "Lemonada"),
+        ),
         cursorColor: Color(0xFFEE5623), //Curseur
         errorColor: Colors.red, //Error form
         textSelectionColor: _themeData == ThemeData.dark()

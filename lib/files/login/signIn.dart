@@ -67,7 +67,7 @@ class _SignInState extends State<SignIn> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Container(
-                            width: Constant.width / 5.1,
+                            width: Constant.width / 6,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     width: 0.25, color: Colors.white)),
@@ -79,7 +79,7 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                           Container(
-                            width: Constant.width / 5.1,
+                            width: Constant.width / 6,
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     width: 0.25, color: Colors.white)),
