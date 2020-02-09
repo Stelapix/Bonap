@@ -72,7 +72,7 @@ class _OwnButtonState extends State<OwnButton> {
             ),
           ),
           Expanded(
-                      child: Center(
+            child: Center(
               child: Text(widget.buttonName,
                   style: TextStyle(color: Colors.white, fontSize: 26.0)),
             ),
