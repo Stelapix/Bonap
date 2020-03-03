@@ -53,7 +53,6 @@ class AppDrawer extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Custom.basket),
-                enabled: false,
                 title: Text('Liste de Course'),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -61,7 +60,7 @@ class AppDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              ListeCoursePage()));
+                              ShoppingListPage()));
                 },
               ),
               ListTile(

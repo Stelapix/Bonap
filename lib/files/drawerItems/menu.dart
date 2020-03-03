@@ -1,7 +1,6 @@
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/shoppingList.dart';
-import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
@@ -14,19 +13,6 @@ class MenuSemaine {
     DateTime now = DateTime.now();
     DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
     return newDate.day.toString() + '/' + newDate.month.toString();
-  }
-}
-
-class FunctionUpdate {
-  static void updateListeCourse(List<List<Meal>> repasSemaine) {
-    ShoppingList.resetListe();
-    for (int i = 0; i < repasSemaine.length; i++) {
-      for (int j = 0; j < repasSemaine[i].length; j++) {
-        if (repasSemaine[i][j] != null) {
-          ShoppingList.addRepasToListe(repasSemaine[i][j]);
-        }
-      }
-    }
   }
 }
 

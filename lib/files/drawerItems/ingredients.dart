@@ -94,7 +94,7 @@ class Ingredient {
         return "Poisson";
         break;
       case (Category.fruit):
-        return "Fruit";
+        return "Fruit";    
         break;
       case (Category.vegetable):
         return "Légume";
