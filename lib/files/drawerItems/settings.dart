@@ -1,3 +1,4 @@
+import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
@@ -188,8 +189,10 @@ class _SettingsState extends State<Settings> {
                 Ingredient.listIngredients
                     .removeRange(0, Ingredient.listIngredients.length);
                 Meal.listMeal.removeRange(0, Meal.listMeal.length);
+                ShoppingList.liste.removeRange(0, ShoppingList.liste.length);
                 DataStorage.saveIngredients();
                 DataStorage.saveRepas();
+                DataStorage.saveShopping();
               },
             ),
             ListTile(

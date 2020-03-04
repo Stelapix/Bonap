@@ -3,6 +3,7 @@ import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:bonap/files/tools.dart';
+import 'package:bonap/files/data/dataStorage.dart';
 
 class ShoppingList {
   static List<IngredientShoppingList> liste =
@@ -47,6 +48,37 @@ class IngredientShoppingList {
     }
     return a;
   }
+
+  // Sauvegarde et chargement
+  IngredientShoppingList.fromJson(Map<String, dynamic> json)
+      : amount = json['amount'],
+        i = Ingredient.fromJson(json['i']),
+        listMeal = createList(json['listMeal']);
+
+  Map<String, dynamic> toJson() => {
+        'i': i,
+        'amount': amount,
+        'listMeal': listMeal,
+      };
+
+  static List<Meal> createList(List<dynamic> s) {
+    List<Meal> L = new List<Meal>();
+    if (s[0] != null) {
+
+
+      for (int i = 0; i < s.length; i++) {
+        L.add(Meal.fromJson(s[i]));
+      }
+
+    }
+    else {
+      L.add(null);
+    }
+    
+    
+
+    return L;
+  }
 }
 
 class ShoppingListPage extends StatefulWidget {
@@ -74,6 +106,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                       }
                     }
                   }
+                  DataStorage.saveShopping();
                 });
               },
             )
@@ -114,6 +147,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                     onPressed: () {
                       setState(() {
                         ShoppingList.liste.remove(data);
+                        DataStorage.saveShopping();
                       });
                     },
                   ),
@@ -126,6 +160,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                           onPressed: () {
                             setState(() {
                               data.amount++;
+                              DataStorage.saveShopping();
                             });
                           },
                           tooltip: "Ajouter 1",
@@ -135,6 +170,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                           onPressed: () {
                             setState(() {
                               if (data.amount > 1) data.amount--;
+                              DataStorage.saveShopping();
                             });
                           },
                           tooltip: "Retirer 1",
@@ -236,7 +272,7 @@ class AddDialogState extends State<AddDialog> {
                                   Ingredient.listIngredients[index], null));
                             }
                           });
-
+                          DataStorage.saveShopping();
                           Navigator.of(context).pop();
                         },
                       );

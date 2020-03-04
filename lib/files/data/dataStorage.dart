@@ -4,12 +4,13 @@ import 'dart:io';
 
 import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
+import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DataStorage {
   DataStorage();
-  static bool debug = false;
+  static bool debug = true;
 
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -29,6 +30,11 @@ class DataStorage {
   static Future<File> get _localFileWeek async {
     final path = await _localPath;
     return File('$path/week.json');
+  }
+
+  static Future<File> get _localFileShopping async {
+    final path = await _localPath;
+    return File('$path/shopping.json');
   }
 
   static Future<int> loadIngredients() async {
@@ -108,6 +114,32 @@ class DataStorage {
     final file = await _localFileWeek;
     String json = jsonEncode(Day.listDay);
     if (debug) print("SAVING WEEK : " + json);
+
+    return file.writeAsString(json);
+  }
+
+  static Future<int> loadShopping() async {
+    try {
+      final file = await _localFileShopping;
+
+      // Read the file
+      String content = await file.readAsString();
+      List collection = json.decode(content);
+      ShoppingList.liste = collection.map((json) => IngredientShoppingList.fromJson(json)).toList();
+      if (debug) print("LOADING SHOPPING : " + collection.toString());
+
+      return 1;
+    } catch (e) {
+      // If there is an error
+      if (debug) print(e.toString());
+      return 0;
+    }
+  }
+
+  static Future<File> saveShopping() async {
+    final file = await _localFileShopping;
+    String json = jsonEncode(ShoppingList.liste);
+    if (debug) print("SAVING SHOPPING : " + json);
 
     return file.writeAsString(json);
   }
