@@ -234,8 +234,8 @@ class DayButtonState extends State<DayButton> {
                     Day.listDay[widget.index] == null
                         ? Icon(Icons.add)
                         : Text(
-                            nameWithoutTheEnd(
-                                Day.listDay[widget.index].listMeal[0].name),
+                            RenderingText.nameWithoutTheEnd(
+                                Day.listDay[widget.index].listMeal[0].name, 4),
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight:
@@ -374,40 +374,7 @@ class DayButtonState extends State<DayButton> {
     );
   }
 
-  String nameWithoutTheEnd(String s) {
-    double max = Constant.width / 3;
-    if (getLenghtOfText(s) < max)
-      return s;
-    else {
-      String s2 = "";
-      int i = 0;
-      while (getLenghtOfText(s2) < max - 10) {
-        s2 += s[i];
-        i++;
-      }
-      return s2 + '...';
-    }
-  }
-
-  double getLenghtOfText(String s) {
-    final constraints = BoxConstraints(
-      maxWidth: 200.0,
-      minHeight: 0.0,
-      minWidth: 0.0,
-    );
-
-    RenderParagraph renderParagraph = RenderParagraph(
-      TextSpan(
-        text: s,
-        style: TextStyle(fontSize: 15),
-      ),
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    );
-
-    renderParagraph.layout(constraints);
-    return renderParagraph.getMinIntrinsicWidth(15).ceilToDouble();
-  }
+  
 }
 
 class ChangeIngredientDialog extends StatefulWidget {

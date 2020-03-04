@@ -1,6 +1,7 @@
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class Constant {
   static String version = "0.2"; //Version de Bonap
@@ -63,4 +64,41 @@ class FunctionTools {
 
 class FeedbackTools {
   static bool hasFeedback = false;
+}
+
+class RenderingText {
+  static String nameWithoutTheEnd(String s, double w) {
+    double max = Constant.width / w;
+    if (getLenghtOfText(s) < max)
+      return s;
+    else {
+      String s2 = "";
+      int i = 0;
+      while (getLenghtOfText(s2) < max - 10) {
+        s2 += s[i];
+        i++;
+      }
+      return s2 + '...';
+    }
+  }
+
+  static double getLenghtOfText(String s) {
+    final constraints = BoxConstraints(
+      maxWidth: 200.0,
+      minHeight: 0.0,
+      minWidth: 0.0,
+    );
+
+    RenderParagraph renderParagraph = RenderParagraph(
+      TextSpan(
+        text: s,
+        style: TextStyle(fontSize: 15),
+      ),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    );
+
+    renderParagraph.layout(constraints);
+    return renderParagraph.getMinIntrinsicWidth(15).ceilToDouble();
+  }
 }

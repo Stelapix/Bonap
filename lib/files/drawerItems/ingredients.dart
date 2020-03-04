@@ -151,7 +151,8 @@ class Ingredient {
       : name = json['name'],
         fav = json['fav'],
         cat =
-            Category.values.firstWhere((e) => e.toString() == json['category']);
+            Category.values.firstWhere((e) => e.toString() == json['category']),
+        icon = catIcon(Category.values.firstWhere((e) => e.toString() == json['category']));
 
   Map<String, dynamic> toJson() => {
         'name': name,

@@ -40,6 +40,7 @@ class IngredientShoppingList {
 
   String displayMeals() {
     String a = '';
+    if (this.listMeal[0] == null) return a;
     for (int b = 0; b < listMeal.length; b++) {
       a += (listMeal[b].name);
       if (b != listMeal.length - 1) a += '\n';
@@ -61,7 +62,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           title: new Text('Liste de Course'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.refresh),
+              icon: Icon(Icons.file_download),
+              tooltip: 'Importer depuis le menu',
               onPressed: () {
                 setState(() {
                   ShoppingList.liste = new List<IngredientShoppingList>();
@@ -105,7 +107,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       Text(data.i.name + ' (' + (data.amount.toString()) + ')'),
                   leading: data.i.icon,
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: Icon(Icons.done),
+                    tooltip: 'Supprimer cet élément',
                     onPressed: () {
                       setState(() {
                         ShoppingList.liste.remove(data);
@@ -143,7 +146,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Cet ingrédient est compris dans ces repas :',
+                            'Compris dans :',
                             style: TextStyle(fontSize: 12),
                           ),
                         ],
@@ -173,13 +176,59 @@ class AddDialogState extends State<AddDialog> {
 
   @override
   Widget build(BuildContext context) {
+    bool alreadyIn = false;
     return AlertDialog(
       title: Text('Ajouter un ingrédient'),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          
-          
+          Container(
+            width: Constant.width * 0.8,
+            height: Constant.height * 0.6,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: Ingredient.listIngredients.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        title: Text(RenderingText.nameWithoutTheEnd(
+                            Ingredient.listIngredients[index].name, 2.8)),
+                        leading: Ingredient.listIngredients[index].icon,
+                        onTap: () {
+                          setState(() {
+                            // Ingredient deja present, on augmente le compteur
+                            for (IngredientShoppingList isl in ShoppingList.liste) {
+                              if (isl.i.name == Ingredient.listIngredients[index].name) {
+                                alreadyIn = true;
+                              }
+                            }
+                            if (alreadyIn) {
+                                  print("Incremente");
+                              for (IngredientShoppingList i
+                                  in ShoppingList.liste) {
+                                if (i.i.name == Ingredient.listIngredients[index].name) {
+                                  i.amount++;
+                                }
+                              }
+                            }
+                            // Sinon on l'ajoute
+                            else {
+                              print("Ajout");
+                              ShoppingList.liste.add(new IngredientShoppingList(
+                                  Ingredient.listIngredients[index], null));
+                            }
+                          });
+
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -193,10 +242,7 @@ class AddDialogState extends State<AddDialog> {
             (data) => new Container(
               child: ListTile(
                 title: Text(data.name),
-                
-                onTap: () {
-                 
-                },
+                onTap: () {},
               ),
             ),
           )

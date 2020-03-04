@@ -330,7 +330,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                                 children: <Widget>[
                                   Ingredient.catIcon(ingrName.cat),
                                   Text('    '),
-                                  Text(ingrName.nameWithoutTheEnd()),
+                                  Text(RenderingText.nameWithoutTheEnd(ingrName.name, 4)),
                                 ],
                               ),
                               value: isIn(_tempSelectedIngr, ingrName),
@@ -495,7 +495,7 @@ class _MyDialogState extends State<_MyDialog> {
                                             ],
                                           ),
                                         ),
-                                        Text(ingrName.nameWithoutTheEnd()),
+                                        Text(RenderingText.nameWithoutTheEnd(ingrName.name, 4)),
                                       ],
                                     ),
                                     value: _tempSelectedIngr.contains(ingrName),
