@@ -51,10 +51,10 @@ class IngredientShoppingList {
 
 class ShoppingListPage extends StatefulWidget {
   @override
-  _ShoppingListPageState createState() => new _ShoppingListPageState();
+  ShoppingListPageState createState() => new ShoppingListPageState();
 }
 
-class _ShoppingListPageState extends State<ShoppingListPage> {
+class ShoppingListPageState extends State<ShoppingListPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -87,7 +87,9 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return AddDialog();
+                  return AddDialog(
+                    slps: this,
+                  );
                 });
           },
           backgroundColor: Color.fromRGBO(0, 191, 255, 1),
@@ -139,22 +141,28 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                         ),
                       ],
                     ),
-                    Divider(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 14.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Compris dans :',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text(
-                      data.displayMeals(),
-                    ),
+                    data.listMeal[0] != null
+                        ? Column(
+                            children: <Widget>[
+                              Divider(),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 14.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Compris dans :',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                data.displayMeals(),
+                              ),
+                            ],
+                          )
+                        : Column(),
                   ]),
             ),
           )
@@ -164,6 +172,12 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 }
 
 class AddDialog extends StatefulWidget {
+  AddDialog({
+    this.slps,
+  });
+
+  final ShoppingListPageState slps;
+
   @override
   AddDialogState createState() => AddDialogState();
 }
@@ -196,18 +210,21 @@ class AddDialogState extends State<AddDialog> {
                             Ingredient.listIngredients[index].name, 2.8)),
                         leading: Ingredient.listIngredients[index].icon,
                         onTap: () {
-                          setState(() {
+                          widget.slps.setState(() {
                             // Ingredient deja present, on augmente le compteur
-                            for (IngredientShoppingList isl in ShoppingList.liste) {
-                              if (isl.i.name == Ingredient.listIngredients[index].name) {
+                            for (IngredientShoppingList isl
+                                in ShoppingList.liste) {
+                              if (isl.i.name ==
+                                  Ingredient.listIngredients[index].name) {
                                 alreadyIn = true;
                               }
                             }
                             if (alreadyIn) {
-                                  print("Incremente");
+                              print("Incremente");
                               for (IngredientShoppingList i
                                   in ShoppingList.liste) {
-                                if (i.i.name == Ingredient.listIngredients[index].name) {
+                                if (i.i.name ==
+                                    Ingredient.listIngredients[index].name) {
                                   i.amount++;
                                 }
                               }
