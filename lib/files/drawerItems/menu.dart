@@ -4,7 +4,6 @@ import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
-import 'package:bonap/files/ui/dropDownButtons/dropDownButton.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
@@ -84,7 +83,68 @@ class _MenuState extends State<Menu> {
                     ])),
               ),
               actions: <Widget>[
-                DropDownButtonMenu(contextMenu: context),
+                PopupMenuButton<String>(
+                  onSelected: (String result) {
+                    result == "lost"
+                        ? FormsState().alertDialog(
+                            "Pour organiser tes petits plats il faut ...",
+                            "Ajouter tes ingrédients\n\nFabriquer d'incroyables repas\n\nPlannifier tes menus\n\nSavourer comme il se doit\n\nEt Bonap hein !",
+                            FlatButton(
+                              child: Text("J'ai tout compris !"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            context)
+                        : FormsState().alertDialog(
+                            "Tout supprimer ?",
+                            "",
+                            Row(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text('Oulà, non !',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('Ouaip',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
+                                  onPressed: () {
+                                    setState(() {
+                                      Day.listDay = new List<Day>(14);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            context);
+                  },
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: "lost",
+                      child: Text("Besoin d'aide ?",
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: "deleteAll",
+                      child: Text('Tout effacer ?',
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
+                    ),
+                  ],
+                ),
               ],
               leading: Builder(
                 builder: (BuildContext context) {
