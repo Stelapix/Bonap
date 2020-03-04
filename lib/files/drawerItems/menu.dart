@@ -16,12 +16,30 @@ class MenuSemaine {
   }
 }
 
+
+enum popUpMenu { lost, deleteAll }
+
+class FunctionUpdate {
+  static void updateListeCourse(List<List<Meal>> repasSemaine) {
+    ShoppingList.resetListe();
+    for (int i = 0; i < repasSemaine.length; i++) {
+      for (int j = 0; j < repasSemaine[i].length; j++) {
+        if (repasSemaine[i][j] != null) {
+          ShoppingList.addRepasToListe(repasSemaine[i][j]);
+        }
+      }
+    }
+  }
+}
+
 class Menu extends StatefulWidget {
   @override
   _MenuState createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
+  popUpMenu _selectionPopUpMenu;
+
   @override
   void initState() {
     super.initState();
@@ -68,9 +86,8 @@ class _MenuState extends State<Menu> {
               title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
-                    fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
-                    fontSize: 17.0,
+                    fontSize: 23.0,
                     color: Colors.black),
               ),
               flexibleSpace: Container(
@@ -84,7 +101,56 @@ class _MenuState extends State<Menu> {
                     ])),
               ),
               actions: <Widget>[
-                DropDownButtonMenu(contextMenu: context),
+                PopupMenuButton<String>(
+                  onSelected: (String result) {
+                    result == "lost"
+                        ? FormsState().alertDialog(
+                            "Pour organiser tes petits plats il faut ...",
+                            "Ajouter tes ingrédients\n\nFabriquer d'incroyables repas\n\nPlannifier tes menus\n\nSavourer comme il se doit\n\nEt Bonap hein !",
+                            FlatButton(
+                              child: Text("J'ai tout compris !"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            context)
+                        : FormsState().alertDialog(
+                            "Tout supprimer ?",
+                            "",
+                            Row(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text('Oulà, non !'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('Ouaip'),
+                                  onPressed: () {
+                                    setState(() {
+                                      Day.listDay = new List<Day>(14);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            context);
+                  },
+                  icon: Icon(Icons.more_vert),
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: "lost",
+                      child: Text("Besoin d'aide ?"),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: "deleteAll",
+                      child: Text('Tout effacer ?'),
+                    ),
+                  ],
+                ),
               ],
               leading: Builder(
                 builder: (BuildContext context) {
@@ -119,9 +185,9 @@ class _MenuState extends State<Menu> {
                               MenuSemaine.getTheNDayOfTheWeek(7).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: "Lemonada",
-                            fontSize: 17.0,
+                            fontSize: 26.0,
                             color: OwnColor.blueLogo,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
