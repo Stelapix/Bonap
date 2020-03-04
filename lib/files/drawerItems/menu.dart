@@ -4,6 +4,7 @@ import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
+import 'package:bonap/files/ui/dropDownButtons/dropDownButtonMain.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,32 @@ class MenuSemaine {
   }
 }
 
+<<<<<<< HEAD
+=======
+enum popUpMenu { lost, deleteAll }
+
+class FunctionUpdate {
+  static void updateListeCourse(List<List<Meal>> repasSemaine) {
+    ShoppingList.resetListe();
+    for (int i = 0; i < repasSemaine.length; i++) {
+      for (int j = 0; j < repasSemaine[i].length; j++) {
+        if (repasSemaine[i][j] != null) {
+          ShoppingList.addRepasToListe(repasSemaine[i][j]);
+        }
+      }
+    }
+  }
+}
+
+>>>>>>> parent of f7dfc62... font
 class Menu extends StatefulWidget {
   @override
   _MenuState createState() => _MenuState();
 }
 
 class _MenuState extends State<Menu> {
+  popUpMenu _selectionPopUpMenu;
+
   @override
   void initState() {
     super.initState();
@@ -67,9 +88,8 @@ class _MenuState extends State<Menu> {
               title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
-                    fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
-                    fontSize: 17.0,
+                    fontSize: 23.0,
                     color: Colors.black),
               ),
               flexibleSpace: Container(
@@ -102,19 +122,13 @@ class _MenuState extends State<Menu> {
                             Row(
                               children: <Widget>[
                                 FlatButton(
-                                  child: Text('Oulà, non !',
-                                      style: TextStyle(
-                                        fontFamily: "Lemonada",
-                                      )),
+                                  child: Text('Oulà, non !'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                 ),
                                 FlatButton(
-                                  child: Text('Ouaip',
-                                      style: TextStyle(
-                                        fontFamily: "Lemonada",
-                                      )),
+                                  child: Text('Ouaip'),
                                   onPressed: () {
                                     setState(() {
                                       Day.listDay = new List<Day>(14);
@@ -131,17 +145,11 @@ class _MenuState extends State<Menu> {
                       <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
                       value: "lost",
-                      child: Text("Besoin d'aide ?",
-                          style: TextStyle(
-                            fontFamily: "Lemonada",
-                          )),
+                      child: Text("Besoin d'aide ?"),
                     ),
                     const PopupMenuItem<String>(
                       value: "deleteAll",
-                      child: Text('Tout effacer ?',
-                          style: TextStyle(
-                            fontFamily: "Lemonada",
-                          )),
+                      child: Text('Tout effacer ?'),
                     ),
                   ],
                 ),
@@ -179,9 +187,9 @@ class _MenuState extends State<Menu> {
                               MenuSemaine.getTheNDayOfTheWeek(7).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: "Lemonada",
-                            fontSize: 17.0,
+                            fontSize: 26.0,
                             color: OwnColor.blueLogo,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

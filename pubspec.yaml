@@ -81,10 +81,6 @@ flutter:
     - family:  Custom
       fonts:
         - asset: fonts/Custom.ttf
-    - family : Lemonada
-      fonts:
-        # https://fonts.google.com/specimen/Lemonada
-        - asset: fonts/Lemonada.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
