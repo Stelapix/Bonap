@@ -1,6 +1,4 @@
 import 'package:bonap/files/data/dataStorage.dart';
-import 'package:bonap/files/drawerItems/meal.dart';
-import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
@@ -11,21 +9,9 @@ import 'package:flutter/material.dart';
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
-    DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
+    DateTime newDate = now.add(Duration(days: -(now.weekday - n - (7 * Weeks.weekID))));
+    
     return newDate.day.toString() + '/' + newDate.month.toString();
-  }
-}
-
-class FunctionUpdate {
-  static void updateListeCourse(List<List<Meal>> repasSemaine) {
-    // ShoppingList.resetListe();
-    // for (int i = 0; i < repasSemaine.length; i++) {
-    //   for (int j = 0; j < repasSemaine[i].length; j++) {
-    //     if (repasSemaine[i][j] != null) {
-    //       ShoppingList.addRepasToListe(repasSemaine[i][j]);
-    //     }
-    //   }
-    // }
   }
 }
 
@@ -82,7 +68,7 @@ class _MenuState extends State<Menu> {
                 style: TextStyle(
                     fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
-                    fontSize: 17.0,
+                    fontSize: 18.0,
                     color: Colors.black),
               ),
               flexibleSpace: Container(
@@ -96,7 +82,7 @@ class _MenuState extends State<Menu> {
                     ])),
               ),
               actions: <Widget>[
-                               PopupMenuButton<String>(
+                PopupMenuButton<String>(
                   onSelected: (String result) {
                     result == "lost"
                         ? FormsState().alertDialog(
@@ -183,6 +169,17 @@ class _MenuState extends State<Menu> {
                       child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.keyboard_arrow_left),
+                          tooltip: "Semaine précédente",
+                          color: Weeks.weekID > -1 ? OwnColor.blueLogo : Theme.of(context).disabledColor,
+                          onPressed: Weeks.weekID > -1
+                              ? () {
+                                  setState(() {
+                                    Weeks.changeWeek('-');
+                                  });
+                                }
+                              : () {}),
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Text(
@@ -193,10 +190,22 @@ class _MenuState extends State<Menu> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "Lemonada",
-                            fontSize: 17.0,
+                            fontSize: 22.0,
                             color: OwnColor.blueLogo,
                           ),
                         ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.keyboard_arrow_right),
+                        tooltip: "Semaine suivante",
+                        color: Weeks.weekID < 2 ? OwnColor.blueLogo : Theme.of(context).disabledColor,
+                        onPressed: Weeks.weekID < 2
+                            ? () {
+                                setState(() {
+                                  Weeks.changeWeek('+');
+                                });
+                              }
+                            : () {},
                       ),
                     ],
                   )),

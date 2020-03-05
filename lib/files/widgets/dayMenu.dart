@@ -6,8 +6,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
 
+class Weeks {
+  
+  static List<Day> week_1 = new List<Day>(14); // Last Week (weekID = -1)
+  static List<Day> week0 = new List<Day>(14); // Current Week (weekID = 0)
+  static List<Day> week1 = new List<Day>(14); // Next Week (weekID = 1)
+  static List<Day> week2 = new List<Day>(14); // Week + 2 (weekID = 2)
+  static int weekID = 0;
+
+  static void changeWeek(String p) {
+    // Save listDay at the right place
+    if (weekID == -1) week_1 = Day.listDay;
+    if (weekID == 0) week0 = Day.listDay;
+    if (weekID == 1) week1 = Day.listDay;
+    if (weekID == 2) week2 = Day.listDay;
+
+    // Load the week and save it in listDay
+    if (p == '+') {
+      if (weekID == -1) Day.listDay = week0;
+      if (weekID == 0) Day.listDay = week1;
+      if (weekID == 1) Day.listDay = week2;
+    } else if (p == '-') {
+      if (weekID == 0) Day.listDay = week_1;
+      if (weekID == 1) Day.listDay = week0;
+      if (weekID == 2) Day.listDay = week1;
+    }
+
+    // Update weekID
+    if (p == '+') weekID++;
+    if (p == '-') weekID--;
+
+    print(weekID);
+  }
+}
+
 class Day {
-  static List<Day> listDay = new List<Day>(14);
+  static List<Day> listDay = Weeks.week0;
 
   List<Meal> listMeal;
   Ingredient ing1;
