@@ -37,7 +37,6 @@ class Weeks {
 
     print(weekID);
   }
-
 }
 
 class Day {
@@ -241,20 +240,20 @@ class DayButtonState extends State<DayButton> {
                   : showDialog(
                       context: context,
                       builder: (context) {
-                        if (Weeks.weekID != -1) return AddMealDialog(this, widget.index);
-                        else return AlertDialog(
-                          title: Text(
-                              "Impossible !"),
-                          content: Text(
-                              "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("Oups, je ne le ferais plus .."),
-                              onPressed: () => Navigator.pop(context, false),
-                            ),
-                            
-                          ],
-                        );
+                        if (Weeks.weekID != -1)
+                          return AddMealDialog(this, widget.index);
+                        else
+                          return AlertDialog(
+                            title: Text("Impossible !"),
+                            content: Text(
+                                "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("Oups, je ne le ferais plus .."),
+                                onPressed: () => Navigator.pop(context, false),
+                              ),
+                            ],
+                          );
                       });
             });
           },
@@ -266,20 +265,20 @@ class DayButtonState extends State<DayButton> {
                   : showDialog(
                       context: context,
                       builder: (context) {
-                        if (Weeks.weekID != -1) AddMealDialog(this, widget.index);
-                         else return AlertDialog(
-                          title: Text(
-                              "Impossible !"),
-                          content: Text(
-                              "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("Oups, je ne le ferais plus .."),
-                              onPressed: () => Navigator.pop(context, false),
-                            ),
-                            
-                          ],
-                        );
+                        if (Weeks.weekID != -1)
+                          AddMealDialog(this, widget.index);
+                        else
+                          return AlertDialog(
+                            title: Text("Impossible !"),
+                            content: Text(
+                                "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("Oups, je ne le ferais plus .."),
+                                onPressed: () => Navigator.pop(context, false),
+                              ),
+                            ],
+                          );
                       });
             });
           },
@@ -292,7 +291,9 @@ class DayButtonState extends State<DayButton> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Day.listDay[widget.index] == null
-                        ? (Weeks.weekID == -1 ? Icon(Icons.do_not_disturb) : Icon(Icons.add))
+                        ? (Weeks.weekID == -1
+                            ? Icon(Icons.do_not_disturb)
+                            : Icon(Icons.add))
                         : (RenderingText.getLenghtOfText(Day
                                     .listDay[widget.index].listMeal[0].name) >
                                 115)
@@ -374,7 +375,14 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing1.icon,
                                           onPressed: () {
-                                            
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return DisplayInfosDialog(
+                                                      this,
+                                                      Day.listDay[widget.index]
+                                                          .listMeal);
+                                                });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing1.name,
@@ -393,7 +401,14 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing2.icon,
                                           onPressed: () {
-                                            
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return DisplayInfosDialog(
+                                                      this,
+                                                      Day.listDay[widget.index]
+                                                          .listMeal);
+                                                });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing2.name,
@@ -412,7 +427,14 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing3.icon,
                                           onPressed: () {
-                                            
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return DisplayInfosDialog(
+                                                      this,
+                                                      Day.listDay[widget.index]
+                                                          .listMeal);
+                                                });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing3.name,
@@ -431,7 +453,6 @@ class DayButtonState extends State<DayButton> {
     );
   }
 }
-
 
 class DelMealDialog extends StatefulWidget {
   final DayButtonState dbs;
