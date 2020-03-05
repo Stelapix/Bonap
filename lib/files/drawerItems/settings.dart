@@ -187,17 +187,43 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
-                Ingredient.listIngredients
-                    .removeRange(0, Ingredient.listIngredients.length);
-                Meal.listMeal.removeRange(0, Meal.listMeal.length);
-                ShoppingList.liste.removeRange(0, ShoppingList.liste.length);
-                Day.listDay.removeRange(0, Day.listDay.length);
-                Day.listDay = new List<Day>(14);
-            
-                DataStorage.saveIngredients();
-                DataStorage.saveRepas();
-                DataStorage.saveShopping();
-                DataStorage.saveWeek();
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text(
+                              "Cette action supprimera la totalité de vos informations sur Bonap"),
+                          content: Text(
+                              "Repas, Ingrédients, Liste de Course ...\nContinuer ?"),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("ANNULER"),
+                              onPressed: () => Navigator.pop(context, false),
+                            ),
+                            FlatButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                setState(() {
+                                  Ingredient.listIngredients.removeRange(
+                                      0, Ingredient.listIngredients.length);
+                                  Meal.listMeal
+                                      .removeRange(0, Meal.listMeal.length);
+                                  ShoppingList.liste.removeRange(
+                                      0, ShoppingList.liste.length);
+                                  Day.listDay
+                                      .removeRange(0, Day.listDay.length);
+                                  Day.listDay = new List<Day>(14);
+
+                                  DataStorage.saveIngredients();
+                                  DataStorage.saveRepas();
+                                  DataStorage.saveShopping();
+                                  DataStorage.saveWeek();
+                                });
+
+                                Navigator.pop(context, false);
+                              },
+                            ),
+                          ],
+                        ));
               },
             ),
             ListTile(
@@ -253,11 +279,8 @@ class _SettingsState extends State<Settings> {
                                 Text("Aymeric    "),
                                 InkWell(
                                   child: Image.asset("assets/linkedin_logo.png",
-                                      width: Constant.width /
-                                          10,
-                                      height:
-                                          Constant.height /
-                                              10),
+                                      width: Constant.width / 10,
+                                      height: Constant.height / 10),
                                   onTap: () => launch(
                                       'https://www.linkedin.com/in/aymericlefeyer/'),
                                 ),
@@ -270,11 +293,8 @@ class _SettingsState extends State<Settings> {
                                 Text("Quentin     "),
                                 InkWell(
                                   child: Image.asset("assets/linkedin_logo.png",
-                                      width: Constant.width /
-                                          10,
-                                      height:
-                                          Constant.height /
-                                              10),
+                                      width: Constant.width / 10,
+                                      height: Constant.height / 10),
                                   onTap: () => launch(
                                       'https://www.linkedin.com/in/quentincarry/'),
                                 ),
@@ -293,11 +313,8 @@ class _SettingsState extends State<Settings> {
                                 InkWell(
                                   child: Image.asset(
                                       "assets/instagram_logo.png",
-                                      width: Constant.width /
-                                          10,
-                                      height:
-                                          Constant.height /
-                                              10),
+                                      width: Constant.width / 10,
+                                      height: Constant.height / 10),
                                   onTap: () => launch(
                                       'https://www.instagram.com/louisehennecart_/?hl=fr'),
                                 ),
