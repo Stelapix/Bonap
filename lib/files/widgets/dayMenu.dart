@@ -374,16 +374,7 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing1.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      1,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
-                                            loaded = true;
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing1.name,
@@ -402,16 +393,7 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing2.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      2,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
-                                            loaded = true;
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing2.name,
@@ -430,15 +412,7 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing3.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      3,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing3.name,
@@ -458,78 +432,6 @@ class DayButtonState extends State<DayButton> {
   }
 }
 
-class ChangeIngredientDialog extends StatefulWidget {
-  final DayButtonState dbs;
-  final int ing;
-  final Meal meal;
-
-  ChangeIngredientDialog(this.dbs, this.ing, this.meal);
-
-  @override
-  ChangeIngredientDialogState createState() => ChangeIngredientDialogState();
-}
-
-class ChangeIngredientDialogState extends State<ChangeIngredientDialog> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Changer l'ingrédient principal"),
-      actions: <Widget>[
-        FlatButton(
-          child: Text("Retour"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        )
-      ],
-      content: Container(
-        width: Constant.width * 0.8,
-        height: Constant.height * 0.4,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                children: widget.meal.listIngredient
-                    .map((data) => new ListTile(
-                          title: Text(
-                            data.name,
-                            style:
-                                ((data == widget.dbs.ing1 && widget.ing == 1) ||
-                                        (data == widget.dbs.ing2 &&
-                                            widget.ing == 2) ||
-                                        (data == widget.dbs.ing3 &&
-                                            widget.ing == 3))
-                                    ? TextStyle(fontWeight: FontWeight.bold)
-                                    : TextStyle(fontWeight: FontWeight.normal),
-                          ),
-                          leading: data.icon,
-                          onTap: () {
-                            if (widget.ing == 1) widget.dbs.ing1 = data;
-                            if (widget.ing == 2) widget.dbs.ing2 = data;
-                            if (widget.ing == 3) widget.dbs.ing3 = data;
-
-                            widget.dbs.setState(() => true);
-                            DataStorage.saveWeek();
-
-                            Navigator.of(context).pop();
-                          },
-                        ))
-                    .toList(),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class DelMealDialog extends StatefulWidget {
   final DayButtonState dbs;
