@@ -315,7 +315,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
           )),
           Container(
             width: Constant.width * 0.8,
-            height: typing ? Constant.width * 0.1 : Constant.height * 0.4,
+            height: typing ? Constant.width * 0.4 : Constant.height * 0.7,
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -468,11 +468,8 @@ class _MyDialogState extends State<_MyDialog> {
                 Container(
                   width: Constant.width * 0.8,
                   height: typing
-                      ? Constant.width * 0.1
-                      : Ingredient.listIngredients.length <= 6
-                          ? (Constant.height *
-                              (Ingredient.listIngredients.length / 16))
-                          : Constant.height * 0.4,
+                      ? Constant.width * 0.4
+                      : Constant.width * 0.6,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,

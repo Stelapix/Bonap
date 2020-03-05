@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DataStorage {
   DataStorage();
-  static bool debug = true;
+  static bool debug = false;
 
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();

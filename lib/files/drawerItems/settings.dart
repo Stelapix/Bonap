@@ -3,6 +3,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:bonap/files/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -190,9 +191,13 @@ class _SettingsState extends State<Settings> {
                     .removeRange(0, Ingredient.listIngredients.length);
                 Meal.listMeal.removeRange(0, Meal.listMeal.length);
                 ShoppingList.liste.removeRange(0, ShoppingList.liste.length);
+                Day.listDay.removeRange(0, Day.listDay.length);
+                Day.listDay = new List<Day>(14);
+            
                 DataStorage.saveIngredients();
                 DataStorage.saveRepas();
                 DataStorage.saveShopping();
+                DataStorage.saveWeek();
               },
             ),
             ListTile(
