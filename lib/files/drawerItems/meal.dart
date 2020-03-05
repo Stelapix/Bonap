@@ -176,11 +176,13 @@ class _RepasPageState extends State<RepasPage> {
       newList = listMeal;
 
     return ListView(
+      
       shrinkWrap: true,
       children: newList
           .map(
             (data) => new Container(
               child: ListTile(
+                contentPadding: EdgeInsets.only(right: 5, left: 15, bottom: 5),
                 title: Text(data.name),
                 subtitle: Text(data.listIngredientToString()),
                 trailing: Row(
