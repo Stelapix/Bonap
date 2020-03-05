@@ -116,7 +116,11 @@ class _MenuState extends State<Menu> {
                                       )),
                                   onPressed: () {
                                     setState(() {
-                                      Day.listDay = new List<Day>(14);
+                                      Weeks.week0 = new List<Day>(14);
+                                      Weeks.week1 = new List<Day>(14);
+                                      Weeks.week2 = new List<Day>(14);
+                                      if (Weeks.weekID != -1) Day.listDay = new List<Day>(14);
+                                      DataStorage.saveWeek();
                                     });
                                     Navigator.of(context).pop();
                                   },
