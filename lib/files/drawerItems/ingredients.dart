@@ -22,7 +22,7 @@ class Ingredient {
   Category cat;
   Icon icon;
   bool fav;
-  static String newCat;
+  static String newCat = "Viande";
   static List<Ingredient> listIngredients = new List<Ingredient>();
   static bool searching = false;
   static String filter = "";
@@ -49,14 +49,14 @@ class Ingredient {
 
   static Icon catIcon(Category c) {
     switch (c) {
+      case (Category.meal):
+        return Icon(Custom.meat);
+        break;
       case (Category.other):
         return Icon(Custom.cereals);
         break;
       case (Category.starchy):
         return Icon(Custom.potato);
-        break;
-      case (Category.meal):
-        return Icon(Custom.meat);
         break;
       case (Category.fish):
         return Icon(Custom.fish);

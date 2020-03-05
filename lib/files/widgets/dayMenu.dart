@@ -233,16 +233,41 @@ class DayButtonState extends State<DayButton> {
                   children: <Widget>[
                     Day.listDay[widget.index] == null
                         ? Icon(Icons.add)
-                        : Text(
-                            RenderingText.nameWithoutTheEnd(
-                                Day.listDay[widget.index].listMeal[0].name, 4),
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight:
-                                    Day.listDay[widget.index].listMeal[0].fav
+                        : (RenderingText.getLenghtOfText(Day
+                                    .listDay[widget.index].listMeal[0].name) >
+                                115)
+                            ? Container(
+                                width: Constant.width / 3.5,
+                                height: Constant.height / 50,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: <Widget>[
+                                    Text(
+                                      RenderingText.nameWithoutTheEnd(
+                                          Day.listDay[widget.index].listMeal[0]
+                                              .name,
+                                          1),
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: Day.listDay[widget.index]
+                                                  .listMeal[0].fav
+                                              ? FontWeight.bold
+                                              : FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Text(
+                                RenderingText.nameWithoutTheEnd(
+                                    Day.listDay[widget.index].listMeal[0].name,
+                                    1),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: Day.listDay[widget.index]
+                                            .listMeal[0].fav
                                         ? FontWeight.bold
                                         : FontWeight.normal),
-                          ),
+                              ),
                   ],
                 ),
                 settingsMode
@@ -373,8 +398,6 @@ class DayButtonState extends State<DayButton> {
       ),
     );
   }
-
-  
 }
 
 class ChangeIngredientDialog extends StatefulWidget {
@@ -588,7 +611,9 @@ class AddMealDialogState extends State<AddMealDialog> {
         content: Meal.listMeal.length > 0
             ? Container(
                 width: Constant.width * 0.8,
-                height: Meal.listMeal.length > 5 ? Constant.height * 0.4 : Constant.height * (Meal.listMeal.length / 14),
+                height: Meal.listMeal.length > 5
+                    ? Constant.height * 0.4
+                    : Constant.height * (Meal.listMeal.length / 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -600,8 +625,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                 ),
               )
             : Container(
-              child: Text('Commencez par ajouter des repas'),
-            ));
+                child: Text('Commencez par ajouter des repas'),
+              ));
   }
 
   ListView displayMeal() {
@@ -678,7 +703,7 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
       ],
       content: Container(
         width: Constant.width * 0.8,
-        height: n > 6 ? Constant.height * 0.4 : Constant.height * (n/15),
+        height: n > 6 ? Constant.height * 0.4 : Constant.height * (n / 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
