@@ -175,7 +175,7 @@ class _MenuState extends State<Menu> {
             drawer: AppDrawer(),
             body: GestureDetector(
               onHorizontalDragStart: (details) {
-                if (details.globalPosition.dx < 300)  {
+                if (details.globalPosition.dx < 200)  {
                   if (Weeks.weekID > -1) {
                     setState(() {
                       Weeks.changeWeek('-');                 
@@ -183,7 +183,7 @@ class _MenuState extends State<Menu> {
                   }
                   
                 }
-                if (details.globalPosition.dx >= 300) {
+                if (details.globalPosition.dx >= 250) {
                   if (Weeks.weekID < 2) {
                     setState(() {
                       Weeks.changeWeek('+');
