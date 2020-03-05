@@ -241,7 +241,20 @@ class DayButtonState extends State<DayButton> {
                   : showDialog(
                       context: context,
                       builder: (context) {
-                        return AddMealDialog(this, widget.index);
+                        if (Weeks.weekID != -1) return AddMealDialog(this, widget.index);
+                        else return AlertDialog(
+                          title: Text(
+                              "Impossible !"),
+                          content: Text(
+                              "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Oups, je ne le ferais plus .."),
+                              onPressed: () => Navigator.pop(context, false),
+                            ),
+                            
+                          ],
+                        );
                       });
             });
           },
@@ -253,7 +266,20 @@ class DayButtonState extends State<DayButton> {
                   : showDialog(
                       context: context,
                       builder: (context) {
-                        return AddMealDialog(this, widget.index);
+                        if (Weeks.weekID != -1) AddMealDialog(this, widget.index);
+                         else return AlertDialog(
+                          title: Text(
+                              "Impossible !"),
+                          content: Text(
+                              "Tu ne peux pas modifier les repas de la semaine dernière, voyons ..."),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Oups, je ne le ferais plus .."),
+                              onPressed: () => Navigator.pop(context, false),
+                            ),
+                            
+                          ],
+                        );
                       });
             });
           },
@@ -266,7 +292,7 @@ class DayButtonState extends State<DayButton> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Day.listDay[widget.index] == null
-                        ? Icon(Icons.add)
+                        ? (Weeks.weekID == -1 ? Icon(Icons.do_not_disturb) : Icon(Icons.add))
                         : (RenderingText.getLenghtOfText(Day
                                     .listDay[widget.index].listMeal[0].name) >
                                 115)
@@ -302,7 +328,7 @@ class DayButtonState extends State<DayButton> {
                               ),
                   ],
                 ),
-                settingsMode
+                settingsMode && Weeks.weekID != -1
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
