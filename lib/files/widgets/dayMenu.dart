@@ -243,10 +243,8 @@ class DayButtonState extends State<DayButton> {
                                   scrollDirection: Axis.horizontal,
                                   children: <Widget>[
                                     Text(
-                                      RenderingText.nameWithoutTheEnd(
-                                          Day.listDay[widget.index].listMeal[0]
-                                              .name,
-                                          1),
+                                      Day.listDay[widget.index].listMeal[0]
+                                          .name,
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: Day.listDay[widget.index]

@@ -40,11 +40,14 @@ class IngredientShoppingList {
   }
 
   String displayMeals() {
-    String a = '';
+    String a = ' -> ';
     if (this.listMeal[0] == null) return a;
     for (int b = 0; b < listMeal.length; b++) {
       a += (listMeal[b].name);
-      if (b != listMeal.length - 1) a += '\n';
+      if (b != listMeal.length - 1) {
+        a += '\n -> ';
+
+      } 
     }
     return a;
   }
@@ -188,13 +191,16 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                                   children: <Widget>[
                                     Text(
                                       'Compris dans :',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
                                     ),
                                   ],
                                 ),
                               ),
-                              Text(
-                                data.displayMeals(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  data.displayMeals(),
+                                ),
                               ),
                             ],
                           )
