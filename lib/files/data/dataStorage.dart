@@ -44,11 +44,17 @@ class DataStorage {
     final path = await _localPath;
     return File('$path/week2.json');
   }
+  static Future<File> get _localFileWeekNumber async {
+    final path = await _localPath;
+    return File('$path/weekNumber.json');
+  }
 
   static Future<File> get _localFileShopping async {
     final path = await _localPath;
     return File('$path/shopping.json');
   }
+
+  // Ingredients
 
   static Future<int> loadIngredients() async {
     // Load from the device
@@ -79,6 +85,8 @@ class DataStorage {
     return file.writeAsString(json);
   }
 
+  // Meals
+
   static Future<int> loadRepas() async {
     try {
       final file = await _localFileRepas;
@@ -104,6 +112,8 @@ class DataStorage {
 
     return file.writeAsString(json);
   }
+
+  // Weeks
 
   static Future<int> loadWeek() async {
     try {
@@ -163,10 +173,14 @@ class DataStorage {
     file1.writeAsStringSync(json1);
     file2.writeAsStringSync(json2);
 
+    DataStorage.saveWeekNumber();
+
 
 
     return file_1.writeAsString(json_1);
   }
+
+  // Shopping List
 
   static Future<int> loadShopping() async {
     try {
@@ -190,6 +204,35 @@ class DataStorage {
     final file = await _localFileShopping;
     String json = jsonEncode(ShoppingList.liste);
     if (debug) print("SAVING SHOPPING : " + json);
+
+    return file.writeAsString(json);
+  }
+
+  // Week Number
+
+  static Future<int> loadWeekNumber() async {
+    try {
+      final file = await _localFileWeekNumber;
+
+      // Read the file
+      String content = await file.readAsString();
+      int collection = json.decode(content);
+      Weeks.weekNumber = collection;
+      
+      if (debug) print("LOADING SHOPPING : " + collection.toString());
+
+      return 1;
+    } catch (e) {
+      // If there is an error
+      if (debug) print(e.toString());
+      return 0;
+    }
+  }
+
+  static Future<File> saveWeekNumber() async {
+    final file = await _localFileWeekNumber;
+    String json = jsonEncode(Weeks.weekNumber);
+    if (debug) print("SAVING WEEK NUMBER : " + json);
 
     return file.writeAsString(json);
   }

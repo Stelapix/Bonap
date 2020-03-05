@@ -33,6 +33,8 @@ class _MenuState extends State<Menu> {
     await DataStorage.loadIngredients();
     await DataStorage.loadRepas();
     await DataStorage.loadWeek();
+    await DataStorage.loadWeekNumber();
+    Weeks.updateWeekNumber();
   }
 
   Future<bool> onBackPressed() {

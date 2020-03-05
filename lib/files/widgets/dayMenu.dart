@@ -5,6 +5,7 @@ import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
+import 'package:intl/intl.dart';
 
 class Weeks {
   static List<Day> week_1 = new List<Day>(14); // Last Week (weekID = -1)
@@ -12,6 +13,7 @@ class Weeks {
   static List<Day> week1 = new List<Day>(14); // Next Week (weekID = 1)
   static List<Day> week2 = new List<Day>(14); // Week + 2 (weekID = 2)
   static int weekID = 0;
+  static int weekNumber;
 
   static void changeWeek(String p) {
     // Save listDay at the right place
@@ -34,8 +36,29 @@ class Weeks {
     // Update weekID
     if (p == '+') weekID++;
     if (p == '-') weekID--;
+  }
 
-    print(weekID);
+  static void newWeek() {
+    week_1 = week0;
+    week0 = week1;
+    week1 = week2;
+    week2 = new List<Day>(14);
+    DataStorage.saveWeek();
+  }
+
+  static void updateWeekNumber() {
+    DateTime now = DateTime.now();
+    int dayOfYear = int.parse(DateFormat("D").format(now));
+    int n = ((dayOfYear - now.weekday + 10) ~/ 7);
+
+
+    if (Weeks.weekNumber != n) {
+      print("NEW WEEK OMG");
+      Weeks.newWeek();
+      Weeks.weekNumber = n;
+      Day.listDay = week0;
+    }
+
   }
 }
 
