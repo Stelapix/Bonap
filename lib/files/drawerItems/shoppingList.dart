@@ -235,7 +235,9 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                           icon: Icon(Icons.remove),
                           onPressed: () {
                             setState(() {
-                              if (data.amount > 1) data.amount--;
+                              data.amount--;
+                              if (data.amount == 0) ShoppingList.liste.remove(data);
+
                               DataStorage.saveShopping();
                             });
                           },
