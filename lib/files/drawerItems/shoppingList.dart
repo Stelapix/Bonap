@@ -46,8 +46,7 @@ class IngredientShoppingList {
       a += (listMeal[b].name);
       if (b != listMeal.length - 1) {
         a += '\n -> ';
-
-      } 
+      }
     }
     return a;
   }
@@ -67,18 +66,12 @@ class IngredientShoppingList {
   static List<Meal> createList(List<dynamic> s) {
     List<Meal> L = new List<Meal>();
     if (s[0] != null) {
-
-
       for (int i = 0; i < s.length; i++) {
         L.add(Meal.fromJson(s[i]));
       }
-
-    }
-    else {
+    } else {
       L.add(null);
     }
-    
-    
 
     return L;
   }
@@ -97,18 +90,88 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           title: new Text('Liste de Course'),
           actions: <Widget>[
             IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    if (ShoppingList.liste.length != 0) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text(
+                                    "Cette action supprimera votre liste de course actuelle"),
+                                content: Text("Continuer ?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("ANNULER"),
+                                    onPressed: () =>
+                                        Navigator.pop(context, false),
+                                  ),
+                                  FlatButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      setState(() {
+                                        ShoppingList.liste =
+                                            new List<IngredientShoppingList>();
+                                      });
+
+                                      Navigator.pop(context, false);
+                                    },
+                                  ),
+                                ],
+                              ));
+                    }
+                  });
+                }),
+            IconButton(
               icon: Icon(Icons.file_download),
               tooltip: 'Importer depuis le menu',
               onPressed: () {
                 setState(() {
-                  ShoppingList.liste = new List<IngredientShoppingList>();
-                  for (Day d in Day.listDay) {
-                    if (d != null) {
-                      for (Meal m in d.listMeal) {
-                        if (m != null) ShoppingList.addMealToList(m);
+                  if (ShoppingList.liste.length != 0) {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text(
+                                  "Cette action écrasera votre liste de course actuelle avec les informations du menu"),
+                              content: Text("Continuer ?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("ANNULER"),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                ),
+                                FlatButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    setState(() {
+                                      ShoppingList.liste =
+                                          new List<IngredientShoppingList>();
+                                      for (Day d in Day.listDay) {
+                                        if (d != null) {
+                                          for (Meal m in d.listMeal) {
+                                            if (m != null)
+                                              ShoppingList.addMealToList(m);
+                                          }
+                                        }
+                                      }
+                                    });
+
+                                    Navigator.pop(context, false);
+                                  },
+                                ),
+                              ],
+                            ));
+                  } else {
+                    ShoppingList.liste = new List<IngredientShoppingList>();
+                    for (Day d in Day.listDay) {
+                      if (d != null) {
+                        for (Meal m in d.listMeal) {
+                          if (m != null) ShoppingList.addMealToList(m);
+                        }
                       }
                     }
                   }
+
                   DataStorage.saveShopping();
                 });
               },
@@ -191,7 +254,9 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                                   children: <Widget>[
                                     Text(
                                       'Compris dans :',
-                                      style: TextStyle(fontSize: 12, color: Theme.of(context).accentColor),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context).accentColor),
                                     ),
                                   ],
                                 ),
