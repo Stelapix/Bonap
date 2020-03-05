@@ -7,7 +7,6 @@ import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
 
 class Weeks {
-  
   static List<Day> week_1 = new List<Day>(14); // Last Week (weekID = -1)
   static List<Day> week0 = new List<Day>(14); // Current Week (weekID = 0)
   static List<Day> week1 = new List<Day>(14); // Next Week (weekID = 1)
@@ -38,6 +37,7 @@ class Weeks {
 
     print(weekID);
   }
+
 }
 
 class Day {

@@ -27,9 +27,22 @@ class DataStorage {
     return File('$path/repas.json');
   }
 
-  static Future<File> get _localFileWeek async {
+// Weeks
+  static Future<File> get _localFileWeek_1 async {
     final path = await _localPath;
-    return File('$path/week.json');
+    return File('$path/week_1.json');
+  }
+  static Future<File> get _localFileWeek0 async {
+    final path = await _localPath;
+    return File('$path/week0.json');
+  }
+  static Future<File> get _localFileWeek1 async {
+    final path = await _localPath;
+    return File('$path/week1.json');
+  }
+  static Future<File> get _localFileWeek2 async {
+    final path = await _localPath;
+    return File('$path/week2.json');
   }
 
   static Future<File> get _localFileShopping async {
@@ -94,13 +107,34 @@ class DataStorage {
 
   static Future<int> loadWeek() async {
     try {
-      final file = await _localFileWeek;
+      final file_1 = await _localFileWeek_1;
+      final file0 = await _localFileWeek0;
+      final file1 = await _localFileWeek1;
+      final file2 = await _localFileWeek2;
 
-      // Read the file
-      String content = await file.readAsString();
+      // Read the file -1
+      String content = await file_1.readAsString();
       List collection = json.decode(content);
-      Day.listDay = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
-      if (debug) print("LOADING WEEK : " + collection.toString());
+      Weeks.week_1 = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
+      if (debug) print("LOADING WEEK -1 : " + collection.toString());
+
+      // Read the file 0
+      content = await file0.readAsString();
+      collection = json.decode(content);
+      Weeks.week0 = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
+      if (debug) print("LOADING WEEK 0 : " + collection.toString());
+
+      // Read the file 1
+      content = await file1.readAsString();
+      collection = json.decode(content);
+      Weeks.week1 = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
+      if (debug) print("LOADING WEEK 1 : " + collection.toString());
+
+      // Read the file 2
+      content = await file2.readAsString();
+      collection = json.decode(content);
+      Weeks.week2 = collection.map((json) => (json != null) ? Day.fromJson(json) : null).toList();
+      if (debug) print("LOADING WEEK 2 : " + collection.toString());
 
       return 1;
     } catch (e) {
@@ -111,11 +145,27 @@ class DataStorage {
   }
 
   static Future<File> saveWeek() async {
-    final file = await _localFileWeek;
-    String json = jsonEncode(Day.listDay);
-    if (debug) print("SAVING WEEK : " + json);
+    final file_1 = await _localFileWeek_1;
+    final file0 = await _localFileWeek0;
+    final file1 = await _localFileWeek1;
+    final file2 = await _localFileWeek2;
 
-    return file.writeAsString(json);
+    String json_1 = jsonEncode(Weeks.week_1);
+    if (debug) print("SAVING WEEK -1 : " + json_1);
+    String json0 = jsonEncode(Weeks.week0);
+    if (debug) print("SAVING WEEK 0 : " + json0);
+    String json1 = jsonEncode(Weeks.week1);
+    if (debug) print("SAVING WEEK 1 : " + json1);
+    String json2 = jsonEncode(Weeks.week2);
+    if (debug) print("SAVING WEEK 2 : " + json2);
+
+    file0.writeAsStringSync(json0);
+    file1.writeAsStringSync(json1);
+    file2.writeAsStringSync(json2);
+
+
+
+    return file_1.writeAsString(json_1);
   }
 
   static Future<int> loadShopping() async {
