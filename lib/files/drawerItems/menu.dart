@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
@@ -9,8 +11,9 @@ import 'package:flutter/material.dart';
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
-    DateTime newDate = now.add(Duration(days: -(now.weekday - n - (7 * Weeks.weekID))));
-    
+    DateTime newDate =
+        now.add(Duration(days: -(now.weekday - n - (7 * Weeks.weekID))));
+
     return newDate.day.toString() + '/' + newDate.month.toString();
   }
 }
@@ -27,6 +30,7 @@ class _MenuState extends State<Menu> {
     loading().whenComplete(() {
       setState(() {});
     });
+
   }
 
   Future<void> loading() async {
@@ -59,9 +63,11 @@ class _MenuState extends State<Menu> {
             ));
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+      return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(
             appBar: AppBar(
@@ -121,7 +127,8 @@ class _MenuState extends State<Menu> {
                                       Weeks.week0 = new List<Day>(14);
                                       Weeks.week1 = new List<Day>(14);
                                       Weeks.week2 = new List<Day>(14);
-                                      if (Weeks.weekID != -1) Day.listDay = new List<Day>(14);
+                                      if (Weeks.weekID != -1)
+                                        Day.listDay = new List<Day>(14);
                                       DataStorage.saveWeek();
                                     });
                                     Navigator.of(context).pop();
@@ -166,65 +173,89 @@ class _MenuState extends State<Menu> {
               backgroundColor: OwnColor.blueLogo,
             ),
             drawer: AppDrawer(),
-            body: SingleChildScrollView(
-              padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(Icons.keyboard_arrow_left),
-                          tooltip: "Semaine précédente",
-                          color: Weeks.weekID > -1 ? OwnColor.blueLogo : Theme.of(context).disabledColor,
-                          onPressed: Weeks.weekID > -1
-                              ? () {
-                                  setState(() {
-                                    Weeks.changeWeek('-');
-                                  });
-                                }
-                              : () {}),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Text(
-                          'Semaine du ' +
-                              MenuSemaine.getTheNDayOfTheWeek(1).toString() +
-                              ' au ' +
-                              MenuSemaine.getTheNDayOfTheWeek(7).toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "Lemonada",
-                            fontSize: 22.0,
-                            color: OwnColor.blueLogo,
+            body: GestureDetector(
+              onHorizontalDragStart: (details) {
+                if (details.globalPosition.dx < 300)  {
+                  if (Weeks.weekID > -1) {
+                    setState(() {
+                      Weeks.changeWeek('-');                 
+                    });
+                  }
+                  
+                }
+                if (details.globalPosition.dx >= 300) {
+                  if (Weeks.weekID < 2) {
+                    setState(() {
+                      Weeks.changeWeek('+');
+                    });
+                  }
+                }
+              },
+
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(Icons.keyboard_arrow_left),
+                            tooltip: "Semaine précédente",
+                            color: Weeks.weekID > -1
+                                ? OwnColor.blueLogo
+                                : Theme.of(context).disabledColor,
+                            onPressed: Weeks.weekID > -1
+                                ? () {
+                                    setState(() {
+                                      Weeks.changeWeek('-');
+                                    });
+                                  }
+                                : () {}),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Text(
+                            'Semaine du ' +
+                                MenuSemaine.getTheNDayOfTheWeek(1).toString() +
+                                ' au ' +
+                                MenuSemaine.getTheNDayOfTheWeek(7).toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: "Lemonada",
+                              fontSize: 22.0,
+                              color: OwnColor.blueLogo,
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.keyboard_arrow_right),
-                        tooltip: "Semaine suivante",
-                        color: Weeks.weekID < 2 ? OwnColor.blueLogo : Theme.of(context).disabledColor,
-                        onPressed: Weeks.weekID < 2
-                            ? () {
-                                setState(() {
-                                  Weeks.changeWeek('+');
-                                });
-                              }
-                            : () {},
-                      ),
-                    ],
-                  )),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        WeekMenu(),
+                        IconButton(
+                          icon: Icon(Icons.keyboard_arrow_right),
+                          tooltip: "Semaine suivante",
+                          color: Weeks.weekID < 2
+                              ? OwnColor.blueLogo
+                              : Theme.of(context).disabledColor,
+                          onPressed: Weeks.weekID < 2
+                              ? () {
+                                  setState(() {
+                                    Weeks.changeWeek('+');
+                                  });
+                                }
+                              : () {},
+                        ),
                       ],
+                    )),
+                    Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          WeekMenu(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )));
   }
