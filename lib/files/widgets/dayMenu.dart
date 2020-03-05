@@ -227,7 +227,7 @@ class DayButtonState extends State<DayButton> {
         width: Constant.width / 2.5,
         child: OutlineButton(
           padding: EdgeInsets.all(8.0),
-          onPressed: () {
+          onLongPress: () {
             setState(() {
               Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listMeal.length > 0
@@ -257,7 +257,7 @@ class DayButtonState extends State<DayButton> {
                       });
             });
           },
-          onLongPress: () {
+          onPressed: () {
             setState(() {
               Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listMeal.length > 0
@@ -334,6 +334,15 @@ class DayButtonState extends State<DayButton> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           IconButton(
+                            tooltip: "Retourner à l'autre affichage",
+                            icon: Icon(Icons.keyboard_return),
+                            onPressed: () {
+                              setState(() {
+                                settingsMode = !settingsMode;
+                              });
+                            },
+                          ),
+                          IconButton(
                             tooltip: "Changer les repas",
                             icon: Icon(Icons.settings),
                             onPressed: () {
@@ -375,14 +384,10 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing1.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return DisplayInfosDialog(
-                                                      this,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal);
-                                                });
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing1.name,
@@ -401,14 +406,11 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing2.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return DisplayInfosDialog(
-                                                      this,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal);
-                                                });
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
+                                            
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing2.name,
@@ -427,14 +429,10 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing3.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return DisplayInfosDialog(
-                                                      this,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal);
-                                                });
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
+                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing3.name,
