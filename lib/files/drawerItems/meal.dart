@@ -297,7 +297,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
     typing = MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
     return AlertDialog(
       title: Text(
-        'Modifier ' + widget.r.name,
+        'Modifier ' + RenderingText.nameWithoutTheEnd(widget.r.name, 2),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -315,7 +315,7 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
           )),
           Container(
             width: Constant.width * 0.8,
-            height: typing ? Constant.width * 0.4 : Constant.height * 0.7,
+            height: typing ? Constant.width * 0.4 : Constant.height * 0.6,
             child: Column(
               children: <Widget>[
                 Expanded(

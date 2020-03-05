@@ -266,7 +266,7 @@ class DayButtonState extends State<DayButton> {
                       context: context,
                       builder: (context) {
                         if (Weeks.weekID != -1)
-                          AddMealDialog(this, widget.index);
+                          return AddMealDialog(this, widget.index);
                         else
                           return AlertDialog(
                             title: Text("Impossible !"),
@@ -590,9 +590,7 @@ class AddMealDialogState extends State<AddMealDialog> {
         content: Meal.listMeal.length > 0
             ? Container(
                 width: Constant.width * 0.8,
-                height: Meal.listMeal.length > 5
-                    ? Constant.height * 0.4
-                    : Constant.height * (Meal.listMeal.length / 14),
+                height: Constant.width * 0.9,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
