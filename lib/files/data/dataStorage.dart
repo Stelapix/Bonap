@@ -6,10 +6,10 @@ import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
+import 'package:firebase/firestore.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DataStorage {
-  DataStorage();
   static bool debug = false;
 
   static Future<String> get _localPath async {
@@ -175,8 +175,6 @@ class DataStorage {
 
     DataStorage.saveWeekNumber();
 
-
-
     return file_1.writeAsString(json_1);
   }
 
@@ -204,7 +202,6 @@ class DataStorage {
     final file = await _localFileShopping;
     String json = jsonEncode(ShoppingList.liste);
     if (debug) print("SAVING SHOPPING : " + json);
-
     return file.writeAsString(json);
   }
 

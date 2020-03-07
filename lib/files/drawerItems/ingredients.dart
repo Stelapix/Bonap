@@ -22,7 +22,7 @@ class Ingredient {
   Category cat;
   Icon icon;
   bool fav;
-  static String newCat = "Viande";
+  static String newCat = "Légume";
   static List<Ingredient> listIngredients = new List<Ingredient>();
   static bool searching = false;
   static String filter = "";

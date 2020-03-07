@@ -100,7 +100,6 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              enabled: false,
               title: Text(
                 'Mode Végétarien',
                 style: TextStyle(
@@ -109,27 +108,31 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedVegetarian)
+                  if (isSwitchedVegetarian) {
                     isSwitchedVegetarian = false;
-                  else
+                    LoginTools.vege = false;
+                  } else
                     isSwitchedVegetarian = true;
-                  if (isSwitchedVegan) isSwitchedVegan = false;
+                  LoginTools.vege = true;
+                  if (isSwitchedVegan) {
+                    isSwitchedVegan = false;
+                    LoginTools.vegan = false;
+                  }
                 });
               },
               trailing: Switch(
                 value: isSwitchedVegetarian,
                 onChanged: (value) {
-                  // setState(() {
-                  //   isSwitchedVegetarian = value;
-                  //   if (isSwitchedVegan) isSwitchedVegan = !value;
-                  // });
+                  setState(() {
+                    isSwitchedVegetarian = value;
+                    if (isSwitchedVegan) isSwitchedVegan = !value;
+                  });
                 },
                 activeTrackColor: Colors.yellow[300],
                 activeColor: Colors.yellow,
               ),
             ),
             ListTile(
-              enabled: false,
               title: Text(
                 'Mode Vegan',
                 style: TextStyle(
@@ -138,20 +141,25 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedVegan)
+                  if (isSwitchedVegan) {
                     isSwitchedVegan = false;
-                  else
+                    LoginTools.vegan = false;
+                  } else
                     isSwitchedVegan = true;
-                  if (isSwitchedVegetarian) isSwitchedVegetarian = false;
+                  LoginTools.vegan = true;
+                  if (isSwitchedVegetarian) {
+                    isSwitchedVegetarian = false;
+                    LoginTools.vege = false;
+                  }
                 });
               },
               trailing: Switch(
                 value: isSwitchedVegan,
                 onChanged: (value) {
-                  // setState(() {
-                  //   isSwitchedVegan = value;
-                  //   if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
-                  // });
+                  setState(() {
+                    isSwitchedVegan = value;
+                    if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
+                  });
                 },
                 activeTrackColor: Colors.lightGreenAccent,
                 activeColor: Colors.green,
