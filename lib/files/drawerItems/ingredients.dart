@@ -3,6 +3,7 @@ import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/ui/dropDownButtons/dropDownButtonIngredients.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:bonap/files/tools.dart';
 
 enum Category {
   meal,
@@ -15,6 +16,7 @@ enum Category {
   salami,
   other
 }
+
 enum popUpSort { alpha, category, favorite }
 
 class Ingredient {
@@ -22,7 +24,7 @@ class Ingredient {
   Category cat;
   Icon icon;
   bool fav;
-  static String newCat = "Légume";
+  static String newCat = "Viande";
   static List<Ingredient> listIngredients = new List<Ingredient>();
   static bool searching = false;
   static String filter = "";
@@ -399,7 +401,7 @@ class AddDialogState extends State<AddDialog> {
               child: new TextField(
             autofocus: false,
             decoration: new InputDecoration(
-                labelText: 'Nom', hintText: 'Frite, Steak, Salade ...'),
+                labelText: 'Nom', hintText: LoginTools.vege ? 'Frite, Fromage, Salade ...' : 'Frite, Steak, Salade ...'),
             onChanged: (value) {
               newIngr = value;
             },

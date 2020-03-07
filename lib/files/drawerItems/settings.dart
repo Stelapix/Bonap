@@ -21,10 +21,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  //Pour cacher/afficher le mot de passe
   bool isSwitchedNight = true;
-  bool isSwitchedVegetarian = false;
-  bool isSwitchedVegan = false;
 
   static FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -108,61 +105,19 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedVegetarian) {
-                    isSwitchedVegetarian = false;
-                    LoginTools.vege = false;
-                  } else
-                    isSwitchedVegetarian = true;
-                  LoginTools.vege = true;
-                  if (isSwitchedVegan) {
-                    isSwitchedVegan = false;
-                    LoginTools.vegan = false;
-                  }
+                  if (LoginTools.vege) LoginTools.vege = false;
+                  else LoginTools.vege = true;
                 });
               },
               trailing: Switch(
-                value: isSwitchedVegetarian,
+                value: LoginTools.vege,
                 onChanged: (value) {
                   setState(() {
-                    isSwitchedVegetarian = value;
-                    if (isSwitchedVegan) isSwitchedVegan = !value;
+                    LoginTools.vege = value;
                   });
                 },
                 activeTrackColor: Colors.yellow[300],
                 activeColor: Colors.yellow,
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Mode Vegan',
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              onTap: () {
-                setState(() {
-                  if (isSwitchedVegan) {
-                    isSwitchedVegan = false;
-                    LoginTools.vegan = false;
-                  } else
-                    isSwitchedVegan = true;
-                  LoginTools.vegan = true;
-                  if (isSwitchedVegetarian) {
-                    isSwitchedVegetarian = false;
-                    LoginTools.vege = false;
-                  }
-                });
-              },
-              trailing: Switch(
-                value: isSwitchedVegan,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitchedVegan = value;
-                    if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
-                  });
-                },
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
               ),
             ),
             Divider(

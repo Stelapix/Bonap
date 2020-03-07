@@ -18,7 +18,6 @@ class LoginTools {
   static bool loggout = false;
   static bool guestMode = false;
   static bool vege = false;
-  static bool vegan = false;
   static final FirebaseAuth auth =
       FirebaseAuth.instance; //Authentification à Firebase
 }
