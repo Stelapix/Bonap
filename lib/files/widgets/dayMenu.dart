@@ -52,8 +52,7 @@ class Weeks {
     DateTime now = DateTime.now();
     int dayOfYear = int.parse(DateFormat("D").format(now));
     int n = ((dayOfYear - now.weekday + 10) ~/ 7);
-    print(n);
-
+    
     if (Weeks.weekNumber != n) {
       print("NEW WEEK OMG");
       Weeks.newWeek();
@@ -136,7 +135,6 @@ class DayMenuState extends State<DayMenu> {
     final bleu = Color.fromRGBO(0, 191, 255, 1);
     // Bold the current day
     var now = DateTime.now();
-    print(Weeks.weekNumber.toString() + '|' + MenuSemaine.getTheNumberOfWeek().toString());
     if (Weeks.weekNumber == MenuSemaine.getTheNumberOfWeek()) {
       
       switch (now.weekday) {
@@ -319,7 +317,7 @@ class DayButtonState extends State<DayButton> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Day.listDay[widget.index] == null
+                    (Day.listDay[widget.index] == null || Day.listDay[widget.index].listMeal.length == 0)
                         ? (Weeks.weekID == -1
                             ? Icon(Icons.do_not_disturb)
                             : Icon(Icons.add))
@@ -397,7 +395,7 @@ class DayButtonState extends State<DayButton> {
                           ),
                         ],
                       )
-                    : Day.listDay[widget.index] != null
+                    : Day.listDay[widget.index] != null && Day.listDay[widget.index].listMeal.length != 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -598,6 +596,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                       }
                     }
 
+                    
+
                     DataStorage.saveWeek();
 
                     widget.dbs.setState(() => true);
@@ -657,6 +657,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                     ? Icon(Icons.check_box)
                     : Icon(Icons.check_box_outline_blank),
                 onTap: () {
+                  // print(Day.listDay[widget.index].listMeal.toString());
+                  
                   setState(() {});
                   if (Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listMeal.contains(data)) {
