@@ -7,6 +7,8 @@ import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:intl/intl.dart';
 
+import '../data/dataStorage.dart';
+
 class Weeks {
   static List<Day> week_1 = new List<Day>(14); // Last Week (weekID = -1)
   static List<Day> week0 = new List<Day>(14); // Current Week (weekID = 0)
@@ -50,7 +52,7 @@ class Weeks {
     DateTime now = DateTime.now();
     int dayOfYear = int.parse(DateFormat("D").format(now));
     int n = ((dayOfYear - now.weekday + 10) ~/ 7);
-
+    print(n);
 
     if (Weeks.weekNumber != n) {
       print("NEW WEEK OMG");
@@ -58,7 +60,6 @@ class Weeks {
       Weeks.weekNumber = n;
       Day.listDay = week0;
     }
-
   }
 }
 
@@ -135,31 +136,36 @@ class DayMenuState extends State<DayMenu> {
     final bleu = Color.fromRGBO(0, 191, 255, 1);
     // Bold the current day
     var now = DateTime.now();
-    switch (now.weekday) {
-      case DateTime.monday:
-        if (widget.dayName == "Lundi") currentDay = true;
-        break;
-      case DateTime.tuesday:
-        if (widget.dayName == "Mardi") currentDay = true;
-        break;
-      case DateTime.wednesday:
-        if (widget.dayName == "Mercredi") currentDay = true;
-        break;
-      case DateTime.thursday:
-        if (widget.dayName == "Jeudi") currentDay = true;
-        break;
-      case DateTime.friday:
-        if (widget.dayName == "Vendredi") currentDay = true;
-        break;
-      case DateTime.saturday:
-        if (widget.dayName == "Samedi") currentDay = true;
-        break;
-      case DateTime.sunday:
-        if (widget.dayName == "Dimanche") currentDay = true;
-        break;
-      default:
-        break;
-    }
+    print(Weeks.weekNumber.toString() + '|' + MenuSemaine.getTheNumberOfWeek().toString());
+    if (Weeks.weekNumber == MenuSemaine.getTheNumberOfWeek()) {
+      
+      switch (now.weekday) {
+        case DateTime.monday:
+          if (widget.dayName == "Lundi") currentDay = true;
+          break;
+        case DateTime.tuesday:
+          if (widget.dayName == "Mardi") currentDay = true;
+          break;
+        case DateTime.wednesday:
+          if (widget.dayName == "Mercredi") currentDay = true;
+          break;
+        case DateTime.thursday:
+          if (widget.dayName == "Jeudi") currentDay = true;
+          break;
+        case DateTime.friday:
+          if (widget.dayName == "Vendredi") currentDay = true;
+          break;
+        case DateTime.saturday:
+          if (widget.dayName == "Samedi") currentDay = true;
+          break;
+        case DateTime.sunday:
+          if (widget.dayName == "Dimanche") currentDay = true;
+          break;
+        default:
+          break;
+      }
+    } else currentDay = false;
+
     // Column
     return Column(
       children: <Widget>[
@@ -410,7 +416,6 @@ class DayButtonState extends State<DayButton> {
                                             setState(() {
                                               settingsMode = !settingsMode;
                                             });
-                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing1.name,
@@ -432,8 +437,6 @@ class DayButtonState extends State<DayButton> {
                                             setState(() {
                                               settingsMode = !settingsMode;
                                             });
-                                            
-                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing2.name,
@@ -455,7 +458,6 @@ class DayButtonState extends State<DayButton> {
                                             setState(() {
                                               settingsMode = !settingsMode;
                                             });
-                                            
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing3.name,

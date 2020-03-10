@@ -7,6 +7,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
@@ -16,28 +17,37 @@ class MenuSemaine {
 
     return newDate.day.toString() + '/' + newDate.month.toString();
   }
+
+  static int getTheNumberOfWeek() {
+    DateTime now = DateTime.now();
+    DateTime newDate =
+        now.add(Duration(days: 7 * Weeks.weekID));
+    int dayOfYear = int.parse(DateFormat("D").format(newDate));
+    return ((dayOfYear - now.weekday + 10) ~/ 7);
+  }
 }
 
 class Menu extends StatefulWidget {
   @override
-  _MenuState createState() => _MenuState();
+  MenuState createState() => MenuState();
 }
 
-class _MenuState extends State<Menu> {
+class MenuState extends State<Menu> {
   @override
   void initState() {
     super.initState();
     loading().whenComplete(() {
       setState(() {});
     });
-
   }
 
-  Future<void> loading() async {
+  static Future<void> loading() async {
     await DataStorage.loadIngredients();
     await DataStorage.loadRepas();
     await DataStorage.loadWeek();
     await DataStorage.loadWeekNumber();
+    print(Weeks.weekNumber);
+    Day.listDay = Weeks.week0;
     Weeks.updateWeekNumber();
   }
 
@@ -63,11 +73,9 @@ class _MenuState extends State<Menu> {
             ));
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-      return WillPopScope(
+    return WillPopScope(
         onWillPop: onBackPressed,
         child: Scaffold(
             appBar: AppBar(
@@ -175,13 +183,12 @@ class _MenuState extends State<Menu> {
             drawer: AppDrawer(),
             body: GestureDetector(
               onHorizontalDragStart: (details) {
-                if (details.globalPosition.dx < 200)  {
+                if (details.globalPosition.dx < 200) {
                   if (Weeks.weekID > -1) {
                     setState(() {
-                      Weeks.changeWeek('-');                 
+                      Weeks.changeWeek('-');
                     });
                   }
-                  
                 }
                 if (details.globalPosition.dx >= 250) {
                   if (Weeks.weekID < 2) {
@@ -191,7 +198,6 @@ class _MenuState extends State<Menu> {
                   }
                 }
               },
-
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                 child: Column(
@@ -216,16 +222,24 @@ class _MenuState extends State<Menu> {
                                 : () {}),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
-                          child: Text(
-                            'Semaine du ' +
-                                MenuSemaine.getTheNDayOfTheWeek(1).toString() +
-                                ' au ' +
-                                MenuSemaine.getTheNDayOfTheWeek(7).toString(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: "Lemonada",
-                              fontSize: 22.0,
-                              color: OwnColor.blueLogo,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                Day.listDay = Weeks.week0;
+                                Weeks.weekID = 0;
+                              });
+                            },
+                            child: Text(
+                              'Semaine ' +
+                                  MenuSemaine.getTheNumberOfWeek()
+                                      .toString(),
+                                  
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: "Lemonada",
+                                fontSize: 22.0,
+                                color: OwnColor.blueLogo,
+                              ),
                             ),
                           ),
                         ),
