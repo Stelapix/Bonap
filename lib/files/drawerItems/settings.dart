@@ -21,8 +21,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isSwitchedNight = true;
-
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> resetPassword() async {
@@ -69,23 +67,21 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedNight)
-                    isSwitchedNight = false;
-                  else
-                    isSwitchedNight = true;
-                  if (isSwitchedNight)
-                    _themeChanger.setTheme(ThemeData.dark());
-                  else {
+                  if (LoginTools.darkMode) {
+                    LoginTools.darkMode = false;
                     _themeChanger.setTheme(ThemeData.light());
+                  }else {
+                    LoginTools.darkMode = true;
+                    _themeChanger.setTheme(ThemeData.dark());
                   }
                 });
               },
               trailing: Switch(
-                value: isSwitchedNight,
+                value: LoginTools.darkMode,
                 onChanged: (value) {
                   setState(() {
-                    isSwitchedNight = value;
-                    if (isSwitchedNight)
+                    LoginTools.darkMode = value;
+                    if (LoginTools.darkMode)
                       _themeChanger.setTheme(ThemeData.dark());
                     else {
                       _themeChanger.setTheme(ThemeData.light());
@@ -197,6 +193,9 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
+                DataStorage.saveTheme();
+                _themeChanger.setTheme(ThemeData.dark());    
+                DataStorage.saveVege();        
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
                   LoginTools.loggout = true;

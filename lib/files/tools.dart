@@ -1,4 +1,5 @@
 import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/rendering.dart';
 class Constant {
   static String version = "0.2"; //Version de Bonap
   static String company = "Stelapix"; //Nom de notre incroyable duo
+  static BuildContext context;
   static double width;
   static double height;
   getSizeOfCurrentScreen(BuildContext context) {
@@ -18,6 +20,7 @@ class LoginTools {
   static bool loggout = false;
   static bool guestMode = false;
   static bool vege = false;
+  static bool darkMode = true;
   static final FirebaseAuth auth =
       FirebaseAuth.instance; //Authentification à Firebase
 }
