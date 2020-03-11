@@ -51,7 +51,7 @@ class MenuState extends State<Menu> {
     await DataStorage.loadWeek();
     await DataStorage.loadWeekNumber();
     Day.listDay = Weeks.week0;
-    await DataStorage.loadTheme(context);
+    await DataStorage.loadTheme(Constant.context);
     await DataStorage.loadVege();
 
     Weeks.updateWeekNumber();
