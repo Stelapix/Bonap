@@ -72,6 +72,7 @@ class MenuState extends State<Menu> {
                     child: Text("OK"),
                     onPressed: () {
                       DataStorage.saveTheme();
+                      DataStorage.saveVege();
                       _themeChanger.setTheme(ThemeData.dark());
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (BuildContext context) {

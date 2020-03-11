@@ -66,7 +66,7 @@ class DataStorage {
     return File('$path/theme.json');
   }
 
-    static Future<File> get _localFileVege async {
+  static Future<File> get _localFileVege async {
     final path = await _localPath;
     return File('$path/vege.json');
   }
