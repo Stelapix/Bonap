@@ -1,13 +1,14 @@
-import 'dart:io';
-
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
+import 'package:bonap/files/widgets/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
@@ -28,6 +29,8 @@ class MenuSemaine {
 }
 
 class Menu extends StatefulWidget {
+  Menu(BuildContext context, {Key key}) : super(key: key);
+
   @override
   MenuState createState() => MenuState();
 }
@@ -35,6 +38,7 @@ class Menu extends StatefulWidget {
 class MenuState extends State<Menu> {
   @override
   void initState() {
+    Constant.context = context;
     super.initState();
     loading().whenComplete(() {
       setState(() {});
@@ -46,12 +50,15 @@ class MenuState extends State<Menu> {
     await DataStorage.loadRepas();
     await DataStorage.loadWeek();
     await DataStorage.loadWeekNumber();
-    
     Day.listDay = Weeks.week0;
+    await DataStorage.loadTheme(context);
+    await DataStorage.loadVege();
+
     Weeks.updateWeekNumber();
   }
 
   Future<bool> onBackPressed() {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -62,13 +69,16 @@ class MenuState extends State<Menu> {
                   onPressed: () => Navigator.pop(context, false),
                 ),
                 FlatButton(
-                  child: Text("OK"),
-                  onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    LoginTools.loggout = true;
-                    return MainMenu();
-                  })),
-                ),
+                    child: Text("OK"),
+                    onPressed: () {
+                      DataStorage.saveTheme();
+                      _themeChanger.setTheme(ThemeData.dark());
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        LoginTools.loggout = true;
+                        return MainMenu();
+                      }));
+                    }),
               ],
             ));
   }

@@ -51,7 +51,7 @@ class _OwnButtonState extends State<OwnButton> {
       LoginTools.guestMode = true;
       print("Guest Mode activated");
       Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => Menu()));
+          MaterialPageRoute(builder: (BuildContext context) => Menu(context)));
     }
   }
 
@@ -169,7 +169,7 @@ class GoogleButtonState extends State<GoogleButton> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => Menu()));
+                          builder: (BuildContext context) => Menu(context)));
                 });
             } else
               print('Login Canceled');

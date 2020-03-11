@@ -47,7 +47,7 @@ class MainScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.hasData && (!snapshot.data.isAnonymous))
-            return Menu();
+            return Menu(context);
           else
             return MainMenu();
         });

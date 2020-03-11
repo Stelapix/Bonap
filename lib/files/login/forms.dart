@@ -184,8 +184,8 @@ class FormsState extends State<Forms> {
                 ),
                 textAlign: TextAlign.left,
               ),
-              content: Text(text, style: TextStyle(color: Colors.white)),
-              backgroundColor: OwnColor.darkBackground,
+              content: Text(text, style: TextStyle(color: LoginTools.darkMode ? Colors.white : OwnColor.darkBackground)),
+              backgroundColor: LoginTools.darkMode ? OwnColor.darkBackground : Colors.white,
               actions: <Widget>[action],
             ));
   }
@@ -380,7 +380,7 @@ class FormsState extends State<Forms> {
                 builder: (context) {
                   KeyForm().newKey();
                   DataStorage.loadIngredients();
-                  return Menu();
+                  return Menu(context);
                 },
               ),
             );
