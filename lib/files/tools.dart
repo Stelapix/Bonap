@@ -1,11 +1,10 @@
 import 'package:bonap/files/login/mainMenu.dart';
-import 'package:bonap/files/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class Constant {
-  static String version = "0.2"; //Version de Bonap
+  static String version = "0.3+"; //Version de Bonap
   static String company = "Stelapix"; //Nom de notre incroyable duo
   static BuildContext context;
   static double width;
