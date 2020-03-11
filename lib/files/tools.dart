@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class Constant {
-  static String version = "0.2"; //Version de Bonap
+  static String version = "0.3+"; //Version de Bonap
   static String company = "Stelapix"; //Nom de notre incroyable duo
+  static BuildContext context;
   static double width;
   static double height;
   getSizeOfCurrentScreen(BuildContext context) {
@@ -17,6 +18,8 @@ class Constant {
 class LoginTools {
   static bool loggout = false;
   static bool guestMode = false;
+  static bool vege = false;
+  static bool darkMode = true;
   static final FirebaseAuth auth =
       FirebaseAuth.instance; //Authentification à Firebase
 }

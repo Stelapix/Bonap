@@ -20,11 +20,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  //Pour cacher/afficher le mot de passe
-  bool isSwitchedNight = true;
-  bool isSwitchedVegetarian = false;
-  bool isSwitchedVegan = false;
-
   static FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> resetPassword() async {
@@ -71,23 +66,21 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedNight)
-                    isSwitchedNight = false;
-                  else
-                    isSwitchedNight = true;
-                  if (isSwitchedNight)
-                    _themeChanger.setTheme(ThemeData.dark());
-                  else {
+                  if (LoginTools.darkMode) {
+                    LoginTools.darkMode = false;
                     _themeChanger.setTheme(ThemeData.light());
+                  }else {
+                    LoginTools.darkMode = true;
+                    _themeChanger.setTheme(ThemeData.dark());
                   }
                 });
               },
               trailing: Switch(
-                value: isSwitchedNight,
+                value: LoginTools.darkMode,
                 onChanged: (value) {
                   setState(() {
-                    isSwitchedNight = value;
-                    if (isSwitchedNight)
+                    LoginTools.darkMode = value;
+                    if (LoginTools.darkMode)
                       _themeChanger.setTheme(ThemeData.dark());
                     else {
                       _themeChanger.setTheme(ThemeData.light());
@@ -99,7 +92,6 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             ListTile(
-              enabled: false,
               title: Text(
                 'Mode Végétarien',
                 style: TextStyle(
@@ -108,52 +100,19 @@ class _SettingsState extends State<Settings> {
               ),
               onTap: () {
                 setState(() {
-                  if (isSwitchedVegetarian)
-                    isSwitchedVegetarian = false;
-                  else
-                    isSwitchedVegetarian = true;
-                  if (isSwitchedVegan) isSwitchedVegan = false;
+                  if (LoginTools.vege) LoginTools.vege = false;
+                  else LoginTools.vege = true;
                 });
               },
               trailing: Switch(
-                value: isSwitchedVegetarian,
+                value: LoginTools.vege,
                 onChanged: (value) {
-                  // setState(() {
-                  //   isSwitchedVegetarian = value;
-                  //   if (isSwitchedVegan) isSwitchedVegan = !value;
-                  // });
+                  setState(() {
+                    LoginTools.vege = value;
+                  });
                 },
                 activeTrackColor: Colors.yellow[300],
                 activeColor: Colors.yellow,
-              ),
-            ),
-            ListTile(
-              enabled: false,
-              title: Text(
-                'Mode Vegan',
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              onTap: () {
-                setState(() {
-                  if (isSwitchedVegan)
-                    isSwitchedVegan = false;
-                  else
-                    isSwitchedVegan = true;
-                  if (isSwitchedVegetarian) isSwitchedVegetarian = false;
-                });
-              },
-              trailing: Switch(
-                value: isSwitchedVegan,
-                onChanged: (value) {
-                  // setState(() {
-                  //   isSwitchedVegan = value;
-                  //   if (isSwitchedVegetarian) isSwitchedVegetarian = !value;
-                  // });
-                },
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
               ),
             ),
             Divider(
@@ -203,6 +162,9 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
+                DataStorage.saveTheme();
+                _themeChanger.setTheme(ThemeData.dark());    
+                DataStorage.saveVege();        
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
                   LoginTools.loggout = true;

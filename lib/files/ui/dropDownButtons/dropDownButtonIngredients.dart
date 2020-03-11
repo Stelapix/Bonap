@@ -1,4 +1,5 @@
 import 'package:bonap/files/drawerItems/ingredients.dart';
+import 'package:bonap/files/tools.dart';
 import 'package:flutter/material.dart';
 
 class DropDownButtonIngredients extends StatefulWidget {
@@ -18,7 +19,13 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
   void initState() {
     super.initState();
     _value = "Viande";
-    _categories.addAll([
+    _categories.addAll(LoginTools.vege ? [
+      "Féculent",
+      "Légume", 
+      "Produit Laitier",
+      "Liquide",
+      "Autre"
+    ] : [
       "Viande",
       "Charcuterie",
       "Poisson",

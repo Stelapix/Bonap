@@ -5,6 +5,62 @@ import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
+import 'package:intl/intl.dart';
+
+import '../data/dataStorage.dart';
+
+class Weeks {
+  static List<Day> week_1 = new List<Day>(14); // Last Week (weekID = -1)
+  static List<Day> week0 = new List<Day>(14); // Current Week (weekID = 0)
+  static List<Day> week1 = new List<Day>(14); // Next Week (weekID = 1)
+  static List<Day> week2 = new List<Day>(14); // Week + 2 (weekID = 2)
+  static int weekID = 0;
+  static int weekNumber;
+
+  static void changeWeek(String p) {
+    // Save listDay at the right place
+    if (weekID == -1) week_1 = Day.listDay;
+    if (weekID == 0) week0 = Day.listDay;
+    if (weekID == 1) week1 = Day.listDay;
+    if (weekID == 2) week2 = Day.listDay;
+
+    // Load the week and save it in listDay
+    if (p == '+') {
+      if (weekID == -1) Day.listDay = week0;
+      if (weekID == 0) Day.listDay = week1;
+      if (weekID == 1) Day.listDay = week2;
+    } else if (p == '-') {
+      if (weekID == 0) Day.listDay = week_1;
+      if (weekID == 1) Day.listDay = week0;
+      if (weekID == 2) Day.listDay = week1;
+    }
+
+    // Update weekID
+    if (p == '+') weekID++;
+    if (p == '-') weekID--;
+  }
+
+  static void newWeek() {
+    week_1 = week0;
+    week0 = week1;
+    week1 = week2;
+    week2 = new List<Day>(14);
+    DataStorage.saveWeek();
+  }
+
+  static void updateWeekNumber() {
+    DateTime now = DateTime.now();
+    int dayOfYear = int.parse(DateFormat("D").format(now));
+    int n = ((dayOfYear - now.weekday + 10) ~/ 7);
+    
+    if (Weeks.weekNumber != n) {
+      print("NEW WEEK OMG");
+      Weeks.newWeek();
+      Weeks.weekNumber = n;
+      Day.listDay = week0;
+    }
+  }
+}
 
 class Day {
   static List<Day> listDay = new List<Day>(14);
@@ -79,31 +135,35 @@ class DayMenuState extends State<DayMenu> {
     final bleu = Color.fromRGBO(0, 191, 255, 1);
     // Bold the current day
     var now = DateTime.now();
-    switch (now.weekday) {
-      case DateTime.monday:
-        if (widget.dayName == "Lundi") currentDay = true;
-        break;
-      case DateTime.tuesday:
-        if (widget.dayName == "Mardi") currentDay = true;
-        break;
-      case DateTime.wednesday:
-        if (widget.dayName == "Mercredi") currentDay = true;
-        break;
-      case DateTime.thursday:
-        if (widget.dayName == "Jeudi") currentDay = true;
-        break;
-      case DateTime.friday:
-        if (widget.dayName == "Vendredi") currentDay = true;
-        break;
-      case DateTime.saturday:
-        if (widget.dayName == "Samedi") currentDay = true;
-        break;
-      case DateTime.sunday:
-        if (widget.dayName == "Dimanche") currentDay = true;
-        break;
-      default:
-        break;
-    }
+    if (Weeks.weekNumber == MenuSemaine.getTheNumberOfWeek()) {
+      
+      switch (now.weekday) {
+        case DateTime.monday:
+          if (widget.dayName == "Lundi") currentDay = true;
+          break;
+        case DateTime.tuesday:
+          if (widget.dayName == "Mardi") currentDay = true;
+          break;
+        case DateTime.wednesday:
+          if (widget.dayName == "Mercredi") currentDay = true;
+          break;
+        case DateTime.thursday:
+          if (widget.dayName == "Jeudi") currentDay = true;
+          break;
+        case DateTime.friday:
+          if (widget.dayName == "Vendredi") currentDay = true;
+          break;
+        case DateTime.saturday:
+          if (widget.dayName == "Samedi") currentDay = true;
+          break;
+        case DateTime.sunday:
+          if (widget.dayName == "Dimanche") currentDay = true;
+          break;
+        default:
+          break;
+      }
+    } else currentDay = false;
+
     // Column
     return Column(
       children: <Widget>[
@@ -231,15 +291,40 @@ class DayButtonState extends State<DayButton> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Day.listDay[widget.index] == null
-                        ? Icon(Icons.add)
-                        : Text(
-                            RenderingText.nameWithoutTheEnd(
-                                Day.listDay[widget.index].listMeal[0].name, 4),
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight:
-                                    Day.listDay[widget.index].listMeal[0].fav
+                    (Day.listDay[widget.index] == null || Day.listDay[widget.index].listMeal.length == 0)
+                        ? (Weeks.weekID == -1
+                            ? Icon(Icons.do_not_disturb)
+                            : Icon(Icons.add))
+                        : (RenderingText.getLenghtOfText(Day
+                                    .listDay[widget.index].listMeal[0].name) >
+                                115)
+                            ? Container(
+                                width: Constant.width / 3.5,
+                                height: Constant.height / 50,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: <Widget>[
+                                    Text(
+                                      Day.listDay[widget.index].listMeal[0]
+                                          .name,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: Day.listDay[widget.index]
+                                                  .listMeal[0].fav
+                                              ? FontWeight.bold
+                                              : FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Text(
+                                RenderingText.nameWithoutTheEnd(
+                                    Day.listDay[widget.index].listMeal[0].name,
+                                    1),
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: Day.listDay[widget.index]
+                                            .listMeal[0].fav
                                         ? FontWeight.bold
                                         : FontWeight.normal),
                           ),
@@ -275,7 +360,7 @@ class DayButtonState extends State<DayButton> {
                           ),
                         ],
                       )
-                    : Day.listDay[widget.index] != null
+                    : Day.listDay[widget.index] != null && Day.listDay[widget.index].listMeal.length != 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,16 +376,9 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing1.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      1,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
-                                            loaded = true;
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing1.name,
@@ -319,16 +397,9 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing2.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      2,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
-                                            loaded = true;
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing2.name,
@@ -347,15 +418,9 @@ class DayButtonState extends State<DayButton> {
                                           icon: Day
                                               .listDay[widget.index].ing3.icon,
                                           onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ChangeIngredientDialog(
-                                                      this,
-                                                      3,
-                                                      Day.listDay[widget.index]
-                                                          .listMeal[0]);
-                                                });
+                                            setState(() {
+                                              settingsMode = !settingsMode;
+                                            });
                                           },
                                           tooltip: Day
                                               .listDay[widget.index].ing3.name,
@@ -571,6 +636,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                       }
                     }
 
+                    
+
                     DataStorage.saveWeek();
 
                     widget.dbs.setState(() => true);
@@ -629,6 +696,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                     ? Icon(Icons.check_box)
                     : Icon(Icons.check_box_outline_blank),
                 onTap: () {
+                  // print(Day.listDay[widget.index].listMeal.toString());
+                  
                   setState(() {});
                   if (Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listMeal.contains(data)) {

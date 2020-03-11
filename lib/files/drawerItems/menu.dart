@@ -1,63 +1,64 @@
 import 'package:bonap/files/data/dataStorage.dart';
-import 'package:bonap/files/drawerItems/meal.dart';
-import 'package:bonap/files/drawerItems/shoppingList.dart';
+import 'package:bonap/files/login/forms.dart';
 import 'package:bonap/files/login/mainMenu.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/ui/drawer.dart';
-import 'package:bonap/files/ui/dropDownButtons/dropDownButtonMain.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
+import 'package:bonap/files/widgets/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
-    DateTime newDate = now.add(Duration(days: -(now.weekday - n)));
+    DateTime newDate =
+        now.add(Duration(days: -(now.weekday - n - (7 * Weeks.weekID))));
+
     return newDate.day.toString() + '/' + newDate.month.toString();
   }
-}
 
-<<<<<<< HEAD
-=======
-enum popUpMenu { lost, deleteAll }
-
-class FunctionUpdate {
-  static void updateListeCourse(List<List<Meal>> repasSemaine) {
-    ShoppingList.resetListe();
-    for (int i = 0; i < repasSemaine.length; i++) {
-      for (int j = 0; j < repasSemaine[i].length; j++) {
-        if (repasSemaine[i][j] != null) {
-          ShoppingList.addRepasToListe(repasSemaine[i][j]);
-        }
-      }
-    }
+  static int getTheNumberOfWeek() {
+    DateTime now = DateTime.now();
+    DateTime newDate =
+        now.add(Duration(days: 7 * Weeks.weekID));
+    int dayOfYear = int.parse(DateFormat("D").format(newDate));
+    return ((dayOfYear - now.weekday + 10) ~/ 7);
   }
 }
 
->>>>>>> parent of f7dfc62... font
 class Menu extends StatefulWidget {
+  Menu(BuildContext context, {Key key}) : super(key: key);
+
   @override
-  _MenuState createState() => _MenuState();
+  MenuState createState() => MenuState();
 }
 
-class _MenuState extends State<Menu> {
-  popUpMenu _selectionPopUpMenu;
-
+class MenuState extends State<Menu> {
   @override
   void initState() {
+    Constant.context = context;
     super.initState();
     loading().whenComplete(() {
       setState(() {});
     });
   }
 
-  Future<void> loading() async {
+  static Future<void> loading() async {
     await DataStorage.loadIngredients();
     await DataStorage.loadRepas();
     await DataStorage.loadWeek();
-    await DataStorage.loadShopping();
+    await DataStorage.loadWeekNumber();
+    Day.listDay = Weeks.week0;
+    await DataStorage.loadTheme(Constant.context);
+    await DataStorage.loadVege();
+
+    Weeks.updateWeekNumber();
   }
 
   Future<bool> onBackPressed() {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -68,13 +69,17 @@ class _MenuState extends State<Menu> {
                   onPressed: () => Navigator.pop(context, false),
                 ),
                 FlatButton(
-                  child: Text("OK"),
-                  onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (BuildContext context) {
-                    LoginTools.loggout = true;
-                    return MainMenu();
-                  })),
-                ),
+                    child: Text("OK"),
+                    onPressed: () {
+                      DataStorage.saveTheme();
+                      DataStorage.saveVege();
+                      _themeChanger.setTheme(ThemeData.dark());
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        LoginTools.loggout = true;
+                        return MainMenu();
+                      }));
+                    }),
               ],
             ));
   }
@@ -88,8 +93,9 @@ class _MenuState extends State<Menu> {
               title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
+                    fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
-                    fontSize: 23.0,
+                    fontSize: 18.0,
                     color: Colors.black),
               ),
               flexibleSpace: Container(
@@ -122,16 +128,27 @@ class _MenuState extends State<Menu> {
                             Row(
                               children: <Widget>[
                                 FlatButton(
-                                  child: Text('Oulà, non !'),
+                                  child: Text('Oulà, non !',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                 ),
                                 FlatButton(
-                                  child: Text('Ouaip'),
+                                  child: Text('Ouaip',
+                                      style: TextStyle(
+                                        fontFamily: "Lemonada",
+                                      )),
                                   onPressed: () {
                                     setState(() {
-                                      Day.listDay = new List<Day>(14);
+                                      Weeks.week0 = new List<Day>(14);
+                                      Weeks.week1 = new List<Day>(14);
+                                      Weeks.week2 = new List<Day>(14);
+                                      if (Weeks.weekID != -1)
+                                        Day.listDay = new List<Day>(14);
+                                      DataStorage.saveWeek();
                                     });
                                     Navigator.of(context).pop();
                                   },
@@ -145,11 +162,17 @@ class _MenuState extends State<Menu> {
                       <PopupMenuEntry<String>>[
                     const PopupMenuItem<String>(
                       value: "lost",
-                      child: Text("Besoin d'aide ?"),
+                      child: Text("Besoin d'aide ?",
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
                     ),
                     const PopupMenuItem<String>(
                       value: "deleteAll",
-                      child: Text('Tout effacer ?'),
+                      child: Text('Tout effacer ?',
+                          style: TextStyle(
+                            fontFamily: "Lemonada",
+                          )),
                     ),
                   ],
                 ),
@@ -169,42 +192,95 @@ class _MenuState extends State<Menu> {
               backgroundColor: OwnColor.blueLogo,
             ),
             drawer: AppDrawer(),
-            body: SingleChildScrollView(
-              padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Text(
-                          'Semaine du ' +
-                              MenuSemaine.getTheNDayOfTheWeek(1).toString() +
-                              ' au ' +
-                              MenuSemaine.getTheNDayOfTheWeek(7).toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: OwnColor.blueLogo,
-                            fontWeight: FontWeight.bold,
+            body: GestureDetector(
+              onHorizontalDragStart: (details) {
+                if (details.globalPosition.dx < 200) {
+                  if (Weeks.weekID > -1) {
+                    setState(() {
+                      Weeks.changeWeek('-');
+                    });
+                  }
+                }
+                if (details.globalPosition.dx >= 250) {
+                  if (Weeks.weekID < 2) {
+                    setState(() {
+                      Weeks.changeWeek('+');
+                    });
+                  }
+                }
+              },
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(Icons.keyboard_arrow_left),
+                            tooltip: "Semaine précédente",
+                            color: Weeks.weekID > -1
+                                ? OwnColor.blueLogo
+                                : Theme.of(context).disabledColor,
+                            onPressed: Weeks.weekID > -1
+                                ? () {
+                                    setState(() {
+                                      Weeks.changeWeek('-');
+                                    });
+                                  }
+                                : () {}),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(() {
+                                Day.listDay = Weeks.week0;
+                                Weeks.weekID = 0;
+                              });
+                            },
+                            child: Text(
+                              'Semaine ' +
+                                  MenuSemaine.getTheNumberOfWeek()
+                                      .toString(),
+                                  
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: "Lemonada",
+                                fontSize: 22.0,
+                                color: OwnColor.blueLogo,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )),
-                  Container(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        WeekMenu(),
+                        IconButton(
+                          icon: Icon(Icons.keyboard_arrow_right),
+                          tooltip: "Semaine suivante",
+                          color: Weeks.weekID < 2
+                              ? OwnColor.blueLogo
+                              : Theme.of(context).disabledColor,
+                          onPressed: Weeks.weekID < 2
+                              ? () {
+                                  setState(() {
+                                    Weeks.changeWeek('+');
+                                  });
+                                }
+                              : () {},
+                        ),
                       ],
+                    )),
+                    Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          WeekMenu(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )));
   }
