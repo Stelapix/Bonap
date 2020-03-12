@@ -11,6 +11,7 @@ class BonapWay {
       AuthResult result = await LoginTools.auth
           .signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
+      Constant.uid = user.uid;
       if (user != null) {
         if (user.isEmailVerified) {
           print(user);
@@ -47,8 +48,9 @@ class GoogleWay {
       );
       final FirebaseUser user =
           (await LoginTools.auth.signInWithCredential(credential)).user;
-      assert(user.displayName != null);
+      assert(user != null);
       assert(!user.isAnonymous);
+      Constant.uid = user.uid;
       assert(await user.getIdToken() != null);
       currentUser = await LoginTools.auth.currentUser();
       assert(user.uid == currentUser.uid);

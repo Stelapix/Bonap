@@ -27,6 +27,8 @@ dependencies:
   intl: ^0.16.0
   firebase_auth: ^0.14.0+5
   firebase_database: any
+  firebase_storage: any
+  file_picker: any
   google_sign_in: ^4.0.7
   flutter_auth_buttons: ^0.6.0
   fluttertoast: ^3.1.3

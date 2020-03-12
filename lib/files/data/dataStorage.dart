@@ -8,6 +8,7 @@ import 'package:bonap/files/drawerItems/shoppingList.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:bonap/files/widgets/theme.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -142,11 +143,11 @@ class DataStorage {
       // Read the file
       String content = await file.readAsString();
       LoginTools.darkMode = json.decode(content);
-      
+
       if (LoginTools.darkMode)
-        _themeChanger.setTheme(ThemeData.dark());  
+        _themeChanger.setTheme(ThemeData.dark());
       else {
-        _themeChanger.setTheme(ThemeData.light());  
+        _themeChanger.setTheme(ThemeData.light());
       }
       if (debug) print("DARK MODE : " + LoginTools.darkMode.toString());
 
@@ -315,6 +316,19 @@ class DataStorage {
     if (debug) print("SAVING WEEK NUMBER : " + json);
 
     return file.writeAsString(json);
+  }
+
+  // Ca rigole plus
+  static Future<void> uploadFile(String filename) async {
+    final file = await _localFileRepas;
+    StorageReference storageReference;
+    String userID = Constant.uid;
+    storageReference = FirebaseStorage.instance.ref().child("$userID/$filename");
+
+    final StorageUploadTask uploadTask = storageReference.putFile(file);
+    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    print("URL is $url");
   }
 }
 
