@@ -7,7 +7,6 @@ class Constant {
   static String version = "0.3+"; //Version de Bonap
   static String company = "Stelapix"; //Nom de notre incroyable duo
   static BuildContext context;
-  static String uid;
   static double width;
   static double height;
   getSizeOfCurrentScreen(BuildContext context) {
@@ -17,6 +16,7 @@ class Constant {
 }
 
 class LoginTools {
+  static String uid;
   static bool loggout = false;
   static bool guestMode = false;
   static bool vege = false;

@@ -37,9 +37,9 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    if (LoginTools.loggout) signOut();
     KeyForm().newKey();
     LoginTools.guestMode = false;
-    if (LoginTools.loggout) signOut();
   }
 
   static PageController whichPage =
@@ -197,8 +197,8 @@ class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
     await LoginTools.auth.signOut();
     await GoogleWay().googleSignIn.signOut();
     print(LoginTools.guestMode ? "Guest Sign Out" : "User Sign Out");
-    MainMenu();
     LoginTools.loggout = false;
+    MainMenu();
     return true;
   }
 

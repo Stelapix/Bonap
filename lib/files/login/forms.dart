@@ -375,7 +375,7 @@ class FormsState extends State<Forms> {
         if (res == 0) {
           //TODO Pour une future animation ?
           Timer(Duration(seconds: 0), () {
-            Navigator.of(context).pushReplacement(
+            Navigator.pushReplacement(context,
               MaterialPageRoute(
                 builder: (context) {
                   KeyForm().newKey();

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:collection';
 
 import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
@@ -319,21 +320,29 @@ class DataStorage {
   }
 
   // Ca rigole plus
-  static Future<void> uploadFile(String filename) async {
-    final file = await _localFileRepas;
+  static Future<void> uploadFile() async {
     StorageReference storageReference;
-    String userID = Constant.uid;
-    storageReference = FirebaseStorage.instance.ref().child("$userID/$filename");
+    String userID = LoginTools.uid;
+    String users = "users";
+    String filename;
+    List<String> listFileName = new List<String>();
+    listFileName.add("repas");
+    listFileName.add("vege");
+    listFileName.add("week");
+    listFileName.add("theme");
+    listFileName.add("ingredients");
+    List<File> listFile = new List<File>();
+    listFile.add(await _localFileRepas);
+    listFile.add(await _localFileVege);
+    listFile.add(await _localFileWeekNumber);
+    listFile.add(await _localFileTheme);
+    listFile.add(await _localFileIngredients);
 
-    final StorageUploadTask uploadTask = storageReference.putFile(file);
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
-    print("URL is $url");
+    for (var i = 0; i < listFile.length; i++) {
+      filename = listFileName.elementAt(i);
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(listFile[i]);
+    }
   }
 }
-
-/*
-* pb ingredients
-* pb de save ?
-* sinon reste ok
-* */

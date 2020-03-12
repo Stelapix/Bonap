@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
 class MenuSemaine {
   static String getTheNDayOfTheWeek(int n) {
     DateTime now = DateTime.now();
@@ -21,8 +20,7 @@ class MenuSemaine {
 
   static int getTheNumberOfWeek() {
     DateTime now = DateTime.now();
-    DateTime newDate =
-        now.add(Duration(days: 7 * Weeks.weekID));
+    DateTime newDate = now.add(Duration(days: 7 * Weeks.weekID));
     int dayOfYear = int.parse(DateFormat("D").format(newDate));
     return ((dayOfYear - now.weekday + 10) ~/ 7);
   }
@@ -46,15 +44,17 @@ class MenuState extends State<Menu> {
   }
 
   static Future<void> loading() async {
-    await DataStorage.loadIngredients();
-    await DataStorage.loadRepas();
-    await DataStorage.loadWeek();
-    await DataStorage.loadWeekNumber();
     Day.listDay = Weeks.week0;
-    await DataStorage.loadTheme(Constant.context);
-    await DataStorage.loadVege();
-    await DataStorage.uploadFile("repas");
-
+    if (!LoginTools.guestMode) {
+      await DataStorage.uploadFile();
+    } else {
+      await DataStorage.loadIngredients();
+      await DataStorage.loadRepas();
+      await DataStorage.loadWeek();
+      await DataStorage.loadWeekNumber();
+      await DataStorage.loadTheme(Constant.context);
+      await DataStorage.loadVege();
+    }
     Weeks.updateWeekNumber();
   }
 
@@ -243,9 +243,7 @@ class MenuState extends State<Menu> {
                             },
                             child: Text(
                               'Semaine ' +
-                                  MenuSemaine.getTheNumberOfWeek()
-                                      .toString(),
-                                  
+                                  MenuSemaine.getTheNumberOfWeek().toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: "Lemonada",
