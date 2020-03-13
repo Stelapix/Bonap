@@ -39,7 +39,9 @@ class MenuState extends State<Menu> {
     Constant.context = context;
     super.initState();
     loading().whenComplete(() {
-      setState(() {});
+      setState(() {
+        Day.listDay = Weeks.week0;
+      });
     });
   }
 
