@@ -99,7 +99,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
               onPressed: () {
                 setState(() {
                   ShoppingList.liste = new List<IngredientShoppingList>();
-                  for (Day d in Day.listDay) {
+                  for (Day d in Weeks.week0) {
                     if (d != null) {
                       for (Meal m in d.listMeal) {
                         if (m != null) ShoppingList.addMealToList(m);

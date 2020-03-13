@@ -3,6 +3,7 @@ import 'package:bonap/files/tools.dart';
 import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
 import 'package:bonap/files/login/mainMenu.dart';
+import 'package:bonap/files/widgets/dayMenu.dart';
 import 'package:bonap/files/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,6 +74,7 @@ class _SettingsState extends State<Settings> {
                     LoginTools.darkMode = true;
                     _themeChanger.setTheme(ThemeData.dark());
                   }
+                  DataStorage.saveTheme();
                 });
               },
               trailing: Switch(
@@ -85,6 +87,7 @@ class _SettingsState extends State<Settings> {
                     else {
                       _themeChanger.setTheme(ThemeData.light());
                     }
+                    DataStorage.saveTheme();
                   });
                 },
                 activeTrackColor: Colors.grey[300],
@@ -102,6 +105,7 @@ class _SettingsState extends State<Settings> {
                 setState(() {
                   if (LoginTools.vege) LoginTools.vege = false;
                   else LoginTools.vege = true;
+                  DataStorage.saveVege();
                 });
               },
               trailing: Switch(
@@ -109,6 +113,7 @@ class _SettingsState extends State<Settings> {
                 onChanged: (value) {
                   setState(() {
                     LoginTools.vege = value;
+                    DataStorage.saveVege();
                   });
                 },
                 activeTrackColor: Colors.yellow[300],
@@ -162,9 +167,18 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
               onTap: () {
-                DataStorage.saveTheme();
-                _themeChanger.setTheme(ThemeData.dark());    
-                DataStorage.saveVege();        
+                Meal.listMeal = new List<Meal>();
+                Ingredient.listIngredients = new List<Ingredient>();
+                LoginTools.vege = false;
+                LoginTools.darkMode = true;
+                ShoppingList.liste = new List<IngredientShoppingList>();
+                Weeks.week_1 = new List<Day>(14);
+                Weeks.week0 = new List<Day>(14);
+                Weeks.week1 = new List<Day>(14);
+                Weeks.week2 = new List<Day>(14);
+                Day.listDay = new List<Day>(14);
+                
+                _themeChanger.setTheme(ThemeData.dark());          
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (BuildContext context) {
                   LoginTools.loggout = true;

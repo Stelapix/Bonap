@@ -44,15 +44,16 @@ class MenuState extends State<Menu> {
   }
 
   static Future<void> loading() async {
+
     Day.listDay = Weeks.week0;
     if (!LoginTools.guestMode) {
-      await DataStorage.uploadFile();
+      await DataStorage.downloadFile();
     } else {
       await DataStorage.loadIngredients();
       await DataStorage.loadRepas();
       await DataStorage.loadWeek();
       await DataStorage.loadWeekNumber();
-      await DataStorage.loadTheme(Constant.context);
+      await DataStorage.loadTheme();
       await DataStorage.loadVege();
     }
     Weeks.updateWeekNumber();

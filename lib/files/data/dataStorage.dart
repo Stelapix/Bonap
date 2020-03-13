@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:collection';
 
 import 'package:bonap/files/drawerItems/ingredients.dart';
 import 'package:bonap/files/drawerItems/meal.dart';
@@ -13,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class DataStorage {
   static bool debug = false;
@@ -96,19 +96,39 @@ class DataStorage {
   }
 
   static Future<File> saveIngredients() async {
-    // Save to the device
+    // Locally
     final file = await _localFileIngredients;
     String json = jsonEncode(Ingredient.listIngredients);
     if (debug) print("SAVING INGR : " + json);
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "ingredients";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
 
     return file.writeAsString(json);
   }
 
   static Future<File> saveVege() async {
-    // Save to the device
+    // Locally
     final file = await _localFileVege;
     String json = jsonEncode(LoginTools.vege);
     if (debug) print("VEGE MODE : " + json);
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "vege";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
     return file.writeAsString(json);
   }
 
@@ -130,17 +150,27 @@ class DataStorage {
   }
 
   static Future<File> saveTheme() async {
-    // Save to the device
+    // Locally
     final file = await _localFileTheme;
     String json = jsonEncode(LoginTools.darkMode);
     if (debug) print("DARK MODE : " + json);
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "theme";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
     return file.writeAsString(json);
   }
 
-  static Future<int> loadTheme(BuildContext newContext) async {
+  static Future<int> loadTheme() async {
     try {
       final file = await _localFileTheme;
-      ThemeChanger _themeChanger = Provider.of<ThemeChanger>(newContext);
+      ThemeChanger _themeChanger = Provider.of<ThemeChanger>(Constant.context);
       // Read the file
       String content = await file.readAsString();
       LoginTools.darkMode = json.decode(content);
@@ -181,9 +211,21 @@ class DataStorage {
   }
 
   static Future<File> saveRepas() async {
+    // Locally
     final file = await _localFileRepas;
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
+
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "repas";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
 
     return file.writeAsString(json);
   }
@@ -238,6 +280,7 @@ class DataStorage {
   }
 
   static Future<File> saveWeek() async {
+    // Locally
     final file_1 = await _localFileWeek_1;
     final file0 = await _localFileWeek0;
     final file1 = await _localFileWeek1;
@@ -257,6 +300,29 @@ class DataStorage {
     file2.writeAsStringSync(json2);
 
     DataStorage.saveWeekNumber();
+
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "week_1";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file_1);
+      filename = "week0";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file0);
+      filename = "week1";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file1);
+      filename = "week2";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file2);
+    }
 
     return file_1.writeAsString(json_1);
   }
@@ -284,9 +350,22 @@ class DataStorage {
   }
 
   static Future<File> saveShopping() async {
+    // Locally
     final file = await _localFileShopping;
     String json = jsonEncode(ShoppingList.liste);
     if (debug) print("SAVING SHOPPING : " + json);
+
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "shopping";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
+
     return file.writeAsString(json);
   }
 
@@ -312,37 +391,165 @@ class DataStorage {
   }
 
   static Future<File> saveWeekNumber() async {
+    // Locally
     final file = await _localFileWeekNumber;
     String json = jsonEncode(Weeks.weekNumber);
     if (debug) print("SAVING WEEK NUMBER : " + json);
+    // Firebase
+    if (!LoginTools.guestMode) {
+      StorageReference storageReference;
+      String userID = LoginTools.uid;
+      String users = "users";
+      String filename = "week";
+      storageReference =
+          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
+      storageReference.putFile(file);
+    }
 
     return file.writeAsString(json);
   }
 
-  // Ca rigole plus
-  static Future<void> uploadFile() async {
-    StorageReference storageReference;
+  static Future<void> downloadFile() async {
     String userID = LoginTools.uid;
     String users = "users";
     String filename;
-    List<String> listFileName = new List<String>();
-    listFileName.add("repas");
-    listFileName.add("vege");
-    listFileName.add("week");
-    listFileName.add("theme");
-    listFileName.add("ingredients");
-    List<File> listFile = new List<File>();
-    listFile.add(await _localFileRepas);
-    listFile.add(await _localFileVege);
-    listFile.add(await _localFileWeekNumber);
-    listFile.add(await _localFileTheme);
-    listFile.add(await _localFileIngredients);
+    String url;
+    http.Response downloadData;
+    List collection;
 
-    for (var i = 0; i < listFile.length; i++) {
-      filename = listFileName.elementAt(i);
-      storageReference =
-          FirebaseStorage.instance.ref().child("$users/$userID/$filename");
-      storageReference.putFile(listFile[i]);
+    try {
+      // Liste Meals
+      filename = "repas";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Meal.listMeal = collection.map((json) => Meal.fromJson(json)).toList();
+    } catch (exception) {
+      // print(exception);
+    }
+
+    try {
+      // Liste Ingredients
+      filename = "ingredients";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Ingredient.listIngredients =
+          collection.map((json) => Ingredient.fromJson(json)).toList();
+    } catch (exception) {
+      // print(exception);
+    }
+
+    // Theme
+    try {
+      ThemeChanger themeChanger = Provider.of<ThemeChanger>(Constant.context);
+      filename = "theme";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      LoginTools.darkMode = json.decode(downloadData.body);
+      if (LoginTools.darkMode)
+        themeChanger.setTheme(ThemeData.dark());
+      else {
+        themeChanger.setTheme(ThemeData.light());
+      }
+    } catch (exception) {
+      // print(exception);
+    }
+    try {
+      // Vege
+      filename = "vege";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      LoginTools.vege = json.decode(downloadData.body);
+    } catch (exception) {
+      // print(exception);
+    }
+
+    try {
+      // Weeks
+      // Read the file -1
+      filename = "week_1";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Weeks.week_1 = collection
+          .map((json) => (json != null) ? Day.fromJson(json) : null)
+          .toList();
+
+      // Read the file 0
+      filename = "week0";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Weeks.week0 = collection
+          .map((json) => (json != null) ? Day.fromJson(json) : null)
+          .toList();
+
+      // Read the file 1
+      filename = "week1";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Weeks.week1 = collection
+          .map((json) => (json != null) ? Day.fromJson(json) : null)
+          .toList();
+
+      // Read the file 2
+      filename = "week2";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      collection = json.decode(downloadData.body);
+      Weeks.week2 = collection
+          .map((json) => (json != null) ? Day.fromJson(json) : null)
+          .toList();
+    } catch (exception) {
+      // print(exception);
+    }
+    try {
+      // WeekNumber
+      filename = "week";
+      url = await FirebaseStorage.instance
+          .ref()
+          .child("$users/$userID/$filename")
+          .getDownloadURL();
+      downloadData = await http.get(url);
+      Weeks.weekNumber = json.decode(downloadData.body);
+    } catch (exception) {
+      // print(exception);
+    }
+    try {
+      // Shopping
+      filename = "shopping";
+      collection = json.decode(downloadData.body);
+      ShoppingList.liste = collection
+          .map((json) => IngredientShoppingList.fromJson(json))
+          .toList();
+    } catch (exception) {
+      // print(exception);
     }
   }
 }
