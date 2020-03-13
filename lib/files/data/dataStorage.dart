@@ -100,25 +100,35 @@ class DataStorage {
     final file = await _localFileIngredients;
     String json = jsonEncode(Ingredient.listIngredients);
     if (debug) print("SAVING INGR : " + json);
+    file.writeAsString(json);
+    await file.exists();
     // Firebase
     if (!LoginTools.guestMode) {
+      
       StorageReference storageReference;
       String userID = LoginTools.uid;
       String users = "users";
       String filename = "ingredients";
+      
       storageReference =
           FirebaseStorage.instance.ref().child("$users/$userID/$filename");
-      storageReference.putFile(file);
+
+      
+     storageReference.putFile(file);
+      
     }
 
     return file.writeAsString(json);
   }
+
 
   static Future<File> saveVege() async {
     // Locally
     final file = await _localFileVege;
     String json = jsonEncode(LoginTools.vege);
     if (debug) print("VEGE MODE : " + json);
+    file.writeAsString(json);
+    await file.exists();
     // Firebase
     if (!LoginTools.guestMode) {
       StorageReference storageReference;
@@ -154,6 +164,8 @@ class DataStorage {
     final file = await _localFileTheme;
     String json = jsonEncode(LoginTools.darkMode);
     if (debug) print("DARK MODE : " + json);
+    file.writeAsString(json);
+    await file.exists();
     // Firebase
     if (!LoginTools.guestMode) {
       StorageReference storageReference;
@@ -213,8 +225,11 @@ class DataStorage {
   static Future<File> saveRepas() async {
     // Locally
     final file = await _localFileRepas;
+    
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
+    file.writeAsString(json);
+    await file.exists();
 
     // Firebase
     if (!LoginTools.guestMode) {
@@ -294,12 +309,18 @@ class DataStorage {
     if (debug) print("SAVING WEEK 1 : " + json1);
     String json2 = jsonEncode(Weeks.week2);
     if (debug) print("SAVING WEEK 2 : " + json2);
-
+    file_1.writeAsStringSync(json_1);
     file0.writeAsStringSync(json0);
     file1.writeAsStringSync(json1);
     file2.writeAsStringSync(json2);
 
     DataStorage.saveWeekNumber();
+
+    
+    await file_1.exists();
+    await file0.exists();
+    await file1.exists();
+    await file2.exists();
 
     // Firebase
     if (!LoginTools.guestMode) {
@@ -354,6 +375,8 @@ class DataStorage {
     final file = await _localFileShopping;
     String json = jsonEncode(ShoppingList.liste);
     if (debug) print("SAVING SHOPPING : " + json);
+    file.writeAsString(json);
+    await file.exists();
 
     // Firebase
     if (!LoginTools.guestMode) {
@@ -395,6 +418,8 @@ class DataStorage {
     final file = await _localFileWeekNumber;
     String json = jsonEncode(Weeks.weekNumber);
     if (debug) print("SAVING WEEK NUMBER : " + json);
+    file.writeAsString(json);
+    await file.exists();
     // Firebase
     if (!LoginTools.guestMode) {
       StorageReference storageReference;
@@ -428,7 +453,7 @@ class DataStorage {
       collection = json.decode(downloadData.body);
       Meal.listMeal = collection.map((json) => Meal.fromJson(json)).toList();
     } catch (exception) {
-      // print(exception);
+      print(exception);
     }
 
     try {
