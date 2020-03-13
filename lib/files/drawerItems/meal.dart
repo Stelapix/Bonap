@@ -165,15 +165,21 @@ class _RepasPageState extends State<RepasPage> {
         break;
     }
     List<Meal> newList = new List();
-    var listMeal = Meal.listMeal;
-    if (Meal.filter != "") {
-      for (Meal m in Meal.listMeal) {
-        if (m.name.contains(Meal.filter)) {
-          newList.add(m);
+
+    for (Meal m in Meal.listMeal) {
+      if (m.name.contains(Meal.filter)) {
+        newList.add(m);
+      }
+      for (Ingredient i in m.listIngredient) {
+        if (LoginTools.vege) {
+          if (i.cat == Category.fish ||
+              i.cat == Category.meal ||
+              i.cat == Category.salami) {
+            newList.remove(m);
+          }
         }
       }
-    } else
-      newList = listMeal;
+    }
 
     return ListView(
       shrinkWrap: true,
@@ -330,7 +336,8 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
                                 children: <Widget>[
                                   Ingredient.catIcon(ingrName.cat),
                                   Text('    '),
-                                  Text(RenderingText.nameWithoutTheEnd(ingrName.name, 4)),
+                                  Text(RenderingText.nameWithoutTheEnd(
+                                      ingrName.name, 4)),
                                 ],
                               ),
                               value: isIn(_tempSelectedIngr, ingrName),
@@ -482,50 +489,58 @@ class _MyDialogState extends State<_MyDialog> {
                             itemCount: widget.ingr.length,
                             itemBuilder: (BuildContext context, int index) {
                               final ingrName = widget.ingr[index];
-                              return Container(
-                                child: CheckboxListTile(
-                                    title: Row(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 12),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Ingredient.catIcon(ingrName.cat),
-                                            ],
+                              if ((ingrName.cat != Category.salami) &&
+                                  (ingrName.cat != Category.fish) &&
+                                  (ingrName.cat != Category.meal)) {
+                                return Container(
+                                  child: CheckboxListTile(
+                                      title: Row(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 12),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Ingredient.catIcon(
+                                                    ingrName.cat),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Text(RenderingText.nameWithoutTheEnd(ingrName.name, 4)),
-                                      ],
-                                    ),
-                                    value: _tempSelectedIngr.contains(ingrName),
-                                    onChanged: (bool value) {
-                                      if (value) {
-                                        if (!_tempSelectedIngr
-                                            .contains(ingrName)) {
-                                          setState(() {
-                                            _tempSelectedIngr.add(ingrName);
-                                          });
+                                          Text(RenderingText.nameWithoutTheEnd(
+                                              ingrName.name, 4)),
+                                        ],
+                                      ),
+                                      value:
+                                          _tempSelectedIngr.contains(ingrName),
+                                      onChanged: (bool value) {
+                                        if (value) {
+                                          if (!_tempSelectedIngr
+                                              .contains(ingrName)) {
+                                            setState(() {
+                                              _tempSelectedIngr.add(ingrName);
+                                            });
+                                          }
+                                        } else {
+                                          if (_tempSelectedIngr
+                                              .contains(ingrName)) {
+                                            setState(() {
+                                              _tempSelectedIngr.removeWhere(
+                                                  (Ingredient ingr) =>
+                                                      ingr == ingrName);
+                                            });
+                                          }
                                         }
-                                      } else {
-                                        if (_tempSelectedIngr
-                                            .contains(ingrName)) {
-                                          setState(() {
-                                            _tempSelectedIngr.removeWhere(
-                                                (Ingredient ingr) =>
-                                                    ingr == ingrName);
-                                          });
-                                        }
-                                      }
 
-                                      widget.onSelectedIngrChanged(
-                                          _tempSelectedIngr);
+                                        widget.onSelectedIngrChanged(
+                                            _tempSelectedIngr);
 
-                                      if (!customName)
-                                        newRepasName =
-                                            _tempSelectedIngr.toString();
-                                    }),
-                              );
+                                        if (!customName)
+                                          newRepasName =
+                                              _tempSelectedIngr.toString();
+                                      }),
+                                );
+                              } else
+                                return Container();
                             }),
                       ),
                     ],
@@ -538,20 +553,22 @@ class _MyDialogState extends State<_MyDialog> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Ingredient.listIngredients.length > 0 ?
-            Padding(
-              padding: const EdgeInsets.only(right: 20 ),
-              child: FlatButton(
-                child: Text('Modifier des ingrédients'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => IngredientsPage()));
-                },
-              ),
-            ) : Container(),
+            Ingredient.listIngredients.length > 0
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: FlatButton(
+                      child: Text('Modifier des ingrédients'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    IngredientsPage()));
+                      },
+                    ),
+                  )
+                : Container(),
             FlatButton(
               onPressed: Ingredient.listIngredients.length == 0
                   ? () {

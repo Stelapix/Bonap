@@ -271,14 +271,18 @@ class _IngredientsPageState extends State<IngredientsPage> {
         break;
     }
     List<Ingredient> newList = new List();
-    if (Ingredient.filter != "") {
+
       for (Ingredient i in Ingredient.listIngredients) {
         if (i.name.contains(Ingredient.filter)) {
           newList.add(i);
+          if (LoginTools.vege) {
+            if (i.cat == Category.meal || i.cat == Category.salami || i.cat == Category.fish) {
+              newList.remove(i);
+            }
+          }
+          
         }
       }
-    } else
-      newList = Ingredient.listIngredients;
 
     return ListView(
       shrinkWrap: true,

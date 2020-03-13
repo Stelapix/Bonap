@@ -37,28 +37,28 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
     ]);
     switch (Ingredient.newCat) {
       case "Viande":
-        _value = _categories.elementAt(0);
+        _value = LoginTools.vege ? "" : _categories.elementAt(0);
         break;
       case "Charcuterie":
-        _value = _categories.elementAt(1);
+        _value = LoginTools.vege ? "" : _categories.elementAt(1);
         break;
       case "Poisson":
-        _value = _categories.elementAt(2);
+        _value = LoginTools.vege ? "" : _categories.elementAt(2);
         break;
       case "Féculent":
-        _value = _categories.elementAt(3);
+        _value = LoginTools.vege ? _categories.elementAt(0) : _categories.elementAt(3);
         break;
       case "Légume":
-        _value = _categories.elementAt(4);
+        _value = LoginTools.vege ? _categories.elementAt(1) : _categories.elementAt(4);
         break;
       case "Produit Laitier":
-        _value = _categories.elementAt(5);
+        _value = LoginTools.vege ? _categories.elementAt(2) : _categories.elementAt(5);
         break;
         case "Liquide":
-        _value = _categories.elementAt(6);
+        _value = LoginTools.vege ? _categories.elementAt(3) : _categories.elementAt(6);
         break;
       case "Autre":
-        _value = _categories.elementAt(7);
+        _value = LoginTools.vege ? _categories.elementAt(4) : _categories.elementAt(7);
         break;
     }
 
