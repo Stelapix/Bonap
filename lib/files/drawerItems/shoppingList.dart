@@ -9,6 +9,9 @@ class ShoppingList {
   static List<IngredientShoppingList> liste =
       new List<IngredientShoppingList>();
 
+  static String filter;
+  static bool searching;
+
   static void addMealToList(Meal m) {
     bool weCanAddIt = true;
     for (int i = 0; i < m.listIngredient.length; i++) {
@@ -87,12 +90,54 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class ShoppingListPageState extends State<ShoppingListPage> {
+  popUpSort _selectionSort;
+
+  @override
+  void initState() {
+    super.initState();
+    ShoppingList.filter = "";
+    ShoppingList.searching = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Liste de Course'),
           actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.search),
+                tooltip: "Chercher un élément ..",
+                onPressed: () {
+                  setState(() {
+                    ShoppingList.searching = !ShoppingList.searching;
+                    if (!ShoppingList.searching) ShoppingList.filter = "";
+                  });
+                }),
+            PopupMenuButton<popUpSort>(
+              onSelected: (popUpSort result) {
+                setState(() {
+                  _selectionSort = result;
+                });
+              },
+              tooltip: "Trier par ..",
+              icon: Icon(Icons.sort),
+              itemBuilder: (BuildContext context) =>
+                  <PopupMenuEntry<popUpSort>>[
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.alpha,
+                  child: Text('Ordre alphabétique'),
+                ),
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.category,
+                  child: Text('Catégories'),
+                ),
+                const PopupMenuItem<popUpSort>(
+                  value: popUpSort.favorite,
+                  child: Text('Favoris'),
+                ),
+              ],
+            ),
             IconButton(
               icon: Icon(Icons.file_download),
               tooltip: 'Importer depuis le menu',
@@ -113,7 +158,12 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           ],
         ),
         body: Container(
-          child: display(),
+          child: Column(
+            children: <Widget>[
+              ShoppingList.searching ? searchBar() : new Row(),
+              Expanded(child: display(),)
+
+          ],)
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -131,10 +181,62 @@ class ShoppingListPageState extends State<ShoppingListPage> {
         ));
   }
 
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
+            ),
+            onChanged: (value) {
+              setState(() {
+                ShoppingList.filter = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   ListView display() {
+    switch (this._selectionSort) {
+      case popUpSort.alpha:
+        ShoppingList.liste
+            .sort((a, b) => a.i.name.toString().compareTo(b.i.name.toString()));
+        break;
+      case popUpSort.category:
+        ShoppingList.liste
+            .sort((a, b) => a.i.cat.toString().compareTo(b.i.cat.toString()));
+        break;
+      case popUpSort.favorite:
+        ShoppingList.liste
+            .sort((b, a) => a.i.fav.toString().compareTo(b.i.fav.toString()));
+        break;
+      default:
+        break;
+    }
+
+    List<IngredientShoppingList> newList = new List();
+
+      for (IngredientShoppingList i in ShoppingList.liste) {
+        if (i.i.name.contains(ShoppingList.filter)) {
+          newList.add(i);
+          if (LoginTools.vege) {
+            if (i.i.cat == Category.meal || i.i.cat == Category.salami || i.i.cat == Category.fish) {
+              newList.remove(i);
+            }
+          }
+          
+        }
+      }
+
+
     return ListView(
       shrinkWrap: true,
-      children: ShoppingList.liste
+      children: newList
           .map(
             (data) => new Container(
               child: ExpansionTile(
