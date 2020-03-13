@@ -674,7 +674,7 @@ class AddIngredientDialogState extends State<AddIngredientDialog> {
                   setState(() {});
                   if (Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listIngredient.contains(data)) {
-                    Day.listDay[widget.index].listMeal.remove(data);
+                    Day.listDay[widget.index].listIngredient.remove(data);
                   } else if (Day.listDay[widget.index] == null) {
                     Day.listDay[widget.index] = new Day();
                     Day.listDay[widget.index].listIngredient.add(data);
