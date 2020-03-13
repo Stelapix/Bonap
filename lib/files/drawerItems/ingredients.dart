@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:bonap/files/tools.dart';
 
 enum Category {
-  meal,
+  meat,
   fish,
   vegetable,
   fruit,
@@ -57,7 +57,7 @@ class Ingredient {
       case (Category.starchy):
         return Icon(Custom.potato);
         break;
-      case (Category.meal):
+      case (Category.meat):
         return Icon(Custom.meat);
         break;
       case (Category.fish):
@@ -89,7 +89,7 @@ class Ingredient {
       case (Category.starchy):
         return "Féculent";
         break;
-      case (Category.meal):
+      case (Category.meat):
         return "Viande";
         break;
       case (Category.fish):
@@ -119,7 +119,7 @@ class Ingredient {
   static Category stringToCategory(String s) {
     switch (s) {
       case "Viande":
-        return Category.meal;
+        return Category.meat;
         break;
       case "Poisson":
         return Category.fish;
@@ -276,7 +276,7 @@ class _IngredientsPageState extends State<IngredientsPage> {
         if (i.name.contains(Ingredient.filter)) {
           newList.add(i);
           if (LoginTools.vege) {
-            if (i.cat == Category.meal || i.cat == Category.salami || i.cat == Category.fish) {
+            if (i.cat == Category.meat || i.cat == Category.salami || i.cat == Category.fish) {
               newList.remove(i);
             }
           }
@@ -500,7 +500,7 @@ class _EditDialogState extends State<_EditDialog> {
             widget.I.name = newIngr;
             switch (Ingredient.newCat) {
               case ("Viande"):
-                widget.I.cat = Category.meal;
+                widget.I.cat = Category.meat;
                 break;
               case ("Légume"):
                 widget.I.cat = Category.vegetable;

@@ -173,7 +173,7 @@ class _RepasPageState extends State<RepasPage> {
       for (Ingredient i in m.listIngredient) {
         if (LoginTools.vege) {
           if (i.cat == Category.fish ||
-              i.cat == Category.meal ||
+              i.cat == Category.meat ||
               i.cat == Category.salami) {
             newList.remove(m);
           }
@@ -491,7 +491,7 @@ class _MyDialogState extends State<_MyDialog> {
                               final ingrName = widget.ingr[index];
                               if ((ingrName.cat != Category.salami) &&
                                   (ingrName.cat != Category.fish) &&
-                                  (ingrName.cat != Category.meal)) {
+                                  (ingrName.cat != Category.meat)) {
                                 return Container(
                                   child: CheckboxListTile(
                                       title: Row(

@@ -225,7 +225,7 @@ class ShoppingListPageState extends State<ShoppingListPage> {
         if (i.i.name.contains(ShoppingList.filter)) {
           newList.add(i);
           if (LoginTools.vege) {
-            if (i.i.cat == Category.meal || i.i.cat == Category.salami || i.i.cat == Category.fish) {
+            if (i.i.cat == Category.meat || i.i.cat == Category.salami || i.i.cat == Category.fish) {
               newList.remove(i);
             }
           }
