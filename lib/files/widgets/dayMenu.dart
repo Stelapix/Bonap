@@ -52,7 +52,7 @@ class Weeks {
     DateTime now = DateTime.now();
     int dayOfYear = int.parse(DateFormat("D").format(now));
     int n = ((dayOfYear - now.weekday + 10) ~/ 7);
-    
+
     if (Weeks.weekNumber != n) {
       print("NEW WEEK OMG");
       Weeks.newWeek();
@@ -66,6 +66,7 @@ class Day {
   static List<Day> listDay = new List<Day>(14);
 
   List<Meal> listMeal;
+  List<Ingredient> listIngredient;
   Ingredient ing1;
   Ingredient ing2;
   Ingredient ing3;
@@ -73,6 +74,7 @@ class Day {
 
   Day() {
     this.listMeal = new List<Meal>();
+    this.listIngredient = new List<Ingredient>();
     this.ing1 = null;
     this.ing2 = null;
     this.ing3 = null;
@@ -82,6 +84,7 @@ class Day {
   // Sauvegarde et chargement
   Day.fromJson(Map<String, dynamic> json)
       : listMeal = createList(json['listMeal']),
+        listIngredient = createList2(json['listIngredient']),
         ing1 = createIng(json['ing1']),
         ing2 = createIng(json['ing1']),
         ing3 = createIng(json['ing1']),
@@ -89,6 +92,7 @@ class Day {
 
   Map<String, dynamic> toJson() => {
         'listMeal': listMeal,
+        'listIngredient': listIngredient,
         'ing1': ing1,
         'ing2': ing2,
         'ing3': ing3,
@@ -102,6 +106,16 @@ class Day {
       m.fav = s[i]['fav'];
 
       L.add(m);
+    }
+    return L;
+  }
+
+  static List<Ingredient> createList2(List<dynamic> s) {
+    List<Ingredient> L = new List<Ingredient>();
+    for (int i = 0; i < s.length; i++) {
+      Ingredient ing = new Ingredient(s[i]['name'], s[i]['category']);
+
+      L.add(ing);
     }
     return L;
   }
@@ -136,7 +150,6 @@ class DayMenuState extends State<DayMenu> {
     // Bold the current day
     var now = DateTime.now();
     if (Weeks.weekNumber == MenuSemaine.getTheNumberOfWeek()) {
-      
       switch (now.weekday) {
         case DateTime.monday:
           if (widget.dayName == "Lundi") currentDay = true;
@@ -162,7 +175,8 @@ class DayMenuState extends State<DayMenu> {
         default:
           break;
       }
-    } else currentDay = false;
+    } else
+      currentDay = false;
 
     // Column
     return Column(
@@ -262,7 +276,9 @@ class DayButtonState extends State<DayButton> {
                       context: context,
                       builder: (context) {
                         return DisplayInfosDialog(
-                            this, Day.listDay[widget.index].listMeal);
+                            this,
+                            Day.listDay[widget.index].listMeal,
+                            Day.listDay[widget.index].listIngredient);
                       })
                   : showDialog(
                       context: context,
@@ -291,7 +307,8 @@ class DayButtonState extends State<DayButton> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    (Day.listDay[widget.index] == null || Day.listDay[widget.index].listMeal.length == 0)
+                    (Day.listDay[widget.index] == null ||
+                            Day.listDay[widget.index].listMeal.length == 0)
                         ? (Weeks.weekID == -1
                             ? Icon(Icons.do_not_disturb)
                             : Icon(Icons.add))
@@ -327,7 +344,7 @@ class DayButtonState extends State<DayButton> {
                                             .listMeal[0].fav
                                         ? FontWeight.bold
                                         : FontWeight.normal),
-                          ),
+                              ),
                   ],
                 ),
                 settingsMode
@@ -360,7 +377,8 @@ class DayButtonState extends State<DayButton> {
                           ),
                         ],
                       )
-                    : Day.listDay[widget.index] != null && Day.listDay[widget.index].listMeal.length != 0
+                    : Day.listDay[widget.index] != null &&
+                            Day.listDay[widget.index].listMeal.length != 0
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,8 +456,6 @@ class DayButtonState extends State<DayButton> {
       ),
     );
   }
-
-  
 }
 
 class ChangeIngredientDialog extends StatefulWidget {
@@ -561,6 +577,118 @@ class DelMealDialogState extends State<DelMealDialog> {
   }
 }
 
+class AddIngredientDialog extends StatefulWidget {
+  final DayButtonState dbs;
+  final int index;
+
+  AddIngredientDialog(this.dbs, this.index);
+
+  @override
+  AddIngredientDialogState createState() => AddIngredientDialogState();
+}
+
+class AddIngredientDialogState extends State<AddIngredientDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        title: Text("Ajouter des ingrédients"),
+        actions: <Widget>[
+          FlatButton(
+              child: Text("Terminer"),
+              onPressed: () {
+                List<Day> copy = Day.listDay;
+
+                for (int i = 0; i < copy.length; i++) {
+                  if (Day.listDay.contains(copy[i]) && copy[i] != null) {
+                    if (copy[i] != null) {
+                      if (copy[i].index == widget.index) {
+                        copy[i].listMeal = Day.listDay[widget.index].listMeal;
+                        copy[i].listIngredient =
+                            Day.listDay[widget.index].listIngredient;
+                      }
+                    }
+                  } else {
+                    Day d = new Day();
+                    d.index = widget.index;
+                    d.listMeal = Day.listDay[widget.index].listMeal;
+                    d.ing1 = d.listMeal[0].listIngredient.length > 0
+                        ? d.listMeal[0].listIngredient[0]
+                        : null;
+                    d.ing2 = d.listMeal[0].listIngredient.length > 1
+                        ? d.listMeal[0].listIngredient[1]
+                        : null;
+                    d.ing3 = d.listMeal[0].listIngredient.length > 2
+                        ? d.listMeal[0].listIngredient[2]
+                        : null;
+                    d.listIngredient = Day.listDay[widget.index].listIngredient;
+                    Day.listDay[widget.index] = d;
+                  }
+                }
+
+                DataStorage.saveWeek();
+
+                widget.dbs.setState(() => true);
+                Navigator.of(context).pop();
+              })
+        ],
+        content: Meal.listMeal.length > 0
+            ? Container(
+                width: Constant.width * 0.8,
+                height: Meal.listMeal.length > 5
+                    ? Constant.height * 0.4
+                    : Constant.height *
+                        (Ingredient.listIngredients.length / 14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: displayIngr(),
+                    )
+                  ],
+                ),
+              )
+            : Container(
+                child: Text('Commencez par ajouter des repas'),
+              ));
+  }
+
+  ListView displayIngr() {
+    List<Ingredient> newList = new List();
+    newList = Ingredient.listIngredients;
+
+    return ListView(
+      shrinkWrap: true,
+      children: newList
+          .map(
+            (data) => new Container(
+              child: ListTile(
+                title: Text(data.name),
+                trailing: Day.listDay[widget.index] != null &&
+                        Day.listDay[widget.index].listIngredient.contains(data)
+                    ? Icon(Icons.check_box)
+                    : Icon(Icons.check_box_outline_blank),
+                onTap: () {
+                  // print(Day.listDay[widget.index].listMeal.toString());
+
+                  setState(() {});
+                  if (Day.listDay[widget.index] != null &&
+                      Day.listDay[widget.index].listIngredient.contains(data)) {
+                    Day.listDay[widget.index].listMeal.remove(data);
+                  } else if (Day.listDay[widget.index] == null) {
+                    Day.listDay[widget.index] = new Day();
+                    Day.listDay[widget.index].listIngredient.add(data);
+                  } else
+                    Day.listDay[widget.index].listIngredient.add(data);
+                },
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
 class AddMealDialog extends StatefulWidget {
   final DayButtonState dbs;
   final int index;
@@ -585,7 +713,7 @@ class AddMealDialogState extends State<AddMealDialog> {
             : Text("Vous allez trop vite !"),
         actions: <Widget>[
           FlatButton(
-            child: Text("Ok"),
+            child: Text("Suivant"),
             onPressed: Meal.listMeal.length > 0
                 ? () {
                     if (Day.listDay[widget.index] != null &&
@@ -636,12 +764,15 @@ class AddMealDialogState extends State<AddMealDialog> {
                       }
                     }
 
-                    
-
                     DataStorage.saveWeek();
 
                     widget.dbs.setState(() => true);
                     Navigator.of(context).pop();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AddIngredientDialog(widget.dbs, widget.index);
+                        });
                   }
                 : () {
                     Navigator.of(context).pop();
@@ -655,7 +786,9 @@ class AddMealDialogState extends State<AddMealDialog> {
         content: Meal.listMeal.length > 0
             ? Container(
                 width: Constant.width * 0.8,
-                height: Meal.listMeal.length > 5 ? Constant.height * 0.4 : Constant.height * (Meal.listMeal.length / 14),
+                height: Meal.listMeal.length > 5
+                    ? Constant.height * 0.4
+                    : Constant.height * (Meal.listMeal.length / 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -667,8 +800,8 @@ class AddMealDialogState extends State<AddMealDialog> {
                 ),
               )
             : Container(
-              child: Text('Commencez par ajouter des repas'),
-            ));
+                child: Text('Commencez par ajouter des repas'),
+              ));
   }
 
   ListView displayMeal() {
@@ -697,7 +830,7 @@ class AddMealDialogState extends State<AddMealDialog> {
                     : Icon(Icons.check_box_outline_blank),
                 onTap: () {
                   // print(Day.listDay[widget.index].listMeal.toString());
-                  
+
                   setState(() {});
                   if (Day.listDay[widget.index] != null &&
                       Day.listDay[widget.index].listMeal.contains(data)) {
@@ -719,8 +852,9 @@ class AddMealDialogState extends State<AddMealDialog> {
 class DisplayInfosDialog extends StatefulWidget {
   final DayButtonState dbs;
   final List<Meal> listMeal;
+  final List<Ingredient> listIngredient;
 
-  DisplayInfosDialog(this.dbs, this.listMeal);
+  DisplayInfosDialog(this.dbs, this.listMeal, this.listIngredient);
 
   @override
   DisplayInfosDialogState createState() => DisplayInfosDialogState();
@@ -747,7 +881,7 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
       ],
       content: Container(
         width: Constant.width * 0.8,
-        height: n > 6 ? Constant.height * 0.4 : Constant.height * (n/15),
+        height: n > 6 ? Constant.height * 0.4 : Constant.height * (n / 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -762,9 +896,24 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
   }
 
   ListView displayInfos() {
+    bool canAdd = true;
+    List<Meal> newList = new List();
+    newList = widget.listMeal;
+    if (widget.listIngredient != null && widget.listIngredient.length > 0) {
+      Meal m = new Meal("Ingredients", widget.listIngredient);
+      for (int i = 0; i < newList.length; i++) {
+        if (newList[i].name == "Ingredients" && newList[i].listIngredient == widget.listIngredient) {
+          canAdd = false;
+        }
+      }
+      if (canAdd) newList.add(m);
+      
+    }
+    
+
     return ListView(
         shrinkWrap: true,
-        children: widget.listMeal
+        children: newList
             .map((data) => new Container(
                   child: Column(
                     children: <Widget>[
