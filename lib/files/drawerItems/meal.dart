@@ -11,7 +11,9 @@ class Meal {
 
   static List<Meal> listMeal = new List<Meal>();
   static String filter = "";
+  static String addMealFilter = "";
   static bool searching = false;
+  static bool addMealSearching = false;
 
   Meal(String name, List<Ingredient> listIngredient) {
     this.name = name;
@@ -69,7 +71,9 @@ class _RepasPageState extends State<RepasPage> {
   @override
   void initState() {
     Meal.filter = "";
+    Meal.addMealFilter = "";
     Meal.searching = false;
+    Meal.addMealSearching = false;
     super.initState();
   }
 
@@ -287,7 +291,6 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
   String newMealName = '';
   bool customName = true;
   bool weCanEditIt = true;
-  bool typing = false;
 
   @override
   void initState() {
@@ -296,80 +299,113 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
       _tempSelectedIngr.add(i);
     }
     super.initState();
+    Meal.addMealSearching = false;
+    Meal.addMealFilter = "";
   }
 
   @override
   Widget build(BuildContext context) {
-    typing = MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+    List<Ingredient> newList = new List();
+
+    for (Ingredient i in Ingredient.listIngredients) {
+      if (i.name.contains(Meal.addMealFilter)) {
+        newList.add(i);
+        if (LoginTools.vege) {
+          if (i.cat == Category.meat ||
+              i.cat == Category.salami ||
+              i.cat == Category.fish) {
+            newList.remove(i);
+          }
+        }
+      }
+    }
     return AlertDialog(
-      title: Text(
-        'Modifier ' + widget.r.name,
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-              child: TextField(
-            autofocus: false,
-            decoration: new InputDecoration(
-                labelText: 'Nom du repas', hintText: newMealName),
-            onChanged: (value) {
-              customName = true;
-              newMealName = value;
-              if (newMealName == '') customName = false;
-            },
-          )),
-          Container(
-            width: Constant.width * 0.8,
-            height: typing ? Constant.width * 0.1 : Constant.height * 0.4,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: widget.ingr.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final ingrName = Ingredient.listIngredients[index];
-
-                        return Container(
-                          child: CheckboxListTile(
-                              title: Row(
-                                children: <Widget>[
-                                  Ingredient.catIcon(ingrName.cat),
-                                  Text('    '),
-                                  Text(RenderingText.nameWithoutTheEnd(
-                                      ingrName.name, 4)),
-                                ],
-                              ),
-                              value: isIn(_tempSelectedIngr, ingrName),
-                              onChanged: (bool value) {
-                                if (value) {
-                                  if (!isIn(_tempSelectedIngr, ingrName)) {
-                                    setState(() {
-                                      _tempSelectedIngr.add(ingrName);
-                                    });
-                                  }
-                                } else {
-                                  if (isIn(_tempSelectedIngr, ingrName)) {
-                                    setState(() {
-                                      _tempSelectedIngr.removeWhere(
-                                          (Ingredient ingr) =>
-                                              ingr.name == ingrName.name);
-                                    });
-                                  }
-                                }
-
-                                widget.onSelectedIngrChanged(_tempSelectedIngr);
-
-                                if (!customName)
-                                  newMealName = _tempSelectedIngr.toString();
-                              }),
-                        );
-                      }),
-                ),
-              ],
-            ),
+          Text(
+            'Modifier ' + widget.r.name,
           ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                Meal.addMealSearching = !Meal.addMealSearching;
+              });
+            },
+            icon: Icon(Icons.search),
+          )
         ],
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Meal.addMealSearching ? searchBar() : Row(),
+            Container(
+                child: TextField(
+              autofocus: false,
+              decoration: new InputDecoration(
+                  labelText: 'Nom du repas', hintText: newMealName),
+              onChanged: (value) {
+                customName = true;
+                newMealName = value;
+                if (newMealName == '') customName = false;
+              },
+            )),
+            Container(
+              width: Constant.width * 0.8,
+              height: Constant.height * 0.4,
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: newList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final ingrName = newList[index];
+
+                          return Container(
+                            child: CheckboxListTile(
+                                title: Row(
+                                  children: <Widget>[
+                                    Ingredient.catIcon(ingrName.cat),
+                                    Text('    '),
+                                    Text(RenderingText.nameWithoutTheEnd(
+                                        ingrName.name, 4)),
+                                  ],
+                                ),
+                                value: isIn(_tempSelectedIngr, ingrName),
+                                onChanged: (bool value) {
+                                  if (value) {
+                                    if (!isIn(_tempSelectedIngr, ingrName)) {
+                                      setState(() {
+                                        _tempSelectedIngr.add(ingrName);
+                                      });
+                                    }
+                                  } else {
+                                    if (isIn(_tempSelectedIngr, ingrName)) {
+                                      setState(() {
+                                        _tempSelectedIngr.removeWhere(
+                                            (Ingredient ingr) =>
+                                                ingr.name == ingrName.name);
+                                      });
+                                    }
+                                  }
+
+                                  widget
+                                      .onSelectedIngrChanged(_tempSelectedIngr);
+
+                                  if (!customName)
+                                    newMealName = _tempSelectedIngr.toString();
+                                }),
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         IconButton(
@@ -409,6 +445,26 @@ class _MyDialogEditState extends State<_MyDialogEdit> {
     );
   }
 
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
+            ),
+            onChanged: (value) {
+              setState(() {
+                Meal.addMealFilter = value;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   bool isIn(List<Ingredient> L, Ingredient I) {
     var b = false;
     for (Ingredient A in L) {
@@ -441,113 +497,147 @@ class _MyDialogState extends State<_MyDialog> {
   String newRepasName = '';
   bool customName = false;
   bool weCanAddIt = true;
-  bool typing = false;
 
   @override
   void initState() {
     _tempSelectedIngr = widget.selectedIngr;
     super.initState();
+    Meal.addMealFilter = "";
+    Meal.addMealSearching = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    typing = MediaQuery.of(context).viewInsets.bottom > 0 ? true : false;
+    List<Ingredient> newList = new List();
+
+    for (Ingredient i in Ingredient.listIngredients) {
+      if (i.name.contains(Meal.addMealFilter)) {
+        newList.add(i);
+        if (LoginTools.vege) {
+          if (i.cat == Category.meat ||
+              i.cat == Category.salami ||
+              i.cat == Category.fish) {
+            newList.remove(i);
+          }
+        }
+      }
+    }
     return AlertDialog(
       title: Ingredient.listIngredients.length == 0
           ? Text('Vous allez trop vite !')
-          : Text('Ajouter un repas'),
-      content: Ingredient.listIngredients.length == 0
-          ? Text("Commencez par ajouter des ingrédients !")
-          : Column(
-              mainAxisSize: MainAxisSize.min,
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Container(
-                    child: TextField(
-                  autofocus: false,
-                  decoration: new InputDecoration(
-                      labelText: 'Nom du repas', hintText: newRepasName),
-                  onChanged: (value) {
-                    customName = true;
-                    newRepasName = value;
-                    if (newRepasName == '') customName = false;
+                Text('Ajouter un repas'),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      Meal.addMealSearching = !Meal.addMealSearching;
+                    });
                   },
-                )),
-                Container(
-                  width: Constant.width * 0.8,
-                  height: typing
-                      ? Constant.width * 0.1
-                      : Ingredient.listIngredients.length <= 6
-                          ? (Constant.height *
-                              (Ingredient.listIngredients.length / 16))
-                          : Constant.height * 0.4,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Expanded(
-                        child: ListView.builder(
-                            itemCount: widget.ingr.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final ingrName = widget.ingr[index];
-                              if ((ingrName.cat != Category.salami) &&
-                                  (ingrName.cat != Category.fish) &&
-                                  (ingrName.cat != Category.meat)) {
-                                return Container(
-                                  child: CheckboxListTile(
-                                      title: Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 12),
-                                            child: Row(
-                                              children: <Widget>[
-                                                Ingredient.catIcon(
-                                                    ingrName.cat),
-                                              ],
-                                            ),
-                                          ),
-                                          Text(RenderingText.nameWithoutTheEnd(
-                                              ingrName.name, 4)),
-                                        ],
-                                      ),
-                                      value:
-                                          _tempSelectedIngr.contains(ingrName),
-                                      onChanged: (bool value) {
-                                        if (value) {
-                                          if (!_tempSelectedIngr
-                                              .contains(ingrName)) {
-                                            setState(() {
-                                              _tempSelectedIngr.add(ingrName);
-                                            });
-                                          }
-                                        } else {
-                                          if (_tempSelectedIngr
-                                              .contains(ingrName)) {
-                                            setState(() {
-                                              _tempSelectedIngr.removeWhere(
-                                                  (Ingredient ingr) =>
-                                                      ingr == ingrName);
-                                            });
-                                          }
-                                        }
-
-                                        widget.onSelectedIngrChanged(
-                                            _tempSelectedIngr);
-
-                                        if (!customName)
-                                          newRepasName =
-                                              _tempSelectedIngr.toString();
-                                      }),
-                                );
-                              } else
-                                return Container();
-                            }),
-                      ),
-                    ],
-                  ),
                 )
               ],
             ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Meal.addMealSearching ? searchBar() : Row(),
+            Ingredient.listIngredients.length == 0
+                ? Text("Commencez par ajouter des ingrédients !")
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                          child: TextField(
+                        autofocus: false,
+                        decoration: new InputDecoration(
+                            labelText: 'Nom du repas', hintText: newRepasName),
+                        onChanged: (value) {
+                          customName = true;
+                          newRepasName = value;
+                          if (newRepasName == '') customName = false;
+                        },
+                      )),
+                      Container(
+                        width: Constant.width * 0.8,
+                        height: Constant.height * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: newList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    final ingrName = newList[index];
+                                    
+                                      return Container(
+                                        child: CheckboxListTile(
+                                            title: Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 12),
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Ingredient.catIcon(
+                                                          ingrName.cat),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text(RenderingText
+                                                    .nameWithoutTheEnd(
+                                                        ingrName.name, 4)),
+                                              ],
+                                            ),
+                                            value: _tempSelectedIngr
+                                                .contains(ingrName),
+                                            onChanged: (bool value) {
+                                              if (value) {
+                                                if (!_tempSelectedIngr
+                                                    .contains(ingrName)) {
+                                                  setState(() {
+                                                    _tempSelectedIngr
+                                                        .add(ingrName);
+                                                  });
+                                                }
+                                              } else {
+                                                if (_tempSelectedIngr
+                                                    .contains(ingrName)) {
+                                                  setState(() {
+                                                    _tempSelectedIngr
+                                                        .removeWhere(
+                                                            (Ingredient ingr) =>
+                                                                ingr ==
+                                                                ingrName);
+                                                  });
+                                                }
+                                              }
+
+                                              widget.onSelectedIngrChanged(
+                                                  _tempSelectedIngr);
+
+                                              if (!customName)
+                                                newRepasName = _tempSelectedIngr
+                                                    .toString();
+                                            }),
+                                      );
+                                    } 
+                                  ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+          ],
+        ),
+      ),
       actions: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -601,6 +691,26 @@ class _MyDialogState extends State<_MyDialog> {
               child: Text('Ok'),
             ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
+            ),
+            onChanged: (value) {
+              setState(() {
+                Meal.addMealFilter = value;
+              });
+            },
+          ),
         ),
       ],
     );
