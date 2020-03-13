@@ -11,6 +11,8 @@ class ShoppingList {
 
   static String filter;
   static bool searching;
+  static String addElementFilter;
+  static bool addElementSearching;
 
   static void addMealToList(Meal m) {
     bool weCanAddIt = true;
@@ -67,18 +69,12 @@ class IngredientShoppingList {
   static List<Meal> createList(List<dynamic> s) {
     List<Meal> L = new List<Meal>();
     if (s[0] != null) {
-
-
       for (int i = 0; i < s.length; i++) {
         L.add(Meal.fromJson(s[i]));
       }
-
-    }
-    else {
+    } else {
       L.add(null);
     }
-    
-    
 
     return L;
   }
@@ -97,6 +93,8 @@ class ShoppingListPageState extends State<ShoppingListPage> {
     super.initState();
     ShoppingList.filter = "";
     ShoppingList.searching = false;
+    ShoppingList.addElementFilter = "";
+    ShoppingList.addElementSearching = false;
   }
 
   @override
@@ -158,13 +156,14 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           ],
         ),
         body: Container(
-          child: Column(
-            children: <Widget>[
-              ShoppingList.searching ? searchBar() : new Row(),
-              Expanded(child: display(),)
-
-          ],)
-        ),
+            child: Column(
+          children: <Widget>[
+            ShoppingList.searching ? searchBar() : new Row(),
+            Expanded(
+              child: display(),
+            )
+          ],
+        )),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showDialog(
@@ -221,18 +220,18 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
     List<IngredientShoppingList> newList = new List();
 
-      for (IngredientShoppingList i in ShoppingList.liste) {
-        if (i.i.name.contains(ShoppingList.filter)) {
-          newList.add(i);
-          if (LoginTools.vege) {
-            if (i.i.cat == Category.meat || i.i.cat == Category.salami || i.i.cat == Category.fish) {
-              newList.remove(i);
-            }
+    for (IngredientShoppingList i in ShoppingList.liste) {
+      if (i.i.name.contains(ShoppingList.filter)) {
+        newList.add(i);
+        if (LoginTools.vege) {
+          if (i.i.cat == Category.meat ||
+              i.i.cat == Category.salami ||
+              i.i.cat == Category.fish) {
+            newList.remove(i);
           }
-          
         }
       }
-
+    }
 
     return ListView(
       shrinkWrap: true,
@@ -324,84 +323,123 @@ class AddDialogState extends State<AddDialog> {
   @override
   void initState() {
     super.initState();
+    ShoppingList.addElementSearching = false;
+    ShoppingList.addElementFilter = "";
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Ingredient> newList = new List();
+
+    for (Ingredient i in Ingredient.listIngredients) {
+      if (i.name.contains(ShoppingList.addElementFilter)) {
+        print(ShoppingList.addElementFilter);
+        newList.add(i);
+        if (LoginTools.vege) {
+          if (i.cat == Category.meat ||
+              i.cat == Category.salami ||
+              i.cat == Category.fish) {
+            newList.remove(i);
+          }
+        }
+      }
+    }
     bool alreadyIn = false;
     return AlertDialog(
-      title: Text('Ajouter un ingrédient'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Container(
-            width: Constant.width * 0.8,
-            height: Constant.height * 0.6,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: Ingredient.listIngredients.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(RenderingText.nameWithoutTheEnd(
-                            Ingredient.listIngredients[index].name, 2.8)),
-                        leading: Ingredient.listIngredients[index].icon,
-                        onTap: () {
-                          widget.slps.setState(() {
-                            // Ingredient deja present, on augmente le compteur
-                            for (IngredientShoppingList isl
-                                in ShoppingList.liste) {
-                              if (isl.i.name ==
-                                  Ingredient.listIngredients[index].name) {
-                                alreadyIn = true;
-                              }
-                            }
-                            if (alreadyIn) {
-                              print("Incremente");
-                              for (IngredientShoppingList i
-                                  in ShoppingList.liste) {
-                                if (i.i.name ==
-                                    Ingredient.listIngredients[index].name) {
-                                  i.amount++;
-                                }
-                              }
-                            }
-                            // Sinon on l'ajoute
-                            else {
-                              print("Ajout");
-                              ShoppingList.liste.add(new IngredientShoppingList(
-                                  Ingredient.listIngredients[index], null));
-                            }
-                          });
-                          DataStorage.saveShopping();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+          Text('Ajouter un ingrédient'),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                ShoppingList.addElementSearching =
+                    !ShoppingList.addElementSearching;
+              });
+            },
           )
         ],
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              width: Constant.width * 0.8,
+              height: Constant.height * 0.6,
+              child: Column(
+                children: <Widget>[
+                  ShoppingList.addElementSearching ? searchBar() : Row(),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: newList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(RenderingText.nameWithoutTheEnd(
+                              newList[index].name, 2.8)),
+                          leading: newList[index].icon,
+                          onTap: () {
+                            widget.slps.setState(() {
+                              // Ingredient deja present, on augmente le compteur
+                              for (IngredientShoppingList isl
+                                  in ShoppingList.liste) {
+                                if (isl.i.name ==
+                                    newList[index].name) {
+                                  alreadyIn = true;
+                                }
+                              }
+                              if (alreadyIn) {
+                                for (IngredientShoppingList i
+                                    in ShoppingList.liste) {
+                                  if (i.i.name ==
+                                      newList[index].name) {
+                                    i.amount++;
+                                  }
+                                }
+                              }
+                              // Sinon on l'ajoute
+                              else {
+                                ShoppingList.liste.add(
+                                    new IngredientShoppingList(
+                                        newList[index],
+                                        null));
+                              }
+                            });
+                            DataStorage.saveShopping();
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
-  ListView ingredients() {
-    return ListView(
-      shrinkWrap: true,
-      children: Ingredient.listIngredients
-          .map(
-            (data) => new Container(
-              child: ListTile(
-                title: Text(data.name),
-                onTap: () {},
-              ),
+  Row searchBar() {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            autofocus: true,
+            decoration: new InputDecoration(
+              labelText: " Chercher ...",
             ),
-          )
-          .toList(),
+            onChanged: (value) {
+              setState(() {
+                ShoppingList.addElementFilter = value;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }
