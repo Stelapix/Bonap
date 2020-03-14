@@ -18,7 +18,15 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
   @override
   void initState() {
     super.initState();
-    _value = "Viande";
+    if (LoginTools.vege) {
+      _value = "Féculent";
+      if (Ingredient.newCat == "Viande" || Ingredient.newCat == "Charcuterie" || Ingredient.newCat == "Poisson") {
+        Ingredient.newCat = "Féculent";
+      }
+    } else {
+      _value = "Viande";
+    }
+    
     _categories.addAll(LoginTools.vege ? [
       "Féculent",
       "Légume", 
@@ -75,6 +83,7 @@ class _DropDownButtonIngredientsState extends State<DropDownButtonIngredients> {
 
   @override
   Widget build(BuildContext context) {
+
     return new DropdownButton(
       value: _value,
       items: _categories.map((String value) {

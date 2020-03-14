@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class DataStorage {
-  static bool debug = true;
+  static bool debug = false;
 
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();

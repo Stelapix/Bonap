@@ -178,6 +178,12 @@ class _IngredientsPageState extends State<IngredientsPage> {
     Ingredient.filter = "";
     Ingredient.searching = false;
     super.initState();
+    if (LoginTools.vege) {
+      Ingredient.newCat = "Féculent";
+      if (Ingredient.newCat == "Viande" || Ingredient.newCat == "Charcuterie" || Ingredient.newCat == "Poisson") {
+        Ingredient.newCat = "Féculent";
+      }
+    } else Ingredient.newCat = "Viande";
   }
 
   @override
@@ -378,6 +384,7 @@ class AddDialogState extends State<AddDialog> {
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
