@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class DataStorage {
-  static bool debug = false;
+  static bool debug = true;
 
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -73,6 +73,10 @@ class DataStorage {
     return File('$path/vege.json');
   }
 
+  static Future<File> get _localFileUID async {
+    final path = await _localPath;
+    return File('$path/uid.json');
+  }
   // Ingredients
 
   static Future<int> loadIngredients() async {
@@ -104,23 +108,19 @@ class DataStorage {
     await file.exists();
     // Firebase
     if (!LoginTools.guestMode) {
-      
       StorageReference storageReference;
       String userID = LoginTools.uid;
       String users = "users";
       String filename = "ingredients";
-      
+
       storageReference =
           FirebaseStorage.instance.ref().child("$users/$userID/$filename");
 
-      
-     storageReference.putFile(file);
-      
+      storageReference.putFile(file);
     }
 
     return file.writeAsString(json);
   }
-
 
   static Future<File> saveVege() async {
     // Locally
@@ -225,7 +225,7 @@ class DataStorage {
   static Future<File> saveRepas() async {
     // Locally
     final file = await _localFileRepas;
-    
+
     String json = jsonEncode(Meal.listMeal);
     if (debug) print("SAVING REPAS : " + json);
     file.writeAsString(json);
@@ -316,7 +316,6 @@ class DataStorage {
 
     DataStorage.saveWeekNumber();
 
-    
     await file_1.exists();
     await file0.exists();
     await file1.exists();
@@ -433,6 +432,36 @@ class DataStorage {
 
     return file.writeAsString(json);
   }
+
+  // UID
+  static Future<int> loadUID() async {
+    try {
+      final file = await _localFileUID;
+
+      // Read the file
+      String content = await file.readAsString();
+      String collection = json.decode(content);
+      LoginTools.uid = collection;
+
+      if (debug) print("LOADING UID : " + collection.toString());
+
+      return 1;
+    } catch (e) {
+      // If there is an error
+      if (debug) print(e.toString());
+      return 0;
+    }
+  }
+
+  static Future<File> saveUID() async {
+    // Locally
+    final file = await _localFileUID;
+    String json = jsonEncode(LoginTools.uid);
+    if (debug) print("SAVING UID : " + json);
+    return file.writeAsString(json);
+  }
+
+  // Download everything
 
   static Future<void> downloadFile() async {
     String userID = LoginTools.uid;

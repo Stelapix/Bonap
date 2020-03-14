@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/login/connectedWays.dart';
 import 'package:bonap/files/login/signIn.dart';
 import 'package:bonap/files/login/signUp.dart';
@@ -34,12 +35,15 @@ class MainMenu extends StatefulWidget {
 }
 
 class MainMenuState extends State<MainMenu> with TickerProviderStateMixin {
+  
   @override
   void initState() {
     super.initState();
     if (LoginTools.loggout) signOut();
     KeyForm().newKey();
     LoginTools.guestMode = false;
+    DataStorage.loadUID();
+    
   }
 
   static PageController whichPage =

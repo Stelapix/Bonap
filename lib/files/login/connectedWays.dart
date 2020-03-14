@@ -1,3 +1,4 @@
+import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/tools.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class BonapWay {
           .signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
       LoginTools.uid = user.uid;
+      DataStorage.saveUID();
       if (user != null) {
         if (user.isEmailVerified) {
           print(user);
@@ -51,6 +53,7 @@ class GoogleWay {
       assert(user != null);
       assert(!user.isAnonymous);
       LoginTools.uid = user.uid;
+      DataStorage.saveUID();
       assert(await user.getIdToken() != null);
       currentUser = await LoginTools.auth.currentUser();
       assert(user.uid == currentUser.uid);
