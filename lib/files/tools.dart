@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class Constant {
-  static String version = "0.3+"; //Version de Bonap
+  static String version = "0.4"; //Version de Bonap
   static String company = "Stelapix"; //Nom de notre incroyable duo
   static BuildContext context;
   static double width;
