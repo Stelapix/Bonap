@@ -1,3 +1,4 @@
+import 'package:bonap/files/data/dataStorage.dart';
 import 'package:bonap/files/drawerItems/menu.dart';
 import 'package:bonap/files/login/connectedWays.dart';
 import 'package:bonap/files/login/mainMenu.dart';
@@ -50,6 +51,7 @@ class _OwnButtonState extends State<OwnButton> {
     else if (widget.buttonType == ButtonType.Guest) {
       LoginTools.guestMode = true;
       print("Guest Mode activated");
+      DataStorage.downloadFile();
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => Menu(context)));
     }
@@ -72,7 +74,7 @@ class _OwnButtonState extends State<OwnButton> {
             ),
           ),
           Expanded(
-                      child: Center(
+            child: Center(
               child: Text(widget.buttonName,
                   style: TextStyle(color: Colors.white, fontSize: 26.0)),
             ),
@@ -166,6 +168,13 @@ class GoogleButtonState extends State<GoogleButton> {
               if (this.mounted)
                 setState(() {
                   print('Logged in successfully');
+                  DataStorage.loadUID();
+                  DataStorage.loadIngredients();
+                  DataStorage.loadRepas();
+                  DataStorage.loadWeek();
+                  DataStorage.loadWeekNumber();
+                  DataStorage.loadTheme();
+                  DataStorage.loadVege();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

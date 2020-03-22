@@ -39,6 +39,7 @@ dependencies:
   path_provider: any
   load: ^0.1.5+1
   url_launcher: ^5.4.1
+  progress_dialog: ^1.2.0
 
 dev_dependencies:
   flutter_launcher_icons:

@@ -161,7 +161,8 @@ class FormsState extends State<Forms> {
                               alertDialog(
                                   "Ne l'oubliez plus !",
                                   "Un email de réinitialisation va vous être envoyé",
-                                  null,context);
+                                  null,
+                                  context);
                             }
                           }),
                     ],
@@ -184,8 +185,13 @@ class FormsState extends State<Forms> {
                 ),
                 textAlign: TextAlign.left,
               ),
-              content: Text(text, style: TextStyle(color: LoginTools.darkMode ? Colors.white : OwnColor.darkBackground)),
-              backgroundColor: LoginTools.darkMode ? OwnColor.darkBackground : Colors.white,
+              content: Text(text,
+                  style: TextStyle(
+                      color: LoginTools.darkMode
+                          ? Colors.white
+                          : OwnColor.darkBackground)),
+              backgroundColor:
+                  LoginTools.darkMode ? OwnColor.darkBackground : Colors.white,
               actions: <Widget>[action],
             ));
   }
@@ -375,11 +381,18 @@ class FormsState extends State<Forms> {
         if (res == 0) {
           //TODO Pour une future animation ?
           Timer(Duration(seconds: 0), () {
-            Navigator.pushReplacement(context,
+            Navigator.pushReplacement(
+              context,
               MaterialPageRoute(
                 builder: (context) {
                   KeyForm().newKey();
+                  DataStorage.loadUID();
                   DataStorage.loadIngredients();
+                  DataStorage.loadRepas();
+                  DataStorage.loadWeek();
+                  DataStorage.loadWeekNumber();
+                  DataStorage.loadTheme();
+                  DataStorage.loadVege();
                   return Menu(context);
                 },
               ),
@@ -387,12 +400,13 @@ class FormsState extends State<Forms> {
           });
         } else if (res == 1) {
           await alertDialog("Patience...",
-              "Veuillez d'abord vérifier votre e-mail.", null,context);
+              "Veuillez d'abord vérifier votre e-mail.", null, context);
           print("email not verified");
         } else if (res == 2) {
           await alertDialog(
               "Oups !",
-              "Vos identifiants sont incorrects.\nMerci de réessayer.",null,
+              "Vos identifiants sont incorrects.\nMerci de réessayer.",
+              null,
               context);
           passwordController.text = "";
           print("wrong details");
@@ -419,7 +433,8 @@ class FormsState extends State<Forms> {
                 "Veuillez vérifier l'adresse e-mail : " +
                     Text(user.email, style: TextStyle(color: Colors.blue))
                         .toString() +
-                    "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",null,
+                    "\n\nCliquez sur le lien fourni dans l'e-mail que vous avez reçu.",
+                null,
                 context);
             Future.sync(MainMenuState().backToSignIn);
           });
