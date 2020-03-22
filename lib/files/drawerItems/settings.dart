@@ -49,8 +49,24 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('Paramètres'),
+      appBar:  AppBar(
+        title: Text(
+                "Paramètres",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.black),
+              ),
+        flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                      OwnColor.yellowLogo,
+                      OwnColor.blueLogo
+                    ])),
+              ),
       ),
       body: Container(
         child: ListView(

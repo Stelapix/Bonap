@@ -1,3 +1,4 @@
+import 'package:bonap/files/tools.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackReport extends StatefulWidget {
@@ -10,7 +11,18 @@ class _FeedbackReportState extends State<FeedbackReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback'),
+        title: Text(
+          "Feedback",
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.black),
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

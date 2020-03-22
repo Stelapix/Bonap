@@ -188,9 +188,25 @@ class _IngredientsPageState extends State<IngredientsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Ingrédients'),
+    return Scaffold(
+        appBar:  AppBar(
+          title: Text(
+                "Ingrédients",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.black),
+              ),
+          flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                      OwnColor.yellowLogo,
+                      OwnColor.blueLogo
+                    ])),
+              ),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.search),

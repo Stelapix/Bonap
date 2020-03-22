@@ -87,7 +87,6 @@ class MenuState extends State<Menu> {
               title: Text(
                 "Menu de la semaine",
                 style: TextStyle(
-                    fontFamily: "Lemonada",
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                     color: Colors.black),

@@ -12,6 +12,7 @@ class ThemeChanger with ChangeNotifier {
   getTheme() => _themeData.copyWith(
         cursorColor: Color(0xFFEE5623), //Curseur
         errorColor: Colors.red, //Error form
+        primaryIconTheme: IconThemeData(color: Colors.black),
         textSelectionColor: _themeData == ThemeData.dark()
             ? Colors.white.withOpacity(0.5)
             : Colors.black.withOpacity(0.5),

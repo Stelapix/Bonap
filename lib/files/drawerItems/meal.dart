@@ -80,11 +80,17 @@ class _RepasPageState extends State<RepasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-          title: new Text('Repas'),
+        appBar: AppBar(
+          title: Text(
+                "Repas",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.black),
+              ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search),
+              icon: Icon(Icons.search, color: Colors.black),
               tooltip: "Chercher un repas ..",
               onPressed: () {
                 setState(() {
@@ -100,7 +106,7 @@ class _RepasPageState extends State<RepasPage> {
                 });
               },
               tooltip: "Trier par ..",
-              icon: Icon(Icons.sort),
+              icon: Icon(Icons.sort, color: Colors.black),
               itemBuilder: (BuildContext context) =>
                   <PopupMenuEntry<popUpSort>>[
                 const PopupMenuItem<popUpSort>(
@@ -114,7 +120,7 @@ class _RepasPageState extends State<RepasPage> {
               ],
             ),
             IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete, color: Colors.black),
                 tooltip: "Supprimer tous les repas",
                 onPressed: () {
                   showDialog(
@@ -124,6 +130,16 @@ class _RepasPageState extends State<RepasPage> {
                       });
                 }),
           ],
+          flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                      OwnColor.yellowLogo,
+                      OwnColor.blueLogo
+                    ])),
+              ),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -702,7 +718,7 @@ class _MyDialogState extends State<_MyDialog> {
         Expanded(
           child: TextField(
             autofocus: true,
-            decoration: new InputDecoration(
+            decoration:  InputDecoration(
               labelText: " Chercher ...",
             ),
             onChanged: (value) {

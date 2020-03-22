@@ -99,9 +99,25 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Liste de Course'),
+    return  Scaffold(
+        appBar:  AppBar(
+          title: Text(
+                "Liste de Course",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                    color: Colors.black),
+              ),
+                            flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                      OwnColor.yellowLogo,
+                      OwnColor.blueLogo
+                    ])),
+              ),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.search),
