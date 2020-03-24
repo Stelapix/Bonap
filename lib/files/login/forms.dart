@@ -386,13 +386,7 @@ class FormsState extends State<Forms> {
               MaterialPageRoute(
                 builder: (context) {
                   KeyForm().newKey();
-                  DataStorage.loadUID();
-                  DataStorage.loadIngredients();
-                  DataStorage.loadRepas();
-                  DataStorage.loadWeek();
-                  DataStorage.loadWeekNumber();
-                  DataStorage.loadTheme();
-                  DataStorage.loadVege();
+                  DataStorage.downloadFile();
                   return Menu(context);
                 },
               ),

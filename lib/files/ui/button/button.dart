@@ -51,7 +51,13 @@ class _OwnButtonState extends State<OwnButton> {
     else if (widget.buttonType == ButtonType.Guest) {
       LoginTools.guestMode = true;
       print("Guest Mode activated");
-      DataStorage.downloadFile();
+      DataStorage.loadUID();
+      DataStorage.loadIngredients();
+      DataStorage.loadRepas();
+      DataStorage.loadWeek();
+      DataStorage.loadWeekNumber();
+      DataStorage.loadTheme();
+      DataStorage.loadVege();
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) => Menu(context)));
     }

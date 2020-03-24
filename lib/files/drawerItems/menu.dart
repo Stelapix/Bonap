@@ -280,6 +280,4 @@ class MenuState extends State<Menu> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => MainMenu()));
   }
-
-
 }

@@ -12,21 +12,20 @@ class FeedbackReport extends StatefulWidget {
 }
 
 class _FeedbackReportState extends State<FeedbackReport> {
- List<String> attachments = [];
-  bool isHTML = false;
+  List<String> attachments = [];
 
-  final _subjectController = TextEditingController(text: 'The subject');
+  final _subjectController = TextEditingController();
 
-  final _bodyController = TextEditingController(
-    text: 'Mail body.',
-  );
+  final _bodyController = TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  var image;
 
   Future<void> send() async {
     final Email email = Email(
       body: _bodyController.text,
-      subject: _subjectController.text,
+      subject: "BONAP_APP" + _subjectController.text,
       recipients: ["stelapix.bonap@gmail.com"],
       attachmentPaths: attachments,
     );
@@ -64,49 +63,92 @@ class _FeedbackReportState extends State<FeedbackReport> {
                   colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
         ),
         actions: <Widget>[
-            IconButton(
-              onPressed: send,
-              icon: Icon(Icons.send),
-            )
-          ],
+          IconButton(
+            onPressed: send,
+            icon: Icon(Icons.send),
+          )
+        ],
       ),
       body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _subjectController,
-                    decoration: InputDecoration(
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _subjectController,
+                  enableInteractiveSelection: false,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: OwnColor.blueLogo, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: OwnColor.blueLogo, width: 0.5),
+                      ),
+                      hintText: "[BUG] Affichage ...",
                       border: OutlineInputBorder(),
-                      labelText: 'Subject',
-                    ),
-                  ),
+                      labelText: 'Sujet',
+                      labelStyle: TextStyle(color: OwnColor.yellowLogo)),
+                  cursorColor: Colors.white,
                 ),
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _bodyController,
-                    maxLines: 10,
-                    decoration: InputDecoration(
-                        labelText: 'Body', border: OutlineInputBorder()),
-                  ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _bodyController,
+                  maxLines: 10,
+                  decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: OwnColor.blueLogo, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: OwnColor.blueLogo, width: 0.5),
+                      ),
+                      border: OutlineInputBorder(),
+                      labelText: 'Message',
+                      hintText: "Corps du message ...",
+                      labelStyle: TextStyle(color: OwnColor.yellowLogo)),
+                  cursorColor: Colors.white,
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Container(
+                  width: Constant.width,
+                  height: Constant.height / 2,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                        Color.fromRGBO(96, 96, 96, 1),
+                        Color.fromRGBO(68, 68, 68, 1)
+                      ])),
+                  child: image == null
+                      ? Text('No image selected.')
+                      : Image.file(image),
+                ),
+              ),
+            ],
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.camera),
-          label: Text('Add Image'),
-          onPressed: _openImagePicker,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openImagePicker,
+        foregroundColor: Colors.black,
+        backgroundColor: OwnColor.blueLogo,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[Icon(Icons.image), Text('Importer une photo')],
         ),
-      
+      ),
       // body: Padding(
       //   padding: const EdgeInsets.all(20),
       //   child: Text(
@@ -116,9 +158,30 @@ class _FeedbackReportState extends State<FeedbackReport> {
   }
 
   void _openImagePicker() async {
-    File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      attachments.add(pick.path);
-    });
+    if (attachments.length < 1) {
+      File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
+      image = pick;
+      setState(() {
+        attachments.add(pick.path);
+      });
+    } else {
+      File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
+      image = pick;
+      setState(() {
+        attachments.removeAt(0);
+        attachments.add(pick.path);
+      });
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text(
+            "Oups",
+            style: TextStyle(color: OwnColor.blueLogo),
+          ),
+          content: Text(
+              "Vous ne pouvez envoyer qu'une seule capture d'écran. \nLa précédente a été remplacé."),
+        ),
+      );
+    }
   }
 }

@@ -49,7 +49,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         title: Text(
                 "Paramètres",
                 style: TextStyle(
