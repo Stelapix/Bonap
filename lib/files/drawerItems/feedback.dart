@@ -14,36 +14,36 @@ class FeedbackReport extends StatefulWidget {
 class _FeedbackReportState extends State<FeedbackReport> {
   List<String> attachments = [];
 
-  final _subjectController = TextEditingController();
+  static TextEditingController subjectController;
 
-  final _bodyController = TextEditingController();
+  static TextEditingController bodyController;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   var image;
 
   Future<void> send() async {
     final Email email = Email(
-      body: _bodyController.text,
-      subject: "BONAP_APP" + _subjectController.text,
+      body: bodyController.text,
+      subject: "BONAP_APP_MAIL : " + subjectController.text,
       recipients: ["stelapix.bonap@gmail.com"],
       attachmentPaths: attachments,
     );
 
-    String platformResponse;
-
     try {
       await FlutterEmailSender.send(email);
-      platformResponse = 'success';
+      if (attachments.isNotEmpty) {
+        attachments.removeAt(0);
+        setState(() {
+          image = null;
+        });
+      }
+      subjectController.text = "";
+      bodyController.text = "";
+      scaffoldKey = GlobalKey<ScaffoldState>();
     } catch (error) {
-      platformResponse = error.toString();
+      print(error);
     }
-
-    if (!mounted) return;
-
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text(platformResponse),
-    ));
   }
 
   @override
@@ -63,6 +63,54 @@ class _FeedbackReportState extends State<FeedbackReport> {
                   colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
         ),
         actions: <Widget>[
+          image != null
+              ? IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        title: Text(
+                          "Voulez-vous retirez la photo ?",
+                          style: TextStyle(color: OwnColor.blueLogo),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('Non'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Oui'),
+                            onPressed: () {
+                              attachments.removeAt(0);
+                              setState(() {
+                                image = null;
+                                Navigator.of(context).pop();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  })
+              : Container(),
+          IconButton(
+              icon: Icon(Icons.info_outline, color: Colors.black),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    title: Text(
+                      "N'hésitez pas !",
+                      style: TextStyle(color: OwnColor.blueLogo),
+                    ),
+                    content: Text(
+                        "Cette application est une bêta,\nsi vous trouvez un bug\nenvoyez nous un mail avec\neventuellement un screenshot.\n\nMerci !"),
+                  ),
+                );
+              }),
           IconButton(
             onPressed: send,
             icon: Icon(Icons.send),
@@ -79,7 +127,7 @@ class _FeedbackReportState extends State<FeedbackReport> {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: TextField(
-                  controller: _subjectController,
+                  controller: subjectController,
                   enableInteractiveSelection: false,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -92,7 +140,7 @@ class _FeedbackReportState extends State<FeedbackReport> {
                       ),
                       hintText: "[BUG] Affichage ...",
                       border: OutlineInputBorder(),
-                      labelText: 'Sujet',
+                      labelText: 'Objet',
                       labelStyle: TextStyle(color: OwnColor.yellowLogo)),
                   cursorColor: Colors.white,
                 ),
@@ -100,8 +148,9 @@ class _FeedbackReportState extends State<FeedbackReport> {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: TextField(
-                  controller: _bodyController,
-                  maxLines: 10,
+                  enableInteractiveSelection: false,
+                  controller: bodyController,
+                  maxLines: 5,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide:
@@ -112,6 +161,7 @@ class _FeedbackReportState extends State<FeedbackReport> {
                             BorderSide(color: OwnColor.blueLogo, width: 0.5),
                       ),
                       border: OutlineInputBorder(),
+                      alignLabelWithHint: true,
                       labelText: 'Message',
                       hintText: "Corps du message ...",
                       labelStyle: TextStyle(color: OwnColor.yellowLogo)),
@@ -122,17 +172,10 @@ class _FeedbackReportState extends State<FeedbackReport> {
                 padding: EdgeInsets.all(8.0),
                 child: Container(
                   width: Constant.width,
-                  height: Constant.height / 2,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                        Color.fromRGBO(96, 96, 96, 1),
-                        Color.fromRGBO(68, 68, 68, 1)
-                      ])),
+                  height: Constant.height / 2.5,
                   child: image == null
-                      ? Text('No image selected.')
+                      ? Center(
+                          child: Text('Vous pouvez sélectionner une image.'))
                       : Image.file(image),
                 ),
               ),
@@ -140,48 +183,45 @@ class _FeedbackReportState extends State<FeedbackReport> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: _openImagePicker,
         foregroundColor: Colors.black,
         backgroundColor: OwnColor.blueLogo,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[Icon(Icons.image), Text('Importer une photo')],
-        ),
+        icon: Icon(Icons.image),
+        label: Text('Importer une photo'),
       ),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(20),
-      //   child: Text(
-      //       "Cette application est une beta, pourriez vous s'il vous plait envoyez vos suggestions ou des bugs que vous auriez trouvé à l'adresse : Stelapix.bonap@gmail.com"),
-      // ),
     );
   }
 
   void _openImagePicker() async {
-    if (attachments.length < 1) {
+    if (attachments.isEmpty) {
       File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
-      image = pick;
-      setState(() {
-        attachments.add(pick.path);
-      });
+      if (pick != null) {
+        image = pick;
+        setState(() {
+          attachments.add(pick.path);
+        });
+      }
     } else {
       File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
-      image = pick;
-      setState(() {
-        attachments.removeAt(0);
-        attachments.add(pick.path);
-      });
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(
-            "Oups",
-            style: TextStyle(color: OwnColor.blueLogo),
+      if (pick != null) {
+        image = pick;
+        setState(() {
+          attachments.removeAt(0);
+          attachments.add(pick.path);
+        });
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: Text(
+              "Oups",
+              style: TextStyle(color: OwnColor.blueLogo),
+            ),
+            content: Text(
+                "Vous ne pouvez envoyer qu'une seule capture d'écran. \nLa précédente a été remplacé."),
           ),
-          content: Text(
-              "Vous ne pouvez envoyer qu'une seule capture d'écran. \nLa précédente a été remplacé."),
-        ),
-      );
+        );
+      }
     }
   }
 }
