@@ -663,6 +663,8 @@ class AddIngredientDialogState extends State<AddIngredientDialog> {
                   }
                 }
 
+                
+
                 DataStorage.saveWeek();
 
                 widget.dbs.setState(() => true);

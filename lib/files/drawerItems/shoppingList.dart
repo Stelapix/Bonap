@@ -99,25 +99,22 @@ class ShoppingListPageState extends State<ShoppingListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar:  AppBar(
+    return Scaffold(
+        appBar: AppBar(
           title: Text(
-                "Liste de Course",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                    color: Colors.black),
-              ),
-                            flexibleSpace: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                      OwnColor.yellowLogo,
-                      OwnColor.blueLogo
-                    ])),
-              ),
+            "Liste de Course",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.0,
+                color: Colors.black),
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[OwnColor.yellowLogo, OwnColor.blueLogo])),
+          ),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.search),
@@ -163,6 +160,30 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                       for (Meal m in d.listMeal) {
                         if (m != null) ShoppingList.addMealToList(m);
                       }
+                    }
+                  }
+                  // Limite de 3 par semaine
+                  for (IngredientShoppingList isl in ShoppingList.liste) {
+                    if (isl.amount >= 3) {
+                      showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: Text(
+                              "Ça fait beaucoup là non ?",
+                            ),
+                            content: Text(
+                                "Cette semaine, vous mangez au moins 3 fois l'ingrédient suivant \""+isl.i.name+"\""),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: Text("Oups !"),
+                                  onPressed: () {
+                                    setState(() {
+                                      Navigator.of(context).pop();
+                                    });
+                                  })
+                            ],
+                          )
+                      );
                     }
                   }
                   DataStorage.saveShopping();
@@ -255,8 +276,14 @@ class ShoppingListPageState extends State<ShoppingListPage> {
           .map(
             (data) => new Container(
               child: ExpansionTile(
-                  title:
-                      data.amount > 0 ? Text(data.i.name + ' (' + (data.amount.toString()) + ')') : Text(data.i.name, style: TextStyle(decoration: TextDecoration.lineThrough),),
+                  title: data.amount > 0
+                      ? Text(
+                          data.i.name + ' (' + (data.amount.toString()) + ')')
+                      : Text(
+                          data.i.name,
+                          style:
+                              TextStyle(decoration: TextDecoration.lineThrough),
+                        ),
                   leading: data.i.icon,
                   trailing: IconButton(
                     icon: Icon(Icons.done),
@@ -265,15 +292,13 @@ class ShoppingListPageState extends State<ShoppingListPage> {
                       setState(() {
                         if (data.amount > 0) {
                           data.amount = 0;
-                        }
-                        else {
+                        } else {
                           ShoppingList.liste.remove(data);
                         }
-                        
+
                         DataStorage.saveShopping();
                       });
                     },
-                    
                   ),
                   children: <Widget>[
                     Row(
@@ -408,16 +433,14 @@ class AddDialogState extends State<AddDialog> {
                               // Ingredient deja present, on augmente le compteur
                               for (IngredientShoppingList isl
                                   in ShoppingList.liste) {
-                                if (isl.i.name ==
-                                    newList[index].name) {
+                                if (isl.i.name == newList[index].name) {
                                   alreadyIn = true;
                                 }
                               }
                               if (alreadyIn) {
                                 for (IngredientShoppingList i
                                     in ShoppingList.liste) {
-                                  if (i.i.name ==
-                                      newList[index].name) {
+                                  if (i.i.name == newList[index].name) {
                                     i.amount++;
                                   }
                                 }
@@ -426,8 +449,7 @@ class AddDialogState extends State<AddDialog> {
                               else {
                                 ShoppingList.liste.add(
                                     new IngredientShoppingList(
-                                        newList[index],
-                                        null));
+                                        newList[index], null));
                               }
                             });
                             DataStorage.saveShopping();
