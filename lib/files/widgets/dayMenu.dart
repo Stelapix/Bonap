@@ -270,33 +270,71 @@ class DayButtonState extends State<DayButton> {
           padding: EdgeInsets.all(8.0),
           onPressed: () {
             setState(() {
-              Day.listDay[widget.index] != null &&
-                      Day.listDay[widget.index].listMeal.length > 0
+              Weeks.weekID == -1
                   ? showDialog(
                       context: context,
-                      builder: (context) {
-                        return DisplayInfosDialog(
-                            this,
-                            Day.listDay[widget.index].listMeal,
-                            Day.listDay[widget.index].listIngredient);
-                      })
-                  : showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AddMealDialog(this, widget.index);
-                      });
+                      builder: (context) => AlertDialog(
+                            title: Text(
+                              "Non !",
+                            ),
+                            content: Text(
+                                "On ne modifie pas un repas de la semaine dernière voyons .."),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: Text("Oups !"),
+                                  onPressed: () {
+                                    setState(() {
+                                      Navigator.of(context).pop();
+                                    });
+                                  })
+                            ],
+                          ))
+                  : Day.listDay[widget.index] != null &&
+                          Day.listDay[widget.index].listMeal.length > 0
+                      ? showDialog(
+                          context: context,
+                          builder: (context) {
+                            return DisplayInfosDialog(
+                                this,
+                                Day.listDay[widget.index].listMeal,
+                                Day.listDay[widget.index].listIngredient);
+                          })
+                      : showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddMealDialog(this, widget.index);
+                          });
             });
           },
           onLongPress: () {
             setState(() {
-              Day.listDay[widget.index] != null &&
-                      Day.listDay[widget.index].listMeal.length > 0
-                  ? settingsMode = !settingsMode
-                  : showDialog(
+              Weeks.weekID == -1
+                  ? showDialog(
                       context: context,
-                      builder: (context) {
-                        return AddMealDialog(this, widget.index);
-                      });
+                      builder: (context) => AlertDialog(
+                            title: Text(
+                              "Non !",
+                            ),
+                            content: Text(
+                                "On ne modifie pas un repas de la semaine dernière voyons .."),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: Text("Oups !"),
+                                  onPressed: () {
+                                    setState(() {
+                                      Navigator.of(context).pop();
+                                    });
+                                  })
+                            ],
+                          ))
+                  : Day.listDay[widget.index] != null &&
+                          Day.listDay[widget.index].listMeal.length > 0
+                      ? settingsMode = !settingsMode
+                      : showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddMealDialog(this, widget.index);
+                          });
             });
           },
           child: Container(
@@ -902,14 +940,13 @@ class DisplayInfosDialogState extends State<DisplayInfosDialog> {
     if (widget.listIngredient != null && widget.listIngredient.length > 0) {
       Meal m = new Meal("Ingredients", widget.listIngredient);
       for (int i = 0; i < newList.length; i++) {
-        if (newList[i].name == "Ingredients" && newList[i].listIngredient == widget.listIngredient) {
+        if (newList[i].name == "Ingredients" &&
+            newList[i].listIngredient == widget.listIngredient) {
           canAdd = false;
         }
       }
       if (canAdd) newList.add(m);
-      
     }
-    
 
     return ListView(
         shrinkWrap: true,
