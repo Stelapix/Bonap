@@ -256,17 +256,24 @@ class ShoppingListPageState extends State<ShoppingListPage> {
             (data) => new Container(
               child: ExpansionTile(
                   title:
-                      Text(data.i.name + ' (' + (data.amount.toString()) + ')'),
+                      data.amount > 0 ? Text(data.i.name + ' (' + (data.amount.toString()) + ')') : Text(data.i.name, style: TextStyle(decoration: TextDecoration.lineThrough),),
                   leading: data.i.icon,
                   trailing: IconButton(
                     icon: Icon(Icons.done),
                     tooltip: 'Supprimer cet élément',
                     onPressed: () {
                       setState(() {
-                        ShoppingList.liste.remove(data);
+                        if (data.amount > 0) {
+                          data.amount = 0;
+                        }
+                        else {
+                          ShoppingList.liste.remove(data);
+                        }
+                        
                         DataStorage.saveShopping();
                       });
                     },
+                    
                   ),
                   children: <Widget>[
                     Row(
